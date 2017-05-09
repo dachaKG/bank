@@ -9,27 +9,27 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
-public class CertificateServiceImpl implements CertificateService{
+public class SelfCertificateServiceImpl implements SelfCertificateService{
 	
-	private final CertificateRepo certificateRepository;
+	private final SelfCertificateRepo certificateRepository;
 	
 	@Autowired
-	public CertificateServiceImpl(final CertificateRepo certificateRepository) {
+	public SelfCertificateServiceImpl(final SelfCertificateRepo certificateRepository) {
 		this.certificateRepository = certificateRepository;
 	}
 
 	@Override
-	public List<Certificate> findAll() {
+	public List<SelfCertificate> findAll() {
 		return certificateRepository.findAll();
 	}
 
 	@Override
-	public Certificate save(Certificate certificate) {
+	public SelfCertificate save(SelfCertificate certificate) {
 		return certificateRepository.save(certificate);
 	}
 
 	@Override
-	public Certificate findOne(Long id) {
+	public SelfCertificate findOne(Long id) {
 		return certificateRepository.findOne(id);
 	}
 

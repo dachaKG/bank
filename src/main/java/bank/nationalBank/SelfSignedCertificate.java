@@ -15,7 +15,7 @@ import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 
-import bank.certificate.Certificate;
+import bank.certificate.SelfCertificate;
 
 public class SelfSignedCertificate {
 
@@ -24,7 +24,7 @@ public class SelfSignedCertificate {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public X509Certificate generateCertificate(KeyPair keyPair, NationalBank nationalBank, Certificate certificate, X500Name x500Name){
+	public X509Certificate generateCertificate(KeyPair keyPair, NationalBank nationalBank, SelfCertificate certificate, X500Name x500Name){
 		
 
 		try {

@@ -34,19 +34,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import bank.certificate.Certificate;
-import bank.certificate.CertificateService;
+import bank.certificate.SelfCertificate;
+import bank.certificate.SelfCertificateService;
 
 @RestController
 @RequestMapping
 public class NationalBankController {
 
 	private final NationalBankService nationalBankService;
-	private final CertificateService certificateService;
+	private final SelfCertificateService certificateService;
 
 	@Autowired
 	public NationalBankController(final NationalBankService nationalBankService,
-			final CertificateService certificateService) {
+			final SelfCertificateService certificateService) {
 		Security.addProvider(new BouncyCastleProvider());
 		this.nationalBankService = nationalBankService;
 		this.certificateService = certificateService;
@@ -58,7 +58,7 @@ public class NationalBankController {
 	}
 
 	@PostMapping("/addCertificate")
-	public void addCertificate(@Valid @RequestBody Certificate certificate) throws KeyStoreException, NoSuchProviderException {
+	public void addCertificate(@Valid @RequestBody SelfCertificate certificate) throws KeyStoreException, NoSuchProviderException {
 		System.out.println(certificate.getSerialNumber());
 		certificateService.save(certificate);
 		KeyStore keyStore;
@@ -78,12 +78,15 @@ public class NationalBankController {
 			keyStore = KeyStore.getInstance("jks");
 			
 			File file = new File("selfSignedCertificate.jks");
-			keyStore.load(null, null);
-			keyStore.setKeyEntry(nationalBank.getCommonName()+"3", keyPair.getPrivate(), certificate.getPassword().toCharArray(), chain);
+			//keyStore.load(null, null);
+			
 			if(!file.exists()){
 				file.createNewFile();
 				keyStore.load(null, "123".toCharArray());
+			}else {
+				keyStore.load(new FileInputStream("selfSignedCertificate.jks"), null);
 			}
+			keyStore.setKeyEntry(certificate.getCommonName(), keyPair.getPrivate(), certificate.getPassword().toCharArray(), chain);
 			keyStore.store(new FileOutputStream("selfSignedCertificate.jks"), "123".toCharArray());
 			
 			//keyStore.store(new FileInputStream("selfSignedCertificate.jks"), "pass".toCharArray());

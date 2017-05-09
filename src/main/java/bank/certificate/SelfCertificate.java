@@ -9,12 +9,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Certificate {
+public class SelfCertificate {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column
 	private Long id;
+	
+	@Column
+	private String commonName;
 	
 	@Column
 	private Date startDate;
@@ -79,6 +82,16 @@ public class Certificate {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public String getCommonName() {
+		return commonName;
+	}
+
+	public void setCommonName(String commonName) {
+		this.commonName = commonName;
+	}
+	
+	
 
 	/*public X500Name getX500Name() {
 		return x500Name;

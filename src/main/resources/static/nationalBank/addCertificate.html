@@ -2,6 +2,10 @@
 <form name="formAdd" ng-model = "$parent.nationalBank" method="post">
 
 	<div>
+		<label>Common name:</label>
+		<input type = "text" name = "commonName" ng-model="$parent.certificate.commonName"/>
+	</div>
+	<div>
 		<label>Start date:</label>
 		<input type = "date" name = "startDate" ng-model="$parent.certificate.startDate"/>
 	</div>
