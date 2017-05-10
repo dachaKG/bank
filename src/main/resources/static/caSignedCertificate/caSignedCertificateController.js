@@ -4,16 +4,16 @@ app.controller('caSignedCertificateController',['$scope','caSignedCertificateSer
 	function($scope,caSignedCertificateService,$location){
 	
 	$scope.issuersCNs =  [
-	      {id: '1', name: 'Option A'},
+	      /*{id: '1', name: 'Option A'},
 	      {id: '2', name: 'Option B'},
-	      {id: '3', name: 'Option C'}
+	      {id: '3', name: 'Option C'}*/
 	    ];
-	$scope.issuerAliases = [	      {id: '1', name: 'Alias A'},
+	$scope.issuerAliases = [/*	      {id: '1', name: 'Alias A'},
 	      {id: '2', name: 'Alias B'},
-	      {id: '3', name: 'Alias C'}];
+	      {id: '3', name: 'Alias C'}*/];
 	
 	$scope.loadAliases = function(){
-		caSignedCertificateService.loadAliases($scope.issuerCN.name)
+		caSignedCertificateService.loadAliases($scope.issuerCommonName.name)
 		.then(function(response){
 			$scope.issuerAliases = [];
 			for(i = 0; i < response.data.length;i++){
@@ -25,7 +25,20 @@ app.controller('caSignedCertificateController',['$scope','caSignedCertificateSer
 		})
 	}
 	
-		function loadCNs(){
+	$scope.createCertificate = function(){
+		$scope.certificateRequest.issuerCommonName = $scope.issuerCommonName.name;
+		$scope.certificateRequest.issuerAlias = $scope.issuerAlias.name;
+
+		caSignedCertificateService.createCertificate($scope.certificateRequest)
+		.then(function(response){
+			
+		},
+		function(response){
+			
+		})
+	}
+	
+	function loadCNs(){
 		caSignedCertificateService.loadCNs()
 		.then(function(response){
 			$scope.issuersCNs = [];

@@ -1,7 +1,7 @@
-<form name= "addCaSignedCertificate" ng-model = "$parent.certificateRequest" method = "post">
+<form name= "addCaSignedCertificate" ng-model = "$parent.certificateRequest" ng-submit = "createCertificate()" method = "post">
 	<div>
 		<label>Issuer CN:</label>
-		<select data-ng-model = "issuerCN" ng-change = "loadAliases()"
+		<select data-ng-model = "issuerCommonName" ng-change = "loadAliases()"
 		data-ng-options = "criteria.name for criteria in issuersCNs track by criteria.id">
 		</select>
 	</div>
@@ -27,14 +27,17 @@
 		<label>Common name:</label>
 		<input type = "text"  name = "commonName" ng-model = "certificateRequest.commonName"> 		
 	</div>
-	
+	<div>
+		<label>Country:</label>
+		<input type = "text"  name = "country" ng-model = "certificateRequest.country"> 		
+	</div>	
 	<div>
 		<label>Start date:</label>
-		<input type = "date" name = "startDate" ng-model = "certificateRequest.startData"/>
+		<input type = "date" name = "startDate" ng-model = "certificateRequest.startDate"/>
 	</div>
 	<div>
 		<label>End date:</label>
-		<input type = "date" name = "endDate" ng-model = "certificateRequest.startData"/>
+		<input type = "date" name = "endDate" ng-model = "certificateRequest.endDate"/>
 	</div>
 	<div>
 		<label> Serial number</label>
@@ -50,5 +53,5 @@
 	</div>
 	
 	
-	<button ng-click = "formAdd.$valid && addCertificate()">Add</button>
+	<button type = "submit" ng-disabled="form.$invalid">Add</button>
 </form>
