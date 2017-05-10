@@ -1,13 +1,10 @@
 package bank.nationalBank;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.math.BigInteger;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
@@ -165,7 +162,7 @@ public class NationalBankController {
 		return null;
 	}
 
-	private static void saveToFile(String fileName, BigInteger mod, BigInteger exp) throws Exception {
+/*	private static void saveToFile(String fileName, BigInteger mod, BigInteger exp) throws Exception {
 		ObjectOutputStream oout = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(fileName)));
 		try {
 			oout.writeObject(mod);
@@ -175,6 +172,6 @@ public class NationalBankController {
 		} finally {
 			oout.close();
 		}
-	}
+	}*/
 
 }
