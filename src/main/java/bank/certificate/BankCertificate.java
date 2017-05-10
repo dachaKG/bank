@@ -2,10 +2,6 @@ package bank.certificate;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-
-import org.hibernate.validator.constraints.NotBlank;
-
 public class BankCertificate {
 
 	

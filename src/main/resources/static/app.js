@@ -2,7 +2,7 @@
 
 
 angular.module('routerApp', ['ui.router',
-	'nationalBank.services', 'nationalBank.controllers']) 
+	'nationalBank.services', 'nationalBank.controllers','caSignedCertificate.services','caSignedCertificate.controllers']) 
 .config(function($stateProvider,$urlRouterProvider){
 	
 	//$urlRouterProvider.otherwise('/country');
@@ -18,6 +18,11 @@ angular.module('routerApp', ['ui.router',
 		url : '/addCertificate',
 		templateUrl : 'nationalBank/addCertificate.html',
 		controller : 'nationalBankController'
+	})
+	.state('addCaSignedCertificate',{
+		url : '/addCaSignedCertificate',
+		templateUrl : 'caSignedCertificate/caSignedCertificate.html',
+		controller : 'caSignedCertificateController'
 	})
 	.state('addNationalBank',{
 		url : '/addNationalBank',
