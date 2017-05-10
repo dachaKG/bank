@@ -15,7 +15,7 @@ import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 
-import bank.certificate.SelfCertificate;
+import bank.selfCertificate.SelfCertificate;
 
 public class SelfSignedCertificate {
 
@@ -43,6 +43,7 @@ public class SelfSignedCertificate {
 					certificate.getEndDate(),x500Name, keyPair.getPublic());
 			//Generise se sertifikat
 			X509CertificateHolder certHolder = certGen.build(contentSigner);
+			
 
 			//Builder generise sertifikat kao objekat klase X509CertificateHolder
 			//Nakon toga je potrebno certHolder konvertovati u sertifikat, za sta se koristi certConverter

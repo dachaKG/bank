@@ -1,4 +1,4 @@
-package bank.certificate;
+package bank.selfCertificate;
 
 import java.util.Date;
 
@@ -28,8 +28,9 @@ public class SelfCertificate {
 	@Column
 	private String serialNumber;
 	
-	private String alias;
+	//private String alias;
 	
+	@Column
 	private String password;
 	
 	/*@Column
@@ -67,13 +68,13 @@ public class SelfCertificate {
 		this.id = id;
 	}
 
-	public String getAlias() {
+	/*public String getAlias() {
 		return alias;
 	}
 
 	public void setAlias(String alias) {
 		this.alias = alias;
-	}
+	}*/
 
 	public String getPassword() {
 		return password;

@@ -26,6 +26,7 @@ import javax.validation.Valid;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
+import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,8 +35,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import bank.certificate.SelfCertificate;
-import bank.certificate.SelfCertificateService;
+import bank.selfCertificate.SelfCertificate;
+import bank.selfCertificate.SelfCertificateService;
 
 @RestController
 @RequestMapping
@@ -69,6 +70,9 @@ public class NationalBankController {
 		X500Name x500Name = generateIssuerData(keyPair.getPrivate(), nationalBank);
 		
 		X509Certificate x509cert = ssc.generateCertificate(keyPair, nationalBank, certificate, x500Name);
+		
+
+		
 		//store key and certificate
 		X509Certificate[] chain = new X509Certificate[1];
 		chain[0] = x509cert;
