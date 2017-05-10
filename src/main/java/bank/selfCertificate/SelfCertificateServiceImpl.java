@@ -1,4 +1,4 @@
-package bank.certificate;
+package bank.selfCertificate;
 
 import java.util.List;
 
