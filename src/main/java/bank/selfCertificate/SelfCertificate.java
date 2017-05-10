@@ -10,31 +10,32 @@ import javax.persistence.Id;
 
 @Entity
 public class SelfCertificate {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column
 	private Long id;
-	
+
 	@Column
-	private String commonName;
-	
+	private String alias;
+
 	@Column
 	private Date startDate;
-	
+
 	@Column
 	private Date endDate;
-	
+
 	@Column
 	private String serialNumber;
-	
-	//private String alias;
-	
+
+	// private String alias;
+
 	@Column
 	private String password;
-	
-	/*@Column
-	private X500Name x500Name;*/
+
+	/*
+	 * @Column private X500Name x500Name;
+	 */
 
 	public Date getStartDate() {
 		return startDate;
@@ -68,13 +69,11 @@ public class SelfCertificate {
 		this.id = id;
 	}
 
-	/*public String getAlias() {
-		return alias;
-	}
-
-	public void setAlias(String alias) {
-		this.alias = alias;
-	}*/
+	/*
+	 * public String getAlias() { return alias; }
+	 * 
+	 * public void setAlias(String alias) { this.alias = alias; }
+	 */
 
 	public String getPassword() {
 		return password;
@@ -84,27 +83,18 @@ public class SelfCertificate {
 		this.password = password;
 	}
 
-	public String getCommonName() {
-		return commonName;
+	public String getAlias() {
+		return alias;
 	}
 
-	public void setCommonName(String commonName) {
-		this.commonName = commonName;
-	}
-	
-	
-
-	/*public X500Name getX500Name() {
-		return x500Name;
+	public void setAlias(String alias) {
+		this.alias = alias;
 	}
 
-	public void setX500Name(X500Name x500Name) {
-		this.x500Name = x500Name;
-	}*/
-	
-	
-	
-	
-	
-	
+	/*
+	 * public X500Name getX500Name() { return x500Name; }
+	 * 
+	 * public void setX500Name(X500Name x500Name) { this.x500Name = x500Name; }
+	 */
+
 }

@@ -23,7 +23,6 @@ import javax.validation.Valid;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
-import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -76,19 +75,42 @@ public class NationalBankController {
 			//keyStore = KeyStore.getInstance("jks");
 		
 		try {
-			keyStore = KeyStore.getInstance("jks");
+			keyStore = KeyStore.getInstance("jks", "SUN");
 			
 			File file = new File("selfSignedCertificate.jks");
-			//keyStore.load(null, null);
 			
 			if(!file.exists()){
 				file.createNewFile();
 				keyStore.load(null, "123".toCharArray());
-			}else {
+			} else {
 				keyStore.load(new FileInputStream("selfSignedCertificate.jks"), null);
 			}
-			keyStore.setKeyEntry(certificate.getCommonName(), keyPair.getPrivate(), certificate.getPassword().toCharArray(), chain);
+			
+			
+			
+			keyStore.setKeyEntry(certificate.getAlias(), keyPair.getPrivate(), certificate.getPassword().toCharArray(), chain);
 			keyStore.store(new FileOutputStream("selfSignedCertificate.jks"), "123".toCharArray());
+			
+		
+			/*//------------
+			X509CertSelector targetConstraints = new X509CertSelector();
+
+			targetConstraints.setCertificate(x509cert);
+
+			try {
+				PKIXBuilderParameters params = new PKIXBuilderParameters(keyStore, targetConstraints);
+				params.setRevocationEnabled(true);
+				System.out.println(params.isRevocationEnabled());
+			} catch (InvalidAlgorithmParameterException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+			
+			//-----------*/
+			
+
+			//Certificate readCertificate = readCertificateFromKeyStore("selfSignedCertificate.jks", "123", "mika");
+			
 			
 			//keyStore.store(new FileInputStream("selfSignedCertificate.jks"), "pass".toCharArray());
 		} catch (NoSuchAlgorithmException e) {
@@ -112,6 +134,54 @@ public class NationalBankController {
 	
 		
 	}
+	
+	/*private void deleteCertificate(KeyStore keyStore, File file) throws Exception {
+		keyStore.deleteEntry("ttt");
+		OutputStream writeStream = new FileOutputStream(file);
+		keyStore.store(writeStream, "123".toCharArray());
+		writeStream.close();
+	}*/
+	
+	/*private Certificate readCertificateFromKeyStore(String keyStoreFile, String keyStorePass, String alias){
+
+		try {
+			//kreiramo instancu KeyStore
+			KeyStore ks = KeyStore.getInstance("JKS", "SUN");
+			//ucitavamo podatke
+			BufferedInputStream in = new BufferedInputStream(new FileInputStream(keyStoreFile));
+			ks.load(in, keyStorePass.toCharArray());
+			Certificate[] listOfCert = ks.getCertificateChain(alias);
+			if(ks.isKeyEntry(alias)) {
+				Certificate cert = ks.getCertificate(alias);
+				X509Certificate xcert = (X509Certificate) ks.getCertificate(alias);
+				System.out.println("---- " + xcert.getBasicConstraints() + " ---------");
+				
+				boolean[] keyUsage = xcert.getKeyUsage();
+				if(keyUsage[5]){
+					System.out.println("jeste");
+				} else {
+					System.out.println("nije");
+				}
+				
+				return cert;
+			}
+		} catch (KeyStoreException e) {
+			e.printStackTrace();
+		} catch (NoSuchProviderException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (CertificateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	
+		
+	}*/
 
 	private X500Name generateIssuerData(PrivateKey issuerKey, NationalBank nationalBank) {
 		X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);

@@ -7,6 +7,10 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x509.BasicConstraints;
+import org.bouncycastle.asn1.x509.Extension;
+import org.bouncycastle.asn1.x509.KeyUsage;
+import org.bouncycastle.cert.CertIOException;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
@@ -41,10 +45,31 @@ public class SelfSignedCertificate {
 			//Postavljaju se podaci za generisanje sertifiakta
 			X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(x500Name, new BigInteger(certificate.getSerialNumber()), certificate.getStartDate(),
 					certificate.getEndDate(),x500Name, keyPair.getPublic());
-			//Generise se sertifikat
+			
+			//----------
+			KeyUsage keyUsage = new KeyUsage( KeyUsage.digitalSignature |
+                    KeyUsage.nonRepudiation|
+                    KeyUsage.keyEncipherment|
+                    KeyUsage.dataEncipherment|
+                    KeyUsage.keyCertSign |
+                    KeyUsage.cRLSign);
+			
+			//Postavljaju se podaci za generisanje samopotpisujucih sertifiakta
+			//X509v3CertificateBuilder generator = new JcaX509v3CertificateBuilder(x500Name, new BigInteger(certificate.getSerialNumber()), certificate.getStartDate(),
+			//		certificate.getEndDate(),x500Name, keyPair.getPublic());
+			try {
+				certGen.addExtension(Extension.basicConstraints, true, new BasicConstraints(true));
+				certGen.addExtension(Extension.keyUsage, false, keyUsage);
+			} catch (CertIOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//-------------
+			
+			//Generise se samopotpisujuci sertifikat
 			X509CertificateHolder certHolder = certGen.build(contentSigner);
 			
-
+			
 			//Builder generise sertifikat kao objekat klase X509CertificateHolder
 			//Nakon toga je potrebno certHolder konvertovati u sertifikat, za sta se koristi certConverter
 			JcaX509CertificateConverter certConverter = new JcaX509CertificateConverter();
