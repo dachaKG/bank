@@ -2,7 +2,8 @@
 
 
 angular.module('routerApp', ['ui.router',
-	'nationalBank.services', 'nationalBank.controllers']) 
+	'nationalBank.services', 'nationalBank.controllers',
+	'findCertificate.services','findCertificate.controllers']) 
 .config(function($stateProvider,$urlRouterProvider){
 	
 	//$urlRouterProvider.otherwise('/country');
@@ -24,6 +25,12 @@ angular.module('routerApp', ['ui.router',
 		templateUrl : 'nationalBank/addNationalBank.html',
 		controller : 'nationalBankController'
 	})
+	.state('findCertificate',{
+		url : '/getExistingCertificate',
+		templateUrl : 'findExistingCertificate/findCertificate.html',
+		controller : 'findCertificateController'
+	})
+	
 	
 	/*.state('country', {
 		url : '/country',

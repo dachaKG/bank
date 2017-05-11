@@ -1,5 +1,6 @@
 package bank.selfCertificate;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -8,34 +9,48 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Entity
-public class SelfCertificate {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column
+public class SelfCertificate implements Serializable{
+	
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
+
+	public SelfCertificate(Long id, String alias, Date startDate, Date endDate, String serialNumber, String password) {
+		super();
+		this.id = id;
+		this.alias = alias;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.serialNumber = serialNumber;
+		this.password = password;
+	}
+	
+	public SelfCertificate() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+
+
 	private Long id;
 
-	@Column
 	private String alias;
 
-	@Column
 	private Date startDate;
-
-	@Column
+	
 	private Date endDate;
-
-	@Column
+	
 	private String serialNumber;
 
-	// private String alias;
-
-	@Column
 	private String password;
-
-	/*
-	 * @Column private X500Name x500Name;
-	 */
+	
+	/*@Column
+	private X500Name x500Name;*/
 
 	public Date getStartDate() {
 		return startDate;
@@ -69,12 +84,6 @@ public class SelfCertificate {
 		this.id = id;
 	}
 
-	/*
-	 * public String getAlias() { return alias; }
-	 * 
-	 * public void setAlias(String alias) { this.alias = alias; }
-	 */
-
 	public String getPassword() {
 		return password;
 	}
@@ -82,6 +91,7 @@ public class SelfCertificate {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 
 	public String getAlias() {
 		return alias;
@@ -91,10 +101,21 @@ public class SelfCertificate {
 		this.alias = alias;
 	}
 
-	/*
-	 * public X500Name getX500Name() { return x500Name; }
-	 * 
-	 * public void setX500Name(X500Name x500Name) { this.x500Name = x500Name; }
-	 */
+	
+	
+	
 
+	/*public X500Name getX500Name() {
+		return x500Name;
+	}
+
+	public void setX500Name(X500Name x500Name) {
+		this.x500Name = x500Name;
+	}*/
+	
+	
+	
+	
+	
+	
 }

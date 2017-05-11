@@ -1,4 +1,4 @@
-package bank.selfCertificate;
+/*package bank.selfCertificate;
 
 import java.util.List;
 
@@ -13,3 +13,4 @@ public interface SelfCertificateService {
 	public void delete(Long id);
 	
 }
+*/
