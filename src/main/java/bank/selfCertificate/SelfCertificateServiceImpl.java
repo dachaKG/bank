@@ -1,4 +1,4 @@
-package bank.selfCertificate;
+/*package bank.selfCertificate;
 
 import java.util.List;
 
@@ -39,3 +39,4 @@ public class SelfCertificateServiceImpl implements SelfCertificateService{
 	}
 
 }
+*/

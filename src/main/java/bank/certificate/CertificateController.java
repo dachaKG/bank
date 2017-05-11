@@ -165,8 +165,6 @@ public class CertificateController {
 				}
 				ks.setKeyEntry(bc.getCommonName()+bc.getSerialNumber(), keyPairSubject.getPrivate(), bc.getPassword().toCharArray(), chain);
 				ks.store(new FileOutputStream(bc.getCommonName()+".jks"), "123".toCharArray());
-				
-				
 			}			
 		} catch (KeyStoreException e) {
 			// TODO Auto-generated catch block
@@ -201,9 +199,7 @@ public class CertificateController {
 	    builder.addRDN(BCStyle.E, bc.getEmail());
 	    //UID (USER ID) je ID korisnika
 	    builder.addRDN(BCStyle.UID, bc.getSerialNumber());
-	    
 	    return new SubjectData(keyPairSubject.getPublic(), builder.build(), bc.getSerialNumber(), bc.getStartDate(), bc.getEndDate());
-
 	}
 
 	private KeyPair generateKeyPair() {
