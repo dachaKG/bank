@@ -57,9 +57,9 @@ public class NationalBankController {
 	@PostMapping("/addCertificate")
 	public void addCertificate(@Valid @RequestBody SelfCertificate certificate) throws KeyStoreException, NoSuchProviderException {
 		System.out.println(certificate.getSerialNumber());
-		certificateService.save(certificate);
 		KeyStore keyStore;
 		KeyPair keyPair = generateKeyPair();
+
 		SelfSignedCertificate ssc = new SelfSignedCertificate();
 		
 		NationalBank nationalBank = nationalBankService.findAll().get(0);

@@ -28,6 +28,7 @@ app.controller('caSignedCertificateController',['$scope','caSignedCertificateSer
 	$scope.createCertificate = function(){
 		$scope.certificateRequest.issuerCommonName = $scope.issuerCommonName.name;
 		$scope.certificateRequest.issuerAlias = $scope.issuerAlias.name;
+		$scope.certificateRequest.certificateAuthority = $scope.ca;
 
 		caSignedCertificateService.createCertificate($scope.certificateRequest)
 		.then(function(response){

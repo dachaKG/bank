@@ -22,7 +22,7 @@ import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 public class CertificateGenerator {
 	public CertificateGenerator() {}
 	
-	public X509Certificate generateCertificate(SubjectData subjectData, PrivateKey issuerPrivate,X500Name issuerX500Name) {
+	public X509Certificate generateCertificate(SubjectData subjectData, PrivateKey issuerPrivate,X500Name issuerX500Name,boolean isCA) {
 		try {
 
 			JcaContentSignerBuilder builder = new JcaContentSignerBuilder("SHA256WithRSAEncryption");
@@ -37,7 +37,7 @@ public class CertificateGenerator {
 					subjectData.getX500name(),
 					subjectData.getPublicKey());
 
-			certGen.addExtension(Extension.basicConstraints, true,new BasicConstraints(true));
+			certGen.addExtension(Extension.basicConstraints, true,new BasicConstraints(isCA));
 			
 			//Generise se sertifikat
 			X509CertificateHolder certHolder = certGen.build(contentSigner);

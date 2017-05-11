@@ -22,7 +22,6 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -147,7 +146,7 @@ public class CertificateController {
 				
 				SubjectData subject = generateSubjectData(bc,keyPairSubject);
 				CertificateGenerator cg = new CertificateGenerator();
-				X509Certificate certificate = cg.generateCertificate(subject, issuerPrivateKey, issuerX500Name);
+				X509Certificate certificate = cg.generateCertificate(subject, issuerPrivateKey, issuerX500Name,bc.isCertificateAuthority());
 				boolean  ca = certificate.getBasicConstraints() != -1;// proveravam da li sam dobro podesio CA
 				System.out.println("CA: " + ca);
 				Certificate[] chain = new Certificate[issuerChain.length+1];

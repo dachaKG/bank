@@ -18,10 +18,13 @@ public class BankCertificate {
 	
 	private String email;	
 	
+	private boolean certificateAuthority;
 	
 	private String issuerCommonName;
 	
 	private String issuerAlias;
+	
+	private String issuerPassword;
 	
 	private Date startDate;
 	
@@ -139,6 +142,24 @@ public class BankCertificate {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+	public boolean isCertificateAuthority() {
+		return certificateAuthority;
+	}
+
+	public void setCertificateAuthority(boolean certificateAuthority) {
+		this.certificateAuthority = certificateAuthority;
+	}
+
+	public String getIssuerPassword() {
+		return issuerPassword;
+	}
+
+	public void setIssuerPassword(String issuerPassword) {
+		this.issuerPassword = issuerPassword;
+	}
+
+
 	
 	
 

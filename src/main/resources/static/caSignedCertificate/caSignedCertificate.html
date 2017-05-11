@@ -51,7 +51,14 @@
 		<label>Password</label>
 		<input type = "password" name = "password" ng-model = "certificateRequest.password"/>
 	</div>
-	
+	<div>
+		<label>CA :</label>
+		<select name = "ca" id = "ca" ng-model = "ca" required>
+			<option ng-value = "">---Please select option---</option>
+			<option ng-value = 'true'>YES</option>
+			<option ng-value = 'false'>NO</option>
+		</select>
+	</div>
 	
 	<button type = "submit" ng-disabled="form.$invalid">Add</button>
 </form>
