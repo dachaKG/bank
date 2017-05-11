@@ -20,11 +20,15 @@ import java.security.Security;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
+import java.security.cert.CertificateExpiredException;
+import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
+import org.apache.sshd.common.util.Base64;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
@@ -53,12 +57,49 @@ public class CertificateController {
 	            	{ return filename.endsWith(".jks"); }
 				});
 		for(int i = 0 ; i < listing.length;i++){
-			String cName = listing[i].getPath().replaceAll(".jks", "");
-			result.add(cName.substring(2));
+
+			try {
+				KeyStore ks = KeyStore.getInstance("JKS");
+				InputStream readStream = new FileInputStream(listing[i].getPath());			
+				ks.load(readStream, "123".toCharArray());
+				Enumeration<String> aliases = ks.aliases();
+				if(checkCN(ks,aliases)){
+					String cName = listing[i].getPath().replaceAll(".jks", "");
+					result.add(cName.substring(2));					
+				}
+			} catch (KeyStoreException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (CertificateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
 		return result;
 	}
 	
+	private boolean checkCN(KeyStore ks, Enumeration<String> aliases) {
+		boolean result = false;
+		while(aliases.hasMoreElements()){
+			String alias = aliases.nextElement();
+			if(isCA(alias,ks)){
+				result = true;
+				break;
+			}
+		}		
+		return result;
+	}
+
 	@RequestMapping(value = "/commonName/{cn}/aliases",method = RequestMethod.GET)
 	public List<String> getAliases(@PathVariable String cn){
 		try {
@@ -96,37 +137,27 @@ public class CertificateController {
 	private boolean isCA(String alias, KeyStore ks) {
 		try {
 			X509Certificate c = (X509Certificate) ks.getCertificate(alias);
+			c.checkValidity();
 			return c.getBasicConstraints() != -1;
 		} catch (KeyStoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (CertificateExpiredException e) {
+			return false;//ako je istekao vraa false
+		} catch (CertificateNotYetValidException e) {
+			return false;
 		}
 		return false;
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	public void addCertificate(@RequestBody BankCertificate bc){
-/*		File dir = new File(".");
-		File[] listing = dir.listFiles(new FilenameFilter() { //ovo ce mi trebati kada budem listao sve sertifikate
-	            public boolean accept(File dir, String filename)
-	            	{ return filename.endsWith(".jks"); }
-				});*/
-		/*bc = new BankCertificate();
-		bc.setCommonName("PROBA3");
-		bc.setAlias("alias1");
-		bc.setCountry("srb");
-		bc.setEmail("adaa@a.com");
-		bc.setStartDate(new Date());
-		bc.setEndDate(new Date());
-		bc.setOrganization("ORG");
-		bc.setOrganizationUnit("unit");
-		bc.setPassword("abc");
-		bc.setSerialNumber("12345888");*/
-	
-		String commonName = /*"selfSignedCertificate";*/bc.getIssuerCommonName();
+		
+		int unique_id= (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
+		bc.setSerialNumber(""+unique_id+"");
+		String commonName = bc.getIssuerCommonName();
 		String tempFile = commonName+".jks";
-		String tempAlias = /*"nbs8";*/bc.getIssuerAlias();
-		String tempKeyPass = "p";//treba resiti cuvanje ovih password-a
+		String tempAlias = bc.getIssuerAlias();
 		
 		try {
 			KeyStore ks = KeyStore.getInstance("JKS", "SUN");
@@ -136,13 +167,15 @@ public class CertificateController {
 			
 			if(ks.isKeyEntry(tempAlias)) {
 				
-				PrivateKey issuerPrivateKey = (PrivateKey) ks.getKey(tempAlias, tempKeyPass.toCharArray());//privatni kljuc issuer-a
+				PrivateKey issuerPrivateKey = (PrivateKey) ks.getKey(tempAlias, bc.getIssuerPassword().toCharArray());//privatni kljuc issuer-a
 				Certificate cert = ks.getCertificate(tempAlias);
 				X500Name issuerX500Name = new JcaX509CertificateHolder((X509Certificate) cert).getSubject();
 				Certificate[] issuerChain = ks.getCertificateChain(tempAlias);//certificate chain if issuer , kako bi odredio ceo chain za subject
-				//sada imam potrebne podatke vezane za issuer-a za potpis sertifikata
+
+				//sada imam potrebne podatke vezane za issuer-a za potpis sertifikata		
 				System.out.println(issuerX500Name.toString());
 				System.out.println(issuerPrivateKey);
+				System.out.println(bc.getSerialNumber());
 				
 				SubjectData subject = generateSubjectData(bc,keyPairSubject);
 				CertificateGenerator cg = new CertificateGenerator();
@@ -163,8 +196,13 @@ public class CertificateController {
 				}else {
 					ks.load(new FileInputStream(bc.getCommonName()+".jks"), null);
 				}
-				ks.setKeyEntry(bc.getCommonName()+bc.getSerialNumber(), keyPairSubject.getPrivate(), bc.getPassword().toCharArray(), chain);
+				ks.setKeyEntry(bc.getAlias(), keyPairSubject.getPrivate(), bc.getPassword().toCharArray(), chain);
 				ks.store(new FileOutputStream(bc.getCommonName()+".jks"), "123".toCharArray());
+				final FileOutputStream os = new FileOutputStream("cert.cer");
+				os.write("-----BEGIN CERTIFICATE-----\n".getBytes("US-ASCII"));
+				os.write(Base64.encodeBase64(cert.getEncoded(), true));
+				os.write("-----END CERTIFICATE-----\n".getBytes("US-ASCII"));
+				os.close();
 			}			
 		} catch (KeyStoreException e) {
 			// TODO Auto-generated catch block

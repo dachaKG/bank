@@ -1,64 +1,123 @@
-<form name= "addCaSignedCertificate" ng-model = "$parent.certificateRequest" ng-submit = "createCertificate()" method = "post">
-	<div>
-		<label>Issuer CN:</label>
-		<select data-ng-model = "issuerCommonName" ng-change = "loadAliases()"
-		data-ng-options = "criteria.name for criteria in issuersCNs track by criteria.id">
-		</select>
+<div class = "container">
+	<div class = "row">
+		<form class="form-horizontal" name= "form" role = "form"  ng-submit = "createCertificate()" method = "post">
+			<fieldset>
+				<legend>Create certificate</legend>
+				
+				<div class = "form-group" >
+					<label class="col-md-4 control-label" for = "issuerCNSelect">Issuer Common Name:</label>
+					<div class = "col-md-4">
+						<select  class="form-control" name = "issuerCNSelect" id = "issuerCNSelect" required data-ng-model = "issuerCommonName" ng-change = "loadAliases()"
+						data-ng-options = "criteria.name for criteria in issuersCNs track by criteria.id">
+						</select>
+					</div>
+				</div>
+				
+				<div class = "form-group">
+					<label class="col-md-4 control-label" for = "issuerAliasSelect">Issuer alias:</label>
+					<div class = "col-md-4">
+						<select class="form-control " id = "issuerAliasSelect" name = "issuerAliasSelect" required data-ng-model = "issuerAlias" 
+						data-ng-options = "criteria.name for criteria in issuerAliases track by criteria.id">
+						</select>
+					</div>
+				</div>
+				
+				<div class = "form-group" ng-class="{ 'has-error': form.issuerPassword.$dirty && form.issuerPassword.$error.required }">
+					<label class = "col-md-4 control-label" for = "issuerPassword"> Issuer password:</label>
+					<div class = "col-md-4">
+						<input  type = "password" name = "issuerPassword" id = "issuerPassword" ng-model = "certificateRequest.issuerPassword"  class="form-control " required/>
+						<span ng-show = "form.issuerPassword.$dirty && form.issuerPassword.$error.required" class="help-block">Issuer certificate password is required</span>
+					</div>
+				</div>
+				
+				<div class = "form-group" ng-class="{ 'has-error': form.organizationUnit.$dirty && form.organizationUnit.$error.required }">
+					<label class = "col-md-4 control-label" for = "organizationUnit">Organization unit:</label>
+					<div class = "col-md-4">
+						<input type = "text" name = "organizationUnit" id = "organizationUnit" ng-model = "certificateRequest.organizationUnit" class="form-control " required/>
+						<span ng-show = "form.organizationUnit.$dirty && form.organizationUnit.$error.required" class="help-block">Organization unit is required</span>					
+					</div>
+				</div>
+				
+				<div class = "form-group" ng-class="{ 'has-error': form.organization.$dirty && form.organization.$error.required }">
+					<label class = "col-md-4 control-label" for = "organization">Organization:</label>
+					<div class = "col-md-4">
+						<input type = "text" name = "organization" id = "organization" ng-model = "certificateRequest.organization"  class="form-control" required/>
+						<span ng-show = "form.organization.$dirty && form.organization.$error.required" class="help-block">Organization is required</span>					
+					</div>
+				</div>
+				
+				<div class = "form-group"ng-class="{ 'has-error': (form.email.$dirty && form.email.$error.required) || (form.email.$dirty && !form.email.$valid) || (form.email.$dirty && vm.errorMessage)}">
+					<label class = "col-md-4 control-label" for = "email">Email:</label>
+					<div class = "col-md-4">
+						<input type = "email" name = "email" id = "email" ng-model = "certificateRequest.email" class="form-control" required/>
+						<span ng-show = "form.email.$dirty && form.email.$error.required" class="help-block">Email is required</span>
+			            <span ng-show = "form.email.$dirty && !form.email.$valid && !form.email.$error.required" class="help-block">Enter email</span>
+					
+					</div>
+				</div>
+				
+				<div class = "form-group" ng-class="{ 'has-error': form.commonName.$dirty && form.commonName.$error.required}">
+					<label class = "col-md-4 control-label" for = "commonName">Common name:</label>
+					<div class = "col-md-4">
+						<input type = "text"  name = "commonName" id = "commonName" ng-model = "certificateRequest.commonName" class="form-control " required/> 
+						<span ng-show = "form.commonName.$dirty && form.commonName.$error.required" class="help-block">Common name is required</span>							
+					</div>
+				</div>
+				
+				<div class = "form-group" ng-class="{ 'has-error': form.country.$dirty && form.country.$error.required}">
+					<label class = "col-md-4 control-label" for = "country">Country:</label>
+					<div class = "col-md-4">
+						<input type = "text"  name = "country" id = "country" ng-model = "certificateRequest.country" class="form-control " required/>
+						<span ng-show = "form.country.$dirty && form.country.$error.required" class="help-block">Country is required</span>							 		
+					</div>
+				</div>
+					
+				<div class = "form-group">
+					<label class = "col-md-4 control-label" for = "startDate">Start date:</label>
+					<div class = "col-md-4">
+						<input type = "date" name = "startDate" ng-model = "certificateRequest.startDate" class="form-control " required/>
+					</div>
+				</div>
+				
+				<div class = "form-group">
+					<label class = "col-md-4 control-label" for = "endDate">End date:</label>
+					<div class = "col-md-4">
+						<input type = "date" name = "endDate" ng-model = "certificateRequest.endDate" class="form-control" required/>
+					</div>
+				</div>
+			
+				<div class = "form-group" ng-class="{ 'has-error': form.alias.$dirty && form.alias.$error.required}">
+					<label class = "col-md-4 control-label" for = "alias">Alias:</label>
+					<div class = "col-md-4">
+						<input type = "text" id = "alias" name = "alias" ng-model = "certificateRequest.alias" class="form-control " required/>
+						<span ng-show = "form.alias.$dirty && form.alias.$error.required" class="help-block">Alias is required</span>							 		
+					</div>
+				</div>
+				<div class = "form-group" ng-class="{ 'has-error': form.password.$dirty && form.password.$error.required}">
+					<label class = "col-md-4 control-label" for = "password">Password:</label>
+					<div class = "col-md-4">
+						<input type = "password" name = "password" ng-model = "certificateRequest.password"/ class="form-control" required>
+						<span ng-show = "form.password.$dirty && form.password.$error.required" class="help-block">Password is required</span>							 		
+					</div>
+				</div>
+				
+				<div class = "form-group" >
+					<label class = "col-md-4 control-label" for = "ca">CA:</label>
+					<div class = "col-md-4">
+						<select name = "ca" id = "ca" ng-model = "ca" class="form-control input-md" required>
+							<option ng-value = 'true'>YES</option>
+							<option ng-value = 'false'>NO</option>
+						</select>
+
+					</div>
+				</div>
+				<div class = "form-group">
+					<label class = "col-md-4 control-label" form = "buttonSubmit"></label>
+					<div class = "col-md-4">
+						<button type = "submit" name = "buttonSubmit" class = "btn btn-primary" ng-disabled="form.$invalid">Create</button>
+					</div>
+				</div>
+			</fieldset>
+		</form>
 	</div>
-	<div>
-		<label>Issuer alias</label>
-		<select data-ng-model = "issuerAlias" 
-		data-ng-options = "criteria.name for criteria in issuerAliases track by criteria.id">
-		</select>
-	</div>
-	<div>
-		<label>Organization unit</label>
-		<input type = "text" name = "organizationUnit" ng-model = "certificateRequest.organizationUnit"/>
-	</div>
-	<div>
-		<label>Organization</label>
-		<input type = "text" name = "organization" ng-model = "certificateRequest.organization"/>
-	</div>
-	<div>
-		<label>Email</label>
-		<input type = "emai" name = "email" ng-model = "certificateRequest.email"/>
-	</div>
-	<div>
-		<label>Common name:</label>
-		<input type = "text"  name = "commonName" ng-model = "certificateRequest.commonName"> 		
-	</div>
-	<div>
-		<label>Country:</label>
-		<input type = "text"  name = "country" ng-model = "certificateRequest.country"> 		
-	</div>	
-	<div>
-		<label>Start date:</label>
-		<input type = "date" name = "startDate" ng-model = "certificateRequest.startDate"/>
-	</div>
-	<div>
-		<label>End date:</label>
-		<input type = "date" name = "endDate" ng-model = "certificateRequest.endDate"/>
-	</div>
-	<div>
-		<label> Serial number</label>
-		<input type = "text" name = "serialNumber" ng-model = "certificateRequest.serialNumber"/>
-	</div>
-	<div>
-		<label>Alias</label>
-		<input type = "text" name = "alias" ng-model = "certificateRequest.alias"/>
-	</div>
-	<div>
-		<label>Password</label>
-		<input type = "password" name = "password" ng-model = "certificateRequest.password"/>
-	</div>
-	<div>
-		<label>CA :</label>
-		<select name = "ca" id = "ca" ng-model = "ca" required>
-			<option ng-value = "">---Please select option---</option>
-			<option ng-value = 'true'>YES</option>
-			<option ng-value = 'false'>NO</option>
-		</select>
-	</div>
-	
-	<button type = "submit" ng-disabled="form.$invalid">Add</button>
-</form>
+</div>
