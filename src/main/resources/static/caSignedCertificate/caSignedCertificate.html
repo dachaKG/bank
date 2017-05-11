@@ -1,0 +1,57 @@
+<form name= "addCaSignedCertificate" ng-model = "$parent.certificateRequest" ng-submit = "createCertificate()" method = "post">
+	<div>
+		<label>Issuer CN:</label>
+		<select data-ng-model = "issuerCommonName" ng-change = "loadAliases()"
+		data-ng-options = "criteria.name for criteria in issuersCNs track by criteria.id">
+		</select>
+	</div>
+	<div>
+		<label>Issuer alias</label>
+		<select data-ng-model = "issuerAlias" 
+		data-ng-options = "criteria.name for criteria in issuerAliases track by criteria.id">
+		</select>
+	</div>
+	<div>
+		<label>Organization unit</label>
+		<input type = "text" name = "organizationUnit" ng-model = "certificateRequest.organizationUnit"/>
+	</div>
+	<div>
+		<label>Organization</label>
+		<input type = "text" name = "organization" ng-model = "certificateRequest.organization"/>
+	</div>
+	<div>
+		<label>Email</label>
+		<input type = "emai" name = "email" ng-model = "certificateRequest.email"/>
+	</div>
+	<div>
+		<label>Common name:</label>
+		<input type = "text"  name = "commonName" ng-model = "certificateRequest.commonName"> 		
+	</div>
+	<div>
+		<label>Country:</label>
+		<input type = "text"  name = "country" ng-model = "certificateRequest.country"> 		
+	</div>	
+	<div>
+		<label>Start date:</label>
+		<input type = "date" name = "startDate" ng-model = "certificateRequest.startDate"/>
+	</div>
+	<div>
+		<label>End date:</label>
+		<input type = "date" name = "endDate" ng-model = "certificateRequest.endDate"/>
+	</div>
+	<div>
+		<label> Serial number</label>
+		<input type = "text" name = "serialNumber" ng-model = "certificateRequest.serialNumber"/>
+	</div>
+	<div>
+		<label>Alias</label>
+		<input type = "text" name = "alias" ng-model = "certificateRequest.alias"/>
+	</div>
+	<div>
+		<label>Password</label>
+		<input type = "password" name = "password" ng-model = "certificateRequest.password"/>
+	</div>
+	
+	
+	<button type = "submit" ng-disabled="form.$invalid">Add</button>
+</form>
