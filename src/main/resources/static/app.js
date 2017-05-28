@@ -5,7 +5,9 @@ angular.module('routerApp', ['ui.router',
 	'nationalBank.services', 'nationalBank.controllers',
 	'findCertificate.services','findCertificate.controllers', 
 	'nationalBank.services', 'nationalBank.controllers',
-	'caSignedCertificate.services','caSignedCertificate.controllers']) 
+	'caSignedCertificate.services','caSignedCertificate.controllers',
+	'signedCertificate.services','signedCertificate.controllers',
+	'revokeCertificate.services','revokeCertificate.controllers']) 
 
 .config(function($stateProvider,$urlRouterProvider){
 	
@@ -28,6 +30,11 @@ angular.module('routerApp', ['ui.router',
 		templateUrl : 'caSignedCertificate/caSignedCertificate.html',
 		controller : 'caSignedCertificateController'
 	})
+	.state('addSignedCertificate',{
+		url : '/addSignedCertificate',
+		templateUrl : 'signedCertificate/signedCertificate.html',
+		controller : 'signedCertificateController'
+	})
 	.state('addNationalBank',{
 		url : '/addNationalBank',
 		templateUrl : 'nationalBank/addNationalBank.html',
@@ -38,7 +45,11 @@ angular.module('routerApp', ['ui.router',
 		templateUrl : 'findExistingCertificate/findCertificate.html',
 		controller : 'findCertificateController'
 	})
-	
+	.state('revokeCertificate',{
+		url : '/revokeCertificate',
+		templateUrl : 'revokeCertificate/revokeCertificate.html',
+		controller : 'revokeCertificateController'
+	})	
 	
 	/*.state('country', {
 		url : '/country',

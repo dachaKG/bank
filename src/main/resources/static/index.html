@@ -7,13 +7,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
 	
-    <script type="text/javascript" src="app-reservation/bootstrap-datetimepicker.min.js"></script>		
 	<!-- AngularJS ============================================================= -->
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-resource.js"></script>
 	<script	src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
-
+	<script src = "/FileSaver.min.js"></script>
 
 <script src="app.js"></script>
 
@@ -21,20 +20,26 @@
 <script src = "/nationalBank/nationalBankService.js"></script>
 <script src = "/caSignedCertificate/caSignedCertificateController.js"></script>
 <script src = "/caSignedCertificate/caSignedCertificateService.js"></script>
+<script src = "/signedCertificate/signedCertificateController.js"></script>
+<script src = "/signedCertificate/signedCertificateService.js"></script>
 
 <script src = "/findExistingCertificate/findCertificateController.js"></script>
 <script src = "/findExistingCertificate/findCertificateService.js"></script>
 
+<script src = "/revokeCertificate/revokeCertificateController.js"></script>
+<script src = "/revokeCertificate/revokeCertificateService.js"></script>
 </head>
 
 
 <body class="bg">
 
 
-	<a ui-sref="addCertificate">New Certificate</a>
-	<a ui-sref="addCaSignedCertificate">New signed certificate</a>
-    <a ui-sref="addNationalBank">New national bank</a>
+	<a ui-sref="addCertificate">New central bank certificate</a>
+	<a ui-sref="addCaSignedCertificate">New bank certificate</a>
+	<a ui-sref = "addSignedCertificate">New client certificate</a>
+	
     <a ui-sref="findCertificate">Find certificate</a>
+    <a ui-sref = "revokeCertificate">Revoke certificate</a>
      <div>
 		<div ui-view></div>
 	</div>

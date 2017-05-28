@@ -28,7 +28,7 @@ public class SelfSignedCertificate {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public X509Certificate generateCertificate(KeyPair keyPair, NationalBank nationalBank, SelfCertificate certificate, X500Name x500Name){
+	public X509Certificate generateCertificate(KeyPair keyPair, SelfCertificate certificate, X500Name x500Name){
 		
 
 		try {

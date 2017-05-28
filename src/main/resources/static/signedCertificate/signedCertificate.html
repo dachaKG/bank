@@ -21,13 +21,7 @@
 					</div>
 				</div>
 				
-				<div class = "form-group" ng-class="{ 'has-error': form.issuerPassword.$dirty && form.issuerPassword.$error.required }">
-					<label class = "col-md-4 control-label" for = "issuerPassword"> Issuer password:</label>
-					<div class = "col-md-4">
-						<input  type = "password" name = "issuerPassword" id = "issuerPassword" ng-model = "certificateRequest.issuerPassword"  class="form-control " required/>
-						<span ng-show = "form.issuerPassword.$dirty && form.issuerPassword.$error.required" class="help-block">Issuer certificate password is required</span>
-					</div>
-				</div>
+
 				
 				<div class = "form-group" ng-class="{ 'has-error': form.organizationUnit.$dirty && form.organizationUnit.$error.required }">
 					<label class = "col-md-4 control-label" for = "organizationUnit">Organization unit:</label>
@@ -71,19 +65,7 @@
 					</div>
 				</div>
 					
-				<div class = "form-group">
-					<label class = "col-md-4 control-label" for = "startDate">Start date:</label>
-					<div class = "col-md-4">
-						<input type = "date" name = "startDate" ng-model = "certificateRequest.startDate" class="form-control " required/>
-					</div>
-				</div>
-				
-				<div class = "form-group">
-					<label class = "col-md-4 control-label" for = "endDate">End date:</label>
-					<div class = "col-md-4">
-						<input type = "date" name = "endDate" ng-model = "certificateRequest.endDate" class="form-control" required/>
-					</div>
-				</div>
+
 			
 				<div class = "form-group" ng-class="{ 'has-error': form.alias.$dirty && form.alias.$error.required}">
 					<label class = "col-md-4 control-label" for = "alias">Alias:</label>

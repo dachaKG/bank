@@ -1,8 +1,6 @@
-var app = angular.module('caSignedCertificate.controllers',[]);
-
-app.controller('caSignedCertificateController',['$scope','caSignedCertificateService','$location',
-	function($scope,caSignedCertificateService,$location){
-	
+var app = angular.module('signedCertificate.controllers',[]);
+app.controller('signedCertificateController',['$scope','signedCertificateService','$location',
+	function($scope,service,$location){
 	$scope.issuersCNs =  [
 	      /*{id: '1', name: 'Option A'},
 	      {id: '2', name: 'Option B'},
@@ -52,5 +50,4 @@ app.controller('caSignedCertificateController',['$scope','caSignedCertificateSer
 		})
 	}
 	loadCNs();
-	
-}]);
+}])

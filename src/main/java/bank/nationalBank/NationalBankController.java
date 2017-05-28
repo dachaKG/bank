@@ -19,11 +19,13 @@ import java.security.Security;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.sshd.common.util.Base64;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
@@ -36,6 +38,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import bank.certificate.Certificate;
+import bank.certificate.CertificateService;
 import bank.selfCertificate.SelfCertificate;
 
 @RestController
@@ -44,12 +48,12 @@ public class NationalBankController {
 
 	private final NationalBankService nationalBankService;
 	//private final SelfCertificateService certificateService;
-
+	private final CertificateService certificateService;
 	@Autowired
-	public NationalBankController(final NationalBankService nationalBankService) {
+	public NationalBankController(final NationalBankService nationalBankService,final CertificateService certificateService) {
 		Security.addProvider(new BouncyCastleProvider());
 		this.nationalBankService = nationalBankService;
-		//this.certificateService = certificateService;
+		this.certificateService = certificateService;
 	}
 
 	@GetMapping("/nationalBank")
@@ -58,18 +62,18 @@ public class NationalBankController {
 	}
 
 	@PostMapping("/addCertificate")
-	public void addCertificate(@Valid @RequestBody SelfCertificate certificate) throws KeyStoreException, NoSuchProviderException {
-		System.out.println(certificate.getSerialNumber());
-
+	public void addCertificate(@Valid @RequestBody SelfCertificate selfCertificate) throws KeyStoreException, NoSuchProviderException {
+		int unique_id= (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
+		selfCertificate.setSerialNumber(""+unique_id+"");
 		KeyStore keyStore;
 		KeyPair keyPair = generateKeyPair();
 
 		SelfSignedCertificate ssc = new SelfSignedCertificate();
 		
-		NationalBank nationalBank = nationalBankService.findAll().get(0);
-		X500Name x500Name = generateIssuerData(keyPair.getPrivate(), nationalBank);
+		//NationalBank nationalBank = nationalBankService.findAll().get(0);
+		X500Name x500Name = generateIssuerData(keyPair.getPrivate(), selfCertificate);
 		
-		X509Certificate x509cert = ssc.generateCertificate(keyPair, nationalBank, certificate, x500Name);
+		X509Certificate x509cert = ssc.generateCertificate(keyPair, selfCertificate, x500Name);
 		
 
 		
@@ -81,21 +85,26 @@ public class NationalBankController {
 		try {
 			keyStore = KeyStore.getInstance("jks", "SUN");
 			
-			File file = new File("selfSignedCertificate.jks");
+			File file = new File(selfCertificate.getCommonName()+".jks");
 			
 			if(!file.exists()){
 				file.createNewFile();
 				keyStore.load(null, "123".toCharArray());
 			} else {
-				keyStore.load(new FileInputStream("selfSignedCertificate.jks"), null);
+				keyStore.load(new FileInputStream(selfCertificate.getCommonName()+".jks"), null);
 			}
 			
 			
 			//getExistingCertificate("1222");
-			keyStore.setKeyEntry(certificate.getAlias(), keyPair.getPrivate(), certificate.getPassword().toCharArray(), chain);
-			keyStore.store(new FileOutputStream("selfSignedCertificate.jks"), "123".toCharArray());
-			
-		
+			keyStore.setKeyEntry(selfCertificate.getAlias(), keyPair.getPrivate(), selfCertificate.getPassword().toCharArray(), chain);
+			keyStore.store(new FileOutputStream(selfCertificate.getCommonName()+".jks"), "123".toCharArray());
+
+			final FileOutputStream os = new FileOutputStream(x509cert.getSerialNumber()+".cer");
+			os.write("-----BEGIN CERTIFICATE-----\n".getBytes("US-ASCII"));
+			os.write(Base64.encodeBase64(x509cert.getEncoded(), true));
+			os.write("-----END CERTIFICATE-----\n".getBytes("US-ASCII"));
+			os.close();			
+			certificateService.save(new Certificate(selfCertificate.getSerialNumber(),false));
 			/*//------------
 			X509CertSelector targetConstraints = new X509CertSelector();
 
@@ -186,64 +195,16 @@ public class NationalBankController {
 		
 	}
 
-	/*private void deleteCertificate(KeyStore keyStore, File file) throws Exception {
-		keyStore.deleteEntry("ttt");
-		OutputStream writeStream = new FileOutputStream(file);
-		keyStore.store(writeStream, "123".toCharArray());
-		writeStream.close();
-	}*/
-	
-	/*private Certificate readCertificateFromKeyStore(String keyStoreFile, String keyStorePass, String alias){
-
-		try {
-			//kreiramo instancu KeyStore
-			KeyStore ks = KeyStore.getInstance("JKS", "SUN");
-			//ucitavamo podatke
-			BufferedInputStream in = new BufferedInputStream(new FileInputStream(keyStoreFile));
-			ks.load(in, keyStorePass.toCharArray());
-			Certificate[] listOfCert = ks.getCertificateChain(alias);
-			if(ks.isKeyEntry(alias)) {
-				Certificate cert = ks.getCertificate(alias);
-				X509Certificate xcert = (X509Certificate) ks.getCertificate(alias);
-				System.out.println("---- " + xcert.getBasicConstraints() + " ---------");
-				
-				boolean[] keyUsage = xcert.getKeyUsage();
-				if(keyUsage[5]){
-					System.out.println("jeste");
-				} else {
-					System.out.println("nije");
-				}
-				
-				return cert;
-			}
-		} catch (KeyStoreException e) {
-			e.printStackTrace();
-		} catch (NoSuchProviderException e) {
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		} catch (CertificateException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	
-		
-	}*/
-
-	private X500Name generateIssuerData(PrivateKey issuerKey, NationalBank nationalBank) {
+	private X500Name generateIssuerData(PrivateKey issuerKey, SelfCertificate selfCertificate) {
 		X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
-	    builder.addRDN(BCStyle.CN, nationalBank.getCommonName());
+	    builder.addRDN(BCStyle.CN, selfCertificate.getCommonName());
 	    
-	    builder.addRDN(BCStyle.O, nationalBank.getOrganization());
-	    builder.addRDN(BCStyle.OU, nationalBank.getOrganizationUnit());
-	    builder.addRDN(BCStyle.C, nationalBank.getCountry());
-	    builder.addRDN(BCStyle.E, nationalBank.getEmail());
+	    builder.addRDN(BCStyle.O, selfCertificate.getOrganization());
+	    builder.addRDN(BCStyle.OU, selfCertificate.getOrganizationUnit());
+	    builder.addRDN(BCStyle.C, selfCertificate.getCountry());
+	    builder.addRDN(BCStyle.E, selfCertificate.getEmail());
 	    //UID (USER ID) je ID korisnika
-	    builder.addRDN(BCStyle.UID, "123456");
+	    builder.addRDN(BCStyle.UID, selfCertificate.getSerialNumber());
 	    
 	    return builder.build();
 		//Kreiraju se podaci za issuer-a, sto u ovom slucaju ukljucuje:
@@ -252,22 +213,6 @@ public class NationalBankController {
 		//return new IssuerData(issuerKey, builder.build());
 	}
 	
-	@PostMapping("/addNationalBank")
-	public void addNationalBank(@RequestBody NationalBank nationalBank) throws Exception {
-		System.out.println(nationalBank.getCommonName());
-		/*KeyPair keyPair = generateKeyPair();
-		
-		KeyFactory fact = KeyFactory.getInstance("RSA");
-		
-		RSAPublicKeySpec pub = fact.getKeySpec(keyPair.getPublic(), RSAPublicKeySpec.class);
-		
-		saveToFile("nationalBankPublicKey.cfg")*/
-		// nationalBank.setPrivateKey(new
-		// BigInteger(keyPair.getPrivate().getEncoded()));
-		// nationalBank.setPublicKey(new
-		// BigInteger(keyPair.getPublic().getEncoded()));
-		nationalBankService.save(nationalBank);
-	}
 
 	private KeyPair generateKeyPair() {
 		try {
@@ -283,16 +228,5 @@ public class NationalBankController {
 		return null;
 	}
 
-/*	private static void saveToFile(String fileName, BigInteger mod, BigInteger exp) throws Exception {
-		ObjectOutputStream oout = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(fileName)));
-		try {
-			oout.writeObject(mod);
-			oout.writeObject(exp);
-		} catch (Exception e) {
-			throw new Exception(e);
-		} finally {
-			oout.close();
-		}
-	}*/
 
 }

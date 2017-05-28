@@ -3,12 +3,6 @@ package bank.selfCertificate;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 
 public class SelfCertificate implements Serializable{
 	
@@ -35,7 +29,15 @@ public class SelfCertificate implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
+	private String commonName;
 
+	private String country; //country
+	
+	private String organization;  //organization
+	
+	private String organizationUnit; //organization unit
+	
+	private String email;
 
 	private Long id;
 
@@ -49,11 +51,49 @@ public class SelfCertificate implements Serializable{
 
 	private String password;
 	
-	/*@Column
-	private X500Name x500Name;*/
 
 	public Date getStartDate() {
 		return startDate;
+	}
+
+	public String getCommonName() {
+		return commonName;
+	}
+
+	public void setCommonName(String commonName) {
+		this.commonName = commonName;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getOrganization() {
+		return organization;
+	}
+
+	public void setOrganization(String organization) {
+		this.organization = organization;
+	}
+
+	public String getOrganizationUnit() {
+		return organizationUnit;
+	}
+
+	public void setOrganizationUnit(String organizationUnit) {
+		this.organizationUnit = organizationUnit;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public void setStartDate(Date startDate) {
@@ -105,13 +145,6 @@ public class SelfCertificate implements Serializable{
 	
 	
 
-	/*public X500Name getX500Name() {
-		return x500Name;
-	}
-
-	public void setX500Name(X500Name x500Name) {
-		this.x500Name = x500Name;
-	}*/
 	
 	
 	

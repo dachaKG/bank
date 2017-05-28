@@ -3,7 +3,7 @@ var app = angular.module('nationalBank.controllers',[]);
 app.controller('nationalBankController',['$scope','nationalBankService','$location',
 	function($scope, nationalBankService,$location) {
 	
-	function findAll(){
+	/*function findAll(){
 		nationalBankService.findAll().then(
 			function(response){
 				if(response.data.length == 0){
@@ -13,10 +13,10 @@ app.controller('nationalBankController',['$scope','nationalBankService','$locati
 		)
 	}
 	
-	findAll();
+	findAll();*/
 	
-	$scope.addCertificate = function(){
-		nationalBankService.addCertificate($scope.certificate).then(
+	$scope.createCertificate = function(){
+		nationalBankService.createCertificate($scope.certificateRequest).then(
 			function(response){
 				$scope.state = undefined;
 				$location.path('/addCertificate')
@@ -25,15 +25,6 @@ app.controller('nationalBankController',['$scope','nationalBankService','$locati
 			});
 	}
 	
-	$scope.addNationalBank = function(){
-		nationalBankService.addNationalBank($scope.nationalBank).then(
-			function(response){
-				$scope.state = undefined;
-				$location.path('/addNationalBank')
-			}, function(response){
-				alert("greska pri dodavanju");
-			});
-	}
 	
 	
 }]);
