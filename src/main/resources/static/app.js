@@ -7,49 +7,60 @@ angular.module('routerApp', ['ui.router',
 	'nationalBank.services', 'nationalBank.controllers',
 	'caSignedCertificate.services','caSignedCertificate.controllers',
 	'signedCertificate.services','signedCertificate.controllers',
-	'revokeCertificate.services','revokeCertificate.controllers']) 
+	'revokeCertificate.services','revokeCertificate.controllers',
+	'user.services', 'user.controllers']) 
 
 .config(function($stateProvider,$urlRouterProvider){
 	
-	//$urlRouterProvider.otherwise('/country');
+	$urlRouterProvider.otherwise('/home');
 	
 	
 	$stateProvider
-	.state('nationalBank',{
+	.state('home.nationalBank',{
 		url : '/nationalBank',
 		templateUrl : 'nationalBank/nationalBankPartial.html',
 		controller : 'nationalBankController'
 	})
-	.state('addCertificate',{
+	.state('home.addCertificate',{
 		url : '/addCertificate',
 		templateUrl : 'nationalBank/addCertificate.html',
 		controller : 'nationalBankController'
 	})
-	.state('addCaSignedCertificate',{
+	.state('home.addCaSignedCertificate',{
 		url : '/addCaSignedCertificate',
 		templateUrl : 'caSignedCertificate/caSignedCertificate.html',
 		controller : 'caSignedCertificateController'
 	})
-	.state('addSignedCertificate',{
+	.state('home.addSignedCertificate',{
 		url : '/addSignedCertificate',
 		templateUrl : 'signedCertificate/signedCertificate.html',
 		controller : 'signedCertificateController'
 	})
-	.state('addNationalBank',{
+	.state('home.addNationalBank',{
 		url : '/addNationalBank',
 		templateUrl : 'nationalBank/addNationalBank.html',
 		controller : 'nationalBankController'
 	})
-	.state('findCertificate',{
+	.state('home.findCertificate',{
 		url : '/getExistingCertificate',
 		templateUrl : 'findExistingCertificate/findCertificate.html',
 		controller : 'findCertificateController'
 	})
-	.state('revokeCertificate',{
+	.state('home.revokeCertificate',{
 		url : '/revokeCertificate',
 		templateUrl : 'revokeCertificate/revokeCertificate.html',
 		controller : 'revokeCertificateController'
-	})	
+	})
+	.state('home.changePassword',{
+		url : '/changePassword',
+		templateUrl : 'user/changePassword.html',
+		controller : 'userController'
+	})
+	.state('home',{
+		url : '/home',
+		templateUrl : 'home.html',
+		controller : 'userController'
+	})
 	
 	/*.state('country', {
 		url : '/country',
@@ -71,4 +82,52 @@ angular.module('routerApp', ['ui.router',
 		templateUrl : 'place/placeList.html',
 		controller : 'placeController'
 	})*/
-});
+}).service('appService', ['$http', function($http){
+	
+	this.userDetails = function(){
+		return $http.get("/userDetails");
+	}
+	
+}]).controller('appController',['$scope','appService','$location',
+	function($scope, appService,$location, Authentication) {
+		
+		$scope.authorities = [];
+		userDetails();
+		$scope.role_admin = false;
+		$scope.role_banker = false;
+		$scope.role_user = false;
+		
+		$scope.toggleShowDiv = function(){
+		    console.log('fired');
+		    $scope.role_banker = !$scope.role_banker;
+		  }
+		
+		function userDetails(){
+			appService.userDetails().then(
+				function(response){
+					for(var i = 0 ; i < response.data.authorities.length; i++){
+						$scope.authorities.push(response.data.authorities[i].authority);
+					}
+					
+					auth();
+					console.log($scope.authorities);
+					// $scope.authorities.push(response.data.authorities);
+				}, function(response){
+					alert("greska pri logout-u");
+				}
+			)
+		}
+		
+		function auth(){
+			for(var i = 0 ; i < $scope.authorities.length; i++){
+				if($scope.authorities[i] == "ROLE_ADMIN"){
+					$scope.role_admin = true;
+				} else if($scope.authorities[i] == "ROLE_BANKER"){
+					$scope.role_banker = true;
+				} else {
+					$scope.role_user = true;
+				}
+			}
+		}
+
+}]);

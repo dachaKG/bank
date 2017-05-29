@@ -28,18 +28,16 @@
 
 <script src = "/revokeCertificate/revokeCertificateController.js"></script>
 <script src = "/revokeCertificate/revokeCertificateService.js"></script>
+
+<script src = "/user/userController.js"></script>
+<script src = "/user/userService.js"></script>
+
 </head>
 
 
-<body class="bg">
+<body class="bg" ng-controller="appController">
 
 
-	<a ui-sref="addCertificate">New central bank certificate</a>
-	<a ui-sref="addCaSignedCertificate">New bank certificate</a>
-	<a ui-sref = "addSignedCertificate">New client certificate</a>
-	
-    <a ui-sref="findCertificate">Find certificate</a>
-    <a ui-sref = "revokeCertificate">Revoke certificate</a>
      <div>
 		<div ui-view></div>
 	</div>

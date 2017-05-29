@@ -31,6 +31,7 @@ import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -61,6 +62,7 @@ public class NationalBankController {
 		return nationalBankService.findAll();
 	}
 
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	@PostMapping("/addCertificate")
 	public void addCertificate(@Valid @RequestBody SelfCertificate selfCertificate) throws KeyStoreException, NoSuchProviderException {
 		int unique_id= (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
