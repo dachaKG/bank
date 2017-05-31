@@ -17,6 +17,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	UserDetailServiceImpl userDetailsService;
 	
+	@Autowired
+	AuthFailure authFailure;
+	
+	@Autowired
+	AuthSuccess authSuccess;
+	
 	 /*@Autowired
 	 @Qualifier("authenticationProvider")
 	 AuthenticationProvider authenticationProvider;*/

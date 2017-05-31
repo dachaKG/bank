@@ -10,13 +10,13 @@ import javax.persistence.ManyToMany;
 
 @Entity
 public class Privilege {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
-	private String name;
-	
+
+	private String privilege;
+
 	@ManyToMany(mappedBy = "privileges")
 	private List<Role> roles;
 
@@ -28,12 +28,12 @@ public class Privilege {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getPrivilege() {
+		return privilege;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setPrivilege(String privilege) {
+		this.privilege = privilege;
 	}
 
 	public List<Role> getRoles() {
@@ -43,7 +43,5 @@ public class Privilege {
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
-	
-	
 
 }

@@ -1,7 +1,9 @@
 var app = angular.module('caSignedCertificate.controllers',[]);
 
-app.controller('caSignedCertificateController',['$scope','caSignedCertificateService','$location',
-	function($scope,caSignedCertificateService,$location){
+app.controller('caSignedCertificateController',['$scope','caSignedCertificateService','$location','addCaSignedCertificate',
+	function($scope,caSignedCertificateService,$location, addCaSignedCertificate){
+	
+	$scope.addCaSignedCertificate = addCaSignedCertificate;
 	
 	$scope.issuersCNs =  [
 	      /*{id: '1', name: 'Option A'},

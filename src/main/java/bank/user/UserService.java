@@ -14,6 +14,10 @@ public interface UserService {
 	
 	public User findByUsername(String username);
 	
+	public User findByUsernameAndCheckIp(String username, String key);
+	
+	public User findByEmail(String email);
+	
 	public User changePassword(String password, Long id);
 	
 

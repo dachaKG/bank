@@ -1,5 +1,7 @@
 package bank.user;
 
+import java.security.SecureRandom;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -8,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -18,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import bank.security.UserDetailServiceImpl;
+import bank.userBadPassword.UserBadPasswordService;
+
 @RestController
 @RequestMapping
 public class UserController {
@@ -25,7 +31,13 @@ public class UserController {
 	private final UserService userService;
 	private final UserDetailsService userDetailsService;
 	
-	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+	@Autowired
+	UserDetailServiceImpl userDetails;
+	
+	@Autowired
+	private UserBadPasswordService userBadPasswordService;
+	
+	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(5, new SecureRandom());
 	
 	@Autowired
 	public UserController(UserService userService, final UserDetailsService userDetailsService) {
@@ -54,7 +66,7 @@ public class UserController {
 	
 	@PutMapping("/changePassword")
 	public boolean changePassword(@RequestBody ChangePassword changePassword){
-		UserDetails userDetails = getUserDetails();
+		CustomUserDetails userDetails = getUserDetails();
 		User user = userService.findByUsername(userDetails.getUsername());
 		boolean checkOldPassword = encoder.matches(changePassword.getOldPassword(), user.getPassword());
 		if(checkOldPassword){
@@ -67,28 +79,30 @@ public class UserController {
 		
 	}
 	
-	@GetMapping("/userDetails")
-	public UserDetails userDetails(){
-		
-/*		SecurityContext context = SecurityContextHolder.getContext();
 
-		Authentication authentication = context.getAuthentication();
-		
-		org.springframework.security.core.userdetails.UserDetails currentUser = userDetailsService.loadUserByUsername(authentication.getName());
-*/
+	
+	@GetMapping("/userDetails")
+	public CustomUserDetails userDetails(){
+	
+
 		return getUserDetails();
 	}
 	
-	private UserDetails getUserDetails(){
+	private CustomUserDetails getUserDetails(){
 
 		
 		SecurityContext context = SecurityContextHolder.getContext();
 
 		Authentication authentication = context.getAuthentication();
 
+		//User user = userService.findByUsername(authentication.getName());
+		
+		//return user;
 		org.springframework.security.core.userdetails.UserDetails currentUser = userDetailsService.loadUserByUsername(authentication.getName());
 		
-		return (UserDetails) currentUser;
+		userBadPasswordService.delete(userDetails.getBadPassword().getId());
+		
+		return (CustomUserDetails) currentUser;
 	
 	}
 

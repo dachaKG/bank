@@ -24,12 +24,38 @@ angular.module('routerApp', ['ui.router',
 	.state('home.addCertificate',{
 		url : '/addCertificate',
 		templateUrl : 'nationalBank/addCertificate.html',
-		controller : 'nationalBankController'
+		controller : 'nationalBankController',
+		resolve : {
+			addCertificate : function($http){
+				return $http.get("/userPermissionAddCertificate").then(
+					function(response){
+						if(response.data == "true"){
+							return true;
+						} else {
+							history.back();
+						}
+					}
+				)
+			}
+		}
 	})
 	.state('home.addCaSignedCertificate',{
 		url : '/addCaSignedCertificate',
 		templateUrl : 'caSignedCertificate/caSignedCertificate.html',
-		controller : 'caSignedCertificateController'
+		controller : 'caSignedCertificateController',
+		resolve : {
+			addCaSignedCertificate : function($http){
+				return $http.get("/userPermissionAddCaSignedCertificate").then(
+					function(response){
+						if(response.data == "true"){
+							return true;
+						} else {
+							history.back();
+						}
+					}
+				)
+			}
+		}
 	})
 	.state('home.addSignedCertificate',{
 		url : '/addSignedCertificate',
@@ -62,26 +88,6 @@ angular.module('routerApp', ['ui.router',
 		controller : 'userController'
 	})
 	
-	/*.state('country', {
-		url : '/country',
-		templateUrl : 'country/countryList.html',
-		controller : 'countryController'
-	})
-	.state('addCountry',{
-		url : '/addCountry',
-		templateUrl : 'country/addCountry.html',
-		controller : 'countryController'
-	})
-	.state('nextPlaces',{
-		url : '/nextPlaces',
-		templateUrl  : 'country/nextPlaces.html',
-		controller : 'countryController'
-	})
-	.state('places', {
-		url : '/places',
-		templateUrl : 'place/placeList.html',
-		controller : 'placeController'
-	})*/
 }).service('appService', ['$http', function($http){
 	
 	this.userDetails = function(){

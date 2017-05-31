@@ -1,30 +1,92 @@
 package bank.security;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import bank.user.CustomUserDetails;
 import bank.user.User;
-import bank.user.UserDetails;
 import bank.user.UserService;
+import bank.userBadPassword.UserBadPassword;
+import bank.userBadPassword.UserBadPasswordService;
 
 @Component
 public class UserDetailServiceImpl implements UserDetailsService {
 	
 	@Autowired
 	private UserService userService;
+	
+    @Autowired
+    private LoginAttemptService loginAttemptService;
+
+	@Autowired
+	private HttpServletRequest request;
+	
+	@Autowired
+	private UserBadPasswordService userBadPasswordService;
+	
+	private UserBadPassword badPassword;
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userService.findByUsername(username);
+	public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		
+		/*String ip = getClientIP();
+		
+		if (loginAttemptService.isBlocked(ip)) {
+            throw new RuntimeException("blocked");
+        }*/
+		
+		String ip = getClientIP();
+		User user = userService.findByUsernameAndCheckIp(username, ip);
 		
 		if(user == null){
-			throw new UsernameNotFoundException("no user found with " + username);
+			
+			
+			if (loginAttemptService.isBlocked(ip)) {
+	            throw new RuntimeException("blocked");
+	        }
+		} else {
+			badPassword = userBadPasswordService.findByUserId(user);
+			if(badPassword == null){
+				badPassword = new UserBadPassword();
+				badPassword.setUser(user);
+				//int att = badPassword.getAttempts();
+				badPassword.setAttempts(1);
+				badPassword.setAccessLocked(false);
+				userBadPasswordService.save(badPassword);
+			} else {
+				if(userBadPasswordService.checkAccessLocked(badPassword.getId())){
+					throw new RuntimeException("blocked");
+				}
+				int att = badPassword.getAttempts();
+				badPassword.setAttempts(att + 1);
+				if(badPassword.getAttempts() >= 3){
+					badPassword.setAccessLocked(true);
+				}
+				userBadPasswordService.save(badPassword);
+			}
+			
 		}
 		
-		return new bank.user.UserDetails(user);
+		return new CustomUserDetails(user);
 	}
+	
+	private String getClientIP() {
+		String xfHeader = request.getHeader("X-Forwarded-For");
+		if (xfHeader == null) {
+			return request.getRemoteAddr();
+		}
+		return xfHeader.split(",")[0];
+	}
+
+	public UserBadPassword getBadPassword() {
+		return badPassword;
+	}
+	
+	
 
 }
 
