@@ -68,8 +68,9 @@ app.controller('csrController',['$scope','csrService','$location',
 
 		service.createCertificate($scope.certificateRequest)
 		.then(function(response){
-			
-			$scope.certificateRequest = {};
+			$scope.state = 'home.csr.feedback';
+			$location.path('home/csr/feedback')			
+
 		},
 		function(response){
 			

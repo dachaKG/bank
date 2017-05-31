@@ -5,7 +5,9 @@ app.controller('signedCertificateController',['$scope','signedCertificateService
 	$scope.createCertificate = function(){
 		service.createCertificate($scope.certificateRequest)
 		.then(function(response){
-			$scope.certificateRequest = {};
+			$scope.state = 'home.addSignedCertificate.feedback';
+
+			$location.path('home/addSignedCertificate/feedback')
 		},
 		function(response){
 			
