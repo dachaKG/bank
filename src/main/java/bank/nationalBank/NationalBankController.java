@@ -68,7 +68,7 @@ public class NationalBankController {
 		KeyStore keyStore;
 		KeyPair keyPair = generateKeyPair();
 
-		SelfSignedCertificate ssc = new SelfSignedCertificate();
+		SelfSignedGenerator ssc = new SelfSignedGenerator();
 		
 		//NationalBank nationalBank = nationalBankService.findAll().get(0);
 		X500Name x500Name = generateIssuerData(keyPair.getPrivate(), selfCertificate);
@@ -98,8 +98,8 @@ public class NationalBankController {
 			//getExistingCertificate("1222");
 			keyStore.setKeyEntry(selfCertificate.getAlias(), keyPair.getPrivate(), selfCertificate.getPassword().toCharArray(), chain);
 			keyStore.store(new FileOutputStream(selfCertificate.getCommonName()+".jks"), "123".toCharArray());
-
-			final FileOutputStream os = new FileOutputStream(x509cert.getSerialNumber()+".cer");
+			File cerFile = new File("certificates\\"+x509cert.getSerialNumber()+".cer");
+			final FileOutputStream os = new FileOutputStream(cerFile);
 			os.write("-----BEGIN CERTIFICATE-----\n".getBytes("US-ASCII"));
 			os.write(Base64.encodeBase64(x509cert.getEncoded(), true));
 			os.write("-----END CERTIFICATE-----\n".getBytes("US-ASCII"));

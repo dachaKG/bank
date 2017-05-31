@@ -24,21 +24,6 @@ app.controller('caSignedCertificateController',['$scope','caSignedCertificateSer
 			alert("GRESKA PRI UCITAVANJU ALIASA");
 		})
 	}
-	
-	$scope.createCertificate = function(){
-		$scope.certificateRequest.issuerCommonName = $scope.issuerCommonName.name;
-		$scope.certificateRequest.issuerAlias = $scope.issuerAlias.name;
-		$scope.certificateRequest.certificateAuthority = 'true';
-
-		caSignedCertificateService.createCertificate($scope.certificateRequest)
-		.then(function(response){
-			
-		},
-		function(response){
-			
-		})
-	}
-	
 	function loadCNs(){
 		caSignedCertificateService.loadCNs()
 		.then(function(response){
@@ -51,6 +36,21 @@ app.controller('caSignedCertificateController',['$scope','caSignedCertificateSer
 			alert("GRESKA");
 		})
 	}
-	loadCNs();
+	loadCNs();	
+	$scope.createCertificate = function(){
+		$scope.certificateRequest.issuerCommonName = $scope.issuerCommonName.name;
+		$scope.certificateRequest.issuerAlias = $scope.issuerAlias.name;
+		$scope.certificateRequest.certificateAuthority = 'true';
+
+		caSignedCertificateService.createCertificate($scope.certificateRequest)
+		.then(function(response){
+			$scope.certificateRequest = {};
+		},
+		function(response){
+			
+		})
+	}
+	
+
 	
 }]);

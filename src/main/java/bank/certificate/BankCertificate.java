@@ -28,7 +28,6 @@ public class BankCertificate {
 	
 	private Date startDate;
 	
-	private Date endDate;
 	
 	private String serialNumber;
 	
@@ -47,13 +46,7 @@ public class BankCertificate {
 		this.startDate = startDate;
 	}
 
-	public Date getEndDate() {
-		return endDate;
-	}
 
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
 
 	public String getSerialNumber() {
 		return serialNumber;

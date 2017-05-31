@@ -1,8 +1,64 @@
 <div class = "container">
 	<div class = "row">
+		<legend></legend>
+	
+		<div class = "form-group" >
+			<label class="col-lg-4 control-label" for = "requests">SELECT REQUEST  :</label>
+			<div class = "col-lg-4">
+				<select  class="form-control" name = "requests" id = "requests"  data-ng-model = "selectedRequest" ng-change = "loadCSRData()"
+					data-ng-options = "criteria.number for criteria in requests track by criteria.id">
+				</select>
+			</div>
+		</div>	
+	</div>
+
+	<div class = "row" ng-show = "selectedRequest">
 		<form class="form-horizontal" name= "form" role = "form"  ng-submit = "createCertificate()" method = "post">
-				<legend>Create certificate</legend>
+				<legend>Sign certificate signing request</legend>
+
+
+				<div class = "form-group" ng-class="{ 'has-error': form.organizationUnit.$dirty && form.organizationUnit.$error.required }">
+					<label class = "col-md-4 control-label" for = "organizationUnit">Organization unit:</label>
+					<div class = "col-md-4">
+						<input type = "text" name = "organizationUnit" id = "organizationUnit" ng-model = "certificateRequest.organizationUnit" class="form-control " required readonly/>
+						<span ng-show = "form.organizationUnit.$dirty && form.organizationUnit.$error.required" class="help-block">Organization unit is required</span>					
+					</div>
+				</div>
 				
+				<div class = "form-group" ng-class="{ 'has-error': form.organization.$dirty && form.organization.$error.required }">
+					<label class = "col-md-4 control-label" for = "organization">Organization:</label>
+					<div class = "col-md-4">
+						<input type = "text" name = "organization" id = "organization" ng-model = "certificateRequest.organization"  class="form-control" required readonly/>
+						<span ng-show = "form.organization.$dirty && form.organization.$error.required" class="help-block">Organization is required</span>					
+					</div>
+				</div>
+				
+				<div class = "form-group"ng-class="{ 'has-error': (form.email.$dirty && form.email.$error.required) || (form.email.$dirty && !form.email.$valid) || (form.email.$dirty && vm.errorMessage)}">
+					<label class = "col-md-4 control-label" for = "email">Email:</label>
+					<div class = "col-md-4">
+						<input type = "email" name = "email" id = "email" ng-model = "certificateRequest.email" class="form-control" required readonly/>
+						<span ng-show = "form.email.$dirty && form.email.$error.required" class="help-block">Email is required</span>
+			            <span ng-show = "form.email.$dirty && !form.email.$valid && !form.email.$error.required" class="help-block">Enter email</span>
+					
+					</div>
+				</div>
+				
+				<div class = "form-group" ng-class="{ 'has-error': form.commonName.$dirty && form.commonName.$error.required}">
+					<label class = "col-md-4 control-label" for = "commonName">Common name:</label>
+					<div class = "col-md-4">
+						<input type = "text"  name = "commonName" id = "commonName" ng-model = "certificateRequest.commonName" class="form-control " required readonly/> 
+						<span ng-show = "form.commonName.$dirty && form.commonName.$error.required" class="help-block">Common name is required</span>							
+					</div>
+				</div>
+				
+				<div class = "form-group" ng-class="{ 'has-error': form.country.$dirty && form.country.$error.required}">
+					<label class = "col-md-4 control-label" for = "country">Country:</label>
+					<div class = "col-md-4">
+						<input type = "text"  name = "country" id = "country" ng-model = "certificateRequest.country" class="form-control " required readonly/>
+						<span ng-show = "form.country.$dirty && form.country.$error.required" class="help-block">Country is required</span>							 		
+					</div>
+				</div>
+
 				<div class = "form-group" >
 					<label class="col-md-4 control-label" for = "issuerCNSelect">Issuer Common Name:</label>
 					<div class = "col-md-4">
@@ -29,47 +85,7 @@
 					</div>
 				</div>
 				
-				<div class = "form-group" ng-class="{ 'has-error': form.organizationUnit.$dirty && form.organizationUnit.$error.required }">
-					<label class = "col-md-4 control-label" for = "organizationUnit">Organization unit:</label>
-					<div class = "col-md-4">
-						<input type = "text" name = "organizationUnit" id = "organizationUnit" ng-model = "certificateRequest.organizationUnit" class="form-control " required/>
-						<span ng-show = "form.organizationUnit.$dirty && form.organizationUnit.$error.required" class="help-block">Organization unit is required</span>					
-					</div>
-				</div>
-				
-				<div class = "form-group" ng-class="{ 'has-error': form.organization.$dirty && form.organization.$error.required }">
-					<label class = "col-md-4 control-label" for = "organization">Organization:</label>
-					<div class = "col-md-4">
-						<input type = "text" name = "organization" id = "organization" ng-model = "certificateRequest.organization"  class="form-control" required/>
-						<span ng-show = "form.organization.$dirty && form.organization.$error.required" class="help-block">Organization is required</span>					
-					</div>
-				</div>
-				
-				<div class = "form-group"ng-class="{ 'has-error': (form.email.$dirty && form.email.$error.required) || (form.email.$dirty && !form.email.$valid) || (form.email.$dirty && vm.errorMessage)}">
-					<label class = "col-md-4 control-label" for = "email">Email:</label>
-					<div class = "col-md-4">
-						<input type = "email" name = "email" id = "email" ng-model = "certificateRequest.email" class="form-control" required/>
-						<span ng-show = "form.email.$dirty && form.email.$error.required" class="help-block">Email is required</span>
-			            <span ng-show = "form.email.$dirty && !form.email.$valid && !form.email.$error.required" class="help-block">Enter email</span>
-					
-					</div>
-				</div>
-				
-				<div class = "form-group" ng-class="{ 'has-error': form.commonName.$dirty && form.commonName.$error.required}">
-					<label class = "col-md-4 control-label" for = "commonName">Common name:</label>
-					<div class = "col-md-4">
-						<input type = "text"  name = "commonName" id = "commonName" ng-model = "certificateRequest.commonName" class="form-control " required/> 
-						<span ng-show = "form.commonName.$dirty && form.commonName.$error.required" class="help-block">Common name is required</span>							
-					</div>
-				</div>
-				
-				<div class = "form-group" ng-class="{ 'has-error': form.country.$dirty && form.country.$error.required}">
-					<label class = "col-md-4 control-label" for = "country">Country:</label>
-					<div class = "col-md-4">
-						<input type = "text"  name = "country" id = "country" ng-model = "certificateRequest.country" class="form-control " required/>
-						<span ng-show = "form.country.$dirty && form.country.$error.required" class="help-block">Country is required</span>							 		
-					</div>
-				</div>
+
 					
 				<div class = "form-group">
 					<label class = "col-md-4 control-label" for = "startDate">Start date:</label>
@@ -77,8 +93,7 @@
 						<input type = "date" name = "startDate" ng-model = "certificateRequest.startDate" class="form-control " required/>
 					</div>
 				</div>
-
-			
+							
 				<div class = "form-group" ng-class="{ 'has-error': form.alias.$dirty && form.alias.$error.required}">
 					<label class = "col-md-4 control-label" for = "alias">Alias:</label>
 					<div class = "col-md-4">

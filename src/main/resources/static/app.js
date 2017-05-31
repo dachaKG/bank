@@ -7,7 +7,8 @@ angular.module('routerApp', ['ui.router',
 	'nationalBank.services', 'nationalBank.controllers',
 	'caSignedCertificate.services','caSignedCertificate.controllers',
 	'signedCertificate.services','signedCertificate.controllers',
-	'revokeCertificate.services','revokeCertificate.controllers']) 
+	'revokeCertificate.services','revokeCertificate.controllers',
+	'csr.services','csr.controllers']) 
 
 .config(function($stateProvider,$urlRouterProvider){
 	
@@ -35,6 +36,11 @@ angular.module('routerApp', ['ui.router',
 		templateUrl : 'signedCertificate/signedCertificate.html',
 		controller : 'signedCertificateController'
 	})
+	.state('signCertificateSigningRequest',{
+		url : '/signCertificateSigningRequest',
+		templateUrl : 'signedCertificate/signCertificateSigningRequest.html',
+		controller : 'signedCertificateController'
+	})	
 	.state('addNationalBank',{
 		url : '/addNationalBank',
 		templateUrl : 'nationalBank/addNationalBank.html',
@@ -50,7 +56,11 @@ angular.module('routerApp', ['ui.router',
 		templateUrl : 'revokeCertificate/revokeCertificate.html',
 		controller : 'revokeCertificateController'
 	})	
-	
+	.state('csr',{
+		url : '/csr',
+		templateUrl : 'csr/signCsr.html',
+		controller : 'csrController'
+	})		
 	/*.state('country', {
 		url : '/country',
 		templateUrl : 'country/countryList.html',

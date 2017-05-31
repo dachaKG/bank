@@ -1,27 +1,7 @@
 <div class = "container">
 	<div class = "row">
 		<form class="form-horizontal" name= "form" role = "form"  ng-submit = "createCertificate()" method = "post">
-				<legend>Create certificate</legend>
-				
-				<div class = "form-group" >
-					<label class="col-md-4 control-label" for = "issuerCNSelect">Issuer Common Name:</label>
-					<div class = "col-md-4">
-						<select  class="form-control" name = "issuerCNSelect" id = "issuerCNSelect" required data-ng-model = "issuerCommonName" ng-change = "loadAliases()"
-						data-ng-options = "criteria.name for criteria in issuersCNs track by criteria.id">
-						</select>
-					</div>
-				</div>
-				
-				<div class = "form-group">
-					<label class="col-md-4 control-label" for = "issuerAliasSelect">Issuer alias:</label>
-					<div class = "col-md-4">
-						<select class="form-control " id = "issuerAliasSelect" name = "issuerAliasSelect" required data-ng-model = "issuerAlias" 
-						data-ng-options = "criteria.name for criteria in issuerAliases track by criteria.id">
-						</select>
-					</div>
-				</div>
-				
-
+				<legend>Create certificate signing request</legend>
 				
 				<div class = "form-group" ng-class="{ 'has-error': form.organizationUnit.$dirty && form.organizationUnit.$error.required }">
 					<label class = "col-md-4 control-label" for = "organizationUnit">Organization unit:</label>
@@ -64,23 +44,7 @@
 						<span ng-show = "form.country.$dirty && form.country.$error.required" class="help-block">Country is required</span>							 		
 					</div>
 				</div>
-					
 
-			
-				<div class = "form-group" ng-class="{ 'has-error': form.alias.$dirty && form.alias.$error.required}">
-					<label class = "col-md-4 control-label" for = "alias">Alias:</label>
-					<div class = "col-md-4">
-						<input type = "text" id = "alias" name = "alias" ng-model = "certificateRequest.alias" class="form-control " required/>
-						<span ng-show = "form.alias.$dirty && form.alias.$error.required" class="help-block">Alias is required</span>							 		
-					</div>
-				</div>
-				<div class = "form-group" ng-class="{ 'has-error': form.password.$dirty && form.password.$error.required}">
-					<label class = "col-md-4 control-label" for = "password">Password:</label>
-					<div class = "col-md-4">
-						<input type = "password" name = "password" ng-model = "certificateRequest.password"/ class="form-control" required>
-						<span ng-show = "form.password.$dirty && form.password.$error.required" class="help-block">Password is required</span>							 		
-					</div>
-				</div>
 				
 				<div class = "form-group">
 					<label class = "col-md-4 control-label" form = "buttonSubmit"></label>
