@@ -156,7 +156,7 @@ public class CertificateController {
 			X509Certificate c = (X509Certificate) ks.getCertificate(alias);
 
 			c.checkValidity();
-			//ovo mi treba da bih proverio da li je povucen 
+			// ovo mi treba da bih proverio da li je povucen
 			bank.certificate.Certificate cert = certificateService.findBySerialNumber(c.getSerialNumber().toString());
 			return c.getBasicConstraints() != -1 && !cert.isPovucen();
 		} catch (KeyStoreException e) {
@@ -171,102 +171,71 @@ public class CertificateController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public void addCertificate(@RequestBody BankCertificate bc) {
+	public void addCertificate(@RequestBody BankCertificate bc) throws IOException, KeyStoreException,
+			NoSuchProviderException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException {
 
 		int unique_id = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
 		bc.setSerialNumber("" + unique_id + "");
 
-		try {
-			KeyStore ks = KeyStore.getInstance("JKS", "SUN");
-			KeyPair keyPairSubject = generateKeyPair();
-			BufferedInputStream in = new BufferedInputStream(new FileInputStream(bc.getIssuerCommonName() + ".jks"));
-			ks.load(in, "123".toCharArray());
+		KeyStore ks = KeyStore.getInstance("JKS", "SUN");
+		KeyPair keyPairSubject = generateKeyPair();
+		BufferedInputStream in = new BufferedInputStream(new FileInputStream(bc.getIssuerCommonName() + ".jks"));
+		ks.load(in, "123".toCharArray());
 
-			if (ks.isKeyEntry(bc.getIssuerAlias())) {
+		if (ks.isKeyEntry(bc.getIssuerAlias())) {
 
-				PrivateKey issuerPrivateKey = (PrivateKey) ks.getKey(bc.getIssuerAlias(),
-						bc.getIssuerPassword().toCharArray());// privatni kljuc
-																// issuer-a
-				Certificate issuerCert = ks.getCertificate(bc.getIssuerAlias());
-				X500Name issuerX500Name = new JcaX509CertificateHolder((X509Certificate) issuerCert).getSubject();
-				Certificate[] issuerChain = ks.getCertificateChain(bc.getIssuerAlias());// certificate
-																						// chain
-																						// if
-																						// issuer
-																						// ,
-																						// kako
-																						// bi
-																						// odredio
-																						// ceo
-																						// chain
-																						// za
-																						// subject
+			PrivateKey issuerPrivateKey = (PrivateKey) ks.getKey(bc.getIssuerAlias(),
+					bc.getIssuerPassword().toCharArray());// privatni kljuc
+															// issuer-a
+			Certificate issuerCert = ks.getCertificate(bc.getIssuerAlias());
+			X500Name issuerX500Name = new JcaX509CertificateHolder((X509Certificate) issuerCert).getSubject();
+			Certificate[] issuerChain = ks.getCertificateChain(bc.getIssuerAlias());// certificate chain if issuer , kako bi odredio ceo chain za  subject
 
-				// sada imam potrebne podatke vezane za issuer-a za potpis
-				// sertifikata
-				System.out.println(issuerX500Name.toString());
-				System.out.println(issuerPrivateKey);
-				System.out.println(bc.getSerialNumber());
+			// sada imam potrebne podatke vezane za issuer-a za potpis
+			// sertifikata
+			System.out.println(issuerX500Name.toString());
+			System.out.println(issuerPrivateKey);
+			System.out.println(bc.getSerialNumber());
 
-				SubjectData subject = generateSubjectData(bc, keyPairSubject);
-				CertificateGenerator cg = new CertificateGenerator();
-				X509Certificate certificate = cg.generateCertificate(subject, issuerPrivateKey, issuerX500Name);
-				boolean ca = certificate.getBasicConstraints() != -1;// proveravam
-																		// da li
-																		// sam
-																		// dobro
-																		// podesio
-																		// CA
-				System.out.println("CA: " + ca);
-				Certificate[] chain = new Certificate[issuerChain.length + 1];
-				chain[0] = certificate;
-				for (int i = 0; i < issuerChain.length; i++) {
-					chain[i + 1] = issuerChain[i];
-				}
-				File file = new File(bc.getCommonName() + ".jks");
-				// keyStore.load(null, null);
-
-				if (!file.exists()) {
-					file.createNewFile();
-					ks.load(null, "123".toCharArray());
-				} else {
-					ks.load(new FileInputStream(bc.getCommonName() + ".jks"), null);
-				}
-				ks.setKeyEntry(bc.getAlias(), keyPairSubject.getPrivate(), bc.getPassword().toCharArray(), chain);
-				ks.store(new FileOutputStream(bc.getCommonName() + ".jks"), "123".toCharArray());
-
-				// cuvanje u bazu serial number-revoke
-				certificateService.save(new bank.certificate.Certificate(bc.getSerialNumber(), false));
-
-				// export to .cer fajl
-				final FileOutputStream os = new FileOutputStream(certificate.getSerialNumber()+".cer");
-				os.write("-----BEGIN CERTIFICATE-----\n".getBytes("US-ASCII"));
-				os.write(Base64.encodeBase64(certificate.getEncoded(), true));
-				os.write("-----END CERTIFICATE-----\n".getBytes("US-ASCII"));
-				os.close();
+			SubjectData subject = generateSubjectData(bc, keyPairSubject);
+			CertificateGenerator cg = new CertificateGenerator();
+			X509Certificate certificate = cg.generateCertificate(subject, issuerPrivateKey, issuerX500Name,true);
+			boolean ca = certificate.getBasicConstraints() != -1;// proveravam
+																	// da li
+																	// sam
+																	// dobro
+																	// podesio
+																	// CA
+			System.out.println("CA: " + ca);
+			Certificate[] chain = new Certificate[issuerChain.length + 1];
+			chain[0] = certificate;
+			for (int i = 0; i < issuerChain.length; i++) {
+				chain[i + 1] = issuerChain[i];
 			}
-		} catch (KeyStoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchProviderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CertificateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnrecoverableKeyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			File file = new File(bc.getCommonName() + ".jks");
+			// keyStore.load(null, null);
+
+			if (!file.exists()) {
+				file.createNewFile();
+				ks.load(null, "123".toCharArray());
+			} else {
+				ks.load(new FileInputStream(bc.getCommonName() + ".jks"), null);
+			}
+			ks.setKeyEntry(bc.getAlias(), keyPairSubject.getPrivate(), bc.getPassword().toCharArray(), chain);
+			ks.store(new FileOutputStream(bc.getCommonName() + ".jks"), "123".toCharArray());
+
+			// cuvanje u bazu serial number-revoke
+			certificateService.save(new bank.certificate.Certificate(bc.getSerialNumber(), false));
+
+			// export to .cer fajl
+			File cerFile = new File("certificates\\"+certificate.getSerialNumber() + ".cer");
+			final FileOutputStream os = new FileOutputStream(cerFile);
+			os.write("-----BEGIN CERTIFICATE-----\n".getBytes("US-ASCII"));
+			os.write(Base64.encodeBase64(certificate.getEncoded(), true));
+			os.write("-----END CERTIFICATE-----\n".getBytes("US-ASCII"));
+			os.close();
 		}
+
 	}
 	
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -282,15 +251,13 @@ public class CertificateController {
 
 	@RequestMapping(value = "/download/{serialNumber}", method = RequestMethod.GET)
 	public void downloadFile(@PathVariable String serialNumber, HttpServletResponse response) throws IOException {
-		
+
 		response.setContentType("application/x-x509-ca-cert");
 
-		File file = new File(serialNumber+".cer");
-
+		File file = new File(serialNumber + ".cer");
 
 		InputStream inputStream = new FileInputStream(file);
 		IOUtils.copy(inputStream, response.getOutputStream());
-
 
 	}
 
@@ -318,7 +285,6 @@ public class CertificateController {
 		builder.addRDN(BCStyle.E, bc.getEmail());
 		// UID (USER ID) je ID korisnika
 		builder.addRDN(BCStyle.UID, bc.getSerialNumber());
-		return new SubjectData(keyPairSubject.getPublic(), builder.build(), bc.getSerialNumber(), bc.getStartDate(),
-				bc.getEndDate());
+		return new SubjectData(keyPairSubject.getPublic(), builder.build(), bc.getSerialNumber(), bc.getStartDate());
 	}
 }

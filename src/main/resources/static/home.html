@@ -1,8 +1,9 @@
 <div>
 	<a ui-sref=".addCertificate" ng-if = "role_admin">New central bank certificate</a>
 	<a ui-sref=".addCaSignedCertificate" ng-if = "role_admin">New bank certificate</a>
-	<a ui-sref = ".addSignedCertificate">New client certificate</a>
-	
+	<a ui-sref = ".addSignedCertificate">Create certificate signing request</a>
+	<a ui-sref = ".csr">Sign certificate signing request</a>
+
     <a ui-sref=".findCertificate">Find certificate</a>
     <a ui-sref = ".revokeCertificate" ng-if = "role_admin">Revoke certificate</a>
     

@@ -5,6 +5,7 @@ import java.security.KeyPair;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Date;
 
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.BasicConstraints;
@@ -21,9 +22,9 @@ import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 
 import bank.selfCertificate.SelfCertificate;
 
-public class SelfSignedCertificate {
+public class SelfSignedGenerator {
 
-	public SelfSignedCertificate() {
+	public SelfSignedGenerator() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -44,7 +45,7 @@ public class SelfSignedCertificate {
 
 			//Postavljaju se podaci za generisanje sertifiakta
 			X509v3CertificateBuilder certGen = new JcaX509v3CertificateBuilder(x500Name, new BigInteger(certificate.getSerialNumber()), certificate.getStartDate(),
-					certificate.getEndDate(),x500Name, keyPair.getPublic());
+					new Date(certificate.getStartDate().getTime()+ 365*86400000l),x500Name, keyPair.getPublic());
 			
 			//----------
 			KeyUsage keyUsage = new KeyUsage( KeyUsage.digitalSignature |

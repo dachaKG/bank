@@ -12,20 +12,18 @@ public class SubjectData {
 	private X500Name x500name;
 	private String serialNumber;
 	private Date startDate;
-	private Date endDate;
 	
 	
 	
 	public SubjectData() {
 		super();
 	}
-	public SubjectData(PublicKey publicKey, X500Name x500name, String serialNumber, Date startDate, Date endDate) {
+	public SubjectData(PublicKey publicKey, X500Name x500name, String serialNumber, Date startDate) {
 		super();
 		this.publicKey = publicKey;
 		this.x500name = x500name;
 		this.serialNumber = serialNumber;
 		this.startDate = startDate;
-		this.endDate = endDate;
 	}
 	public PublicKey getPublicKey() {
 		return publicKey;
@@ -51,12 +49,7 @@ public class SubjectData {
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
-	public Date getEndDate() {
-		return endDate;
-	}
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
+
 	
 	
 	

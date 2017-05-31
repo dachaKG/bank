@@ -1,8 +1,10 @@
 var app = angular.module('nationalBank.controllers',[]);
 
+
 app.controller('nationalBankController',['$scope','nationalBankService','$location','addCertificate',
 	function($scope, nationalBankService,$location, addCertificate) {
 	
+
 	/*function findAll(){
 		nationalBankService.findAll().then(
 			function(response){

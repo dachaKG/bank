@@ -8,7 +8,9 @@ angular.module('routerApp', ['ui.router',
 	'caSignedCertificate.services','caSignedCertificate.controllers',
 	'signedCertificate.services','signedCertificate.controllers',
 	'revokeCertificate.services','revokeCertificate.controllers',
+	'csr.services','csr.controllers',
 	'user.services', 'user.controllers']) 
+
 
 .config(function($stateProvider,$urlRouterProvider){
 	
@@ -62,6 +64,7 @@ angular.module('routerApp', ['ui.router',
 		templateUrl : 'signedCertificate/signedCertificate.html',
 		controller : 'signedCertificateController'
 	})
+	
 	.state('home.addNationalBank',{
 		url : '/addNationalBank',
 		templateUrl : 'nationalBank/addNationalBank.html',
@@ -76,7 +79,12 @@ angular.module('routerApp', ['ui.router',
 		url : '/revokeCertificate',
 		templateUrl : 'revokeCertificate/revokeCertificate.html',
 		controller : 'revokeCertificateController'
-	})
+	})	
+	.state('home.csr',{
+		url : '/csr',
+		templateUrl : 'csr/signCsr.html',
+		controller : 'csrController'
+	})		
 	.state('home.changePassword',{
 		url : '/changePassword',
 		templateUrl : 'user/changePassword.html',

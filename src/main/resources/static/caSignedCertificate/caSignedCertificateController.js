@@ -4,7 +4,7 @@ app.controller('caSignedCertificateController',['$scope','caSignedCertificateSer
 	function($scope,caSignedCertificateService,$location, addCaSignedCertificate){
 	
 	$scope.addCaSignedCertificate = addCaSignedCertificate;
-	
+
 	$scope.issuersCNs =  [
 	      /*{id: '1', name: 'Option A'},
 	      {id: '2', name: 'Option B'},
@@ -13,7 +13,8 @@ app.controller('caSignedCertificateController',['$scope','caSignedCertificateSer
 	$scope.issuerAliases = [/*	      {id: '1', name: 'Alias A'},
 	      {id: '2', name: 'Alias B'},
 	      {id: '3', name: 'Alias C'}*/];
-	
+	$scope.issuerCommonName = {id:null,name:""};
+	$scope.certificateRequest = {};
 	$scope.loadAliases = function(){
 		caSignedCertificateService.loadAliases($scope.issuerCommonName.name)
 		.then(function(response){
@@ -26,21 +27,6 @@ app.controller('caSignedCertificateController',['$scope','caSignedCertificateSer
 			alert("GRESKA PRI UCITAVANJU ALIASA");
 		})
 	}
-	
-	$scope.createCertificate = function(){
-		$scope.certificateRequest.issuerCommonName = $scope.issuerCommonName.name;
-		$scope.certificateRequest.issuerAlias = $scope.issuerAlias.name;
-		$scope.certificateRequest.certificateAuthority = 'true';
-
-		caSignedCertificateService.createCertificate($scope.certificateRequest)
-		.then(function(response){
-			
-		},
-		function(response){
-			
-		})
-	}
-	
 	function loadCNs(){
 		caSignedCertificateService.loadCNs()
 		.then(function(response){
@@ -53,6 +39,21 @@ app.controller('caSignedCertificateController',['$scope','caSignedCertificateSer
 			alert("GRESKA");
 		})
 	}
-	loadCNs();
+	loadCNs();	
+	$scope.createCertificate = function(){
+		$scope.certificateRequest.issuerCommonName = $scope.issuerCommonName.name;
+		$scope.certificateRequest.issuerAlias = $scope.issuerAlias.name;
+		$scope.certificateRequest.certificateAuthority = 'true';
+
+		caSignedCertificateService.createCertificate($scope.certificateRequest)
+		.then(function(response){
+			$scope.certificateRequest = {};
+		},
+		function(response){
+			
+		})
+	}
+	
+
 	
 }]);

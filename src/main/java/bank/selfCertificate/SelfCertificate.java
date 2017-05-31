@@ -14,12 +14,11 @@ public class SelfCertificate implements Serializable{
 	
 	
 
-	public SelfCertificate(Long id, String alias, Date startDate, Date endDate, String serialNumber, String password) {
+	public SelfCertificate(Long id, String alias, Date startDate, String serialNumber, String password) {
 		super();
 		this.id = id;
 		this.alias = alias;
 		this.startDate = startDate;
-		this.endDate = endDate;
 		this.serialNumber = serialNumber;
 		this.password = password;
 	}
@@ -45,7 +44,6 @@ public class SelfCertificate implements Serializable{
 
 	private Date startDate;
 	
-	private Date endDate;
 	
 	private String serialNumber;
 
@@ -100,13 +98,7 @@ public class SelfCertificate implements Serializable{
 		this.startDate = startDate;
 	}
 
-	public Date getEndDate() {
-		return endDate;
-	}
 
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
 
 	public String getSerialNumber() {
 		return serialNumber;
