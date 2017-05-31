@@ -2,7 +2,7 @@ var app = angular.module('nationalBank.controllers',[]);
 
 app.controller('nationalBankController',['$scope','nationalBankService','$location',
 	function($scope, nationalBankService,$location) {
-	
+	$scope.certificateRequest = {};
 	/*function findAll(){
 		nationalBankService.findAll().then(
 			function(response){

@@ -38,6 +38,7 @@ import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -236,7 +237,8 @@ public class CertificateController {
 		}
 
 	}
-
+	
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	@PutMapping("/{serialNumber}")
 	public bank.certificate.Certificate revokeCertificate(@PathVariable("serialNumber") String serialNumber) {
 		return certificateService.revoke(serialNumber);
