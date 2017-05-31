@@ -158,7 +158,7 @@ public class ClientController {
 		JcaPKCS10CertificationRequest jcaRequest = new JcaPKCS10CertificationRequest(request);
 		PublicKey publicKey = jcaRequest.getPublicKey();
 		KeyStore ks = KeyStore.getInstance("JKS", "SUN");
-		BufferedInputStream in = new BufferedInputStream(new FileInputStream(bc.getIssuerCommonName() + ".jks"));
+		BufferedInputStream in = new BufferedInputStream(new FileInputStream("ksBanks\\"+bc.getIssuerCommonName() + ".jks"));
 		ks.load(in, "123".toCharArray());
 
 		if (ks.isKeyEntry(bc.getIssuerAlias())) {
@@ -172,42 +172,36 @@ public class ClientController {
 
 			// sada imam potrebne podatke vezane za issuer-a za potpis
 			// sertifikata
-			System.out.println(issuerX500Name.toString());
-			System.out.println(issuerPrivateKey);
-			System.out.println(bc.getSerialNumber());
+
 
 			SubjectData subject = generateSubjectData(bc, publicKey);
 			CertificateGenerator cg = new CertificateGenerator();
 			X509Certificate certificate = cg.generateCertificate(subject, issuerPrivateKey, issuerX500Name,false);
-			boolean ca = certificate.getBasicConstraints() != -1;// proveravam
-																	// da li
-																	// sam
-																	// dobro
-																	// podesio
-																	// CA
+			boolean ca = certificate.getBasicConstraints() != -1;
 			System.out.println("CA: " + ca);
+			
 			Certificate[] chain = new Certificate[issuerChain.length + 1];
 			chain[0] = certificate;
 			for (int i = 0; i < issuerChain.length; i++) {
 				chain[i + 1] = issuerChain[i];
 			}
-			File file = new File(bc.getCommonName() + ".jks");
+			File file = new File("ksClients\\"+bc.getCommonName() + ".jks");
 			// keyStore.load(null, null);
 
 			if (!file.exists()) {
 				file.createNewFile();
 				ks.load(null, "123".toCharArray());
 			} else {
-				ks.load(new FileInputStream(bc.getCommonName() + ".jks"), null);
+				ks.load(new FileInputStream(file), null);
 			}
 			ks.setCertificateEntry(bc.getAlias(), certificate);
-			ks.store(new FileOutputStream(bc.getCommonName() + ".jks"), "123".toCharArray());
+			ks.store(new FileOutputStream(file), "123".toCharArray());
 
 			// cuvanje u bazu serial number-revoke
 			certificateService.save(new bank.certificate.Certificate(bc.getSerialNumber(), false));
 
 			// export to .cer fajl
-			final FileOutputStream os = new FileOutputStream(certificate.getSerialNumber() + ".cer");
+			final FileOutputStream os = new FileOutputStream("certificates\\"+certificate.getSerialNumber() + ".cer");
 			os.write("-----BEGIN CERTIFICATE-----\n".getBytes("US-ASCII"));
 			os.write(Base64.encodeBase64(certificate.getEncoded(), true));
 			os.write("-----END CERTIFICATE-----\n".getBytes("US-ASCII"));

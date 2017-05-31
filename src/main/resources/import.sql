@@ -7,6 +7,12 @@ insert into user (username, password) values ('dachakg2','$2a$10$NGxm0C0hF28mYpm
 insert into user (username, password) values ('milance','$2a$10$LeQbMB55qkJYitFFGe2j3.uqe/1nrduf9ZRb8F6zSzg5n3GizOvw.');
 insert into user (username, password) values ('duca','$2a$10$UteruuYLEll8yHbjCM7Q8OhIvB0EIzT9ErS7Wqqltj1gk37qEHkpW');
 
+insert into certificate (povucen, serial_number) values (0, '1496236139');
+insert into certificate (povucen, serial_number) values (0, '1496256785');
+insert into certificate (povucen, serial_number) values (0, '1496256921');
+insert into certificate (povucen, serial_number) values (0, '1496257047');
+
+
 insert into role (enum_role) values ('ROLE_ADMIN');
 insert into role (enum_role) values ('ROLE_ADMIN');
 insert into role (enum_role) values ('ROLE_USER');

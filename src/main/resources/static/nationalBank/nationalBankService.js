@@ -7,7 +7,7 @@ services.service('nationalBankService',['$http', function($http){
 	}
 	
 	this.createCertificate = function(certificate){
-		return $http.post("/addCertificate",certificate);
+		return $http.post("/nationalBank",certificate);
 	}
 	
 	
