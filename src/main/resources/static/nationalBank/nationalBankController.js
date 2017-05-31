@@ -1,8 +1,10 @@
 var app = angular.module('nationalBank.controllers',[]);
 
-app.controller('nationalBankController',['$scope','nationalBankService','$location',
-	function($scope, nationalBankService,$location) {
-	$scope.certificateRequest = {};
+
+app.controller('nationalBankController',['$scope','nationalBankService','$location','addCertificate',
+	function($scope, nationalBankService,$location, addCertificate) {
+	
+
 	/*function findAll(){
 		nationalBankService.findAll().then(
 			function(response){
@@ -15,10 +17,15 @@ app.controller('nationalBankController',['$scope','nationalBankService','$locati
 	
 	findAll();*/
 	
+	$scope.addCertificate = addCertificate;
+	
+	
 	$scope.createCertificate = function(){
+		
 		nationalBankService.createCertificate($scope.certificateRequest).then(
 			function(response){
 				$scope.state = undefined;
+				
 				$location.path('/addCertificate')
 			}, function(response){
 				alert("greska pri dodavanju");

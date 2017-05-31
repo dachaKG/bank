@@ -6,14 +6,17 @@ import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 
-public class UserDetails implements org.springframework.security.core.userdetails.UserDetails{
+public class CustomUserDetails implements org.springframework.security.core.userdetails.UserDetails{
 	 
 	private static final long serialVersionUID = 1L; 
 	
 	private final User user;
 	
-	public UserDetails(User user) {
+	public CustomUserDetails(User user) {
 		this.user = user;
+		if(user == null){
+			throw new RuntimeException("Bad credentials");
+		}
 	}
 
 	@Override
