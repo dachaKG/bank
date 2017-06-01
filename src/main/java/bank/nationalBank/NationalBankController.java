@@ -1,12 +1,11 @@
 package bank.nationalBank;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
-import java.math.BigInteger;
+import java.io.InputStream;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
@@ -17,6 +16,8 @@ import java.security.PrivateKey;
 import java.security.SecureRandom;
 import java.security.Security;
 import java.security.cert.CertificateException;
+import java.security.cert.CertificateExpiredException;
+import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,6 +38,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import bank.certificate.Certificate;
@@ -44,7 +46,7 @@ import bank.certificate.CertificateService;
 import bank.selfCertificate.SelfCertificate;
 
 @RestController
-@RequestMapping
+@RequestMapping("/nationalBank")
 public class NationalBankController {
 
 	private final NationalBankService nationalBankService;
@@ -57,145 +59,134 @@ public class NationalBankController {
 		this.certificateService = certificateService;
 	}
 
-	@GetMapping("/nationalBank")
+	/*@GetMapping
 	public List<NationalBank> findAll() {
 		return nationalBankService.findAll();
-	}
+	}*/
+	
+	
 
 	@PreAuthorize("hasAuthority('addCertificate')")
-	@PostMapping("/addCertificate")
-	public void addCertificate(@Valid @RequestBody SelfCertificate selfCertificate) throws KeyStoreException, NoSuchProviderException {
+	@PostMapping
+	public void addCertificate(@Valid @RequestBody SelfCertificate selfCertificate) throws KeyStoreException, NoSuchProviderException, IOException, NoSuchAlgorithmException, CertificateException {
 		int unique_id= (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
 		selfCertificate.setSerialNumber(""+unique_id+"");
 		KeyStore keyStore;
 		KeyPair keyPair = generateKeyPair();
 
 		SelfSignedGenerator ssc = new SelfSignedGenerator();
-		
-		//NationalBank nationalBank = nationalBankService.findAll().get(0);
 		X500Name x500Name = generateIssuerData(keyPair.getPrivate(), selfCertificate);
 		
 		X509Certificate x509cert = ssc.generateCertificate(keyPair, selfCertificate, x500Name);
-		
 
-		
 		//store key and certificate
 		X509Certificate[] chain = new X509Certificate[1];
 		chain[0] = x509cert;
-			//keyStore = KeyStore.getInstance("jks");
-		
-		try {
 			keyStore = KeyStore.getInstance("jks", "SUN");
-			
-			File file = new File(selfCertificate.getCommonName()+".jks");
+			File file = new File("ksCentralBank\\" + selfCertificate.getCommonName()+".jks");
 			
 			if(!file.exists()){
 				file.createNewFile();
 				keyStore.load(null, "123".toCharArray());
 			} else {
-				keyStore.load(new FileInputStream(selfCertificate.getCommonName()+".jks"), null);
+				keyStore.load(new FileInputStream(file), null);
 			}
 			
 			
 			//getExistingCertificate("1222");
 			keyStore.setKeyEntry(selfCertificate.getAlias(), keyPair.getPrivate(), selfCertificate.getPassword().toCharArray(), chain);
-			keyStore.store(new FileOutputStream(selfCertificate.getCommonName()+".jks"), "123".toCharArray());
+			keyStore.store(new FileOutputStream(file), "123".toCharArray());
+			
 			File cerFile = new File("certificates\\"+x509cert.getSerialNumber()+".cer");
 			final FileOutputStream os = new FileOutputStream(cerFile);
 			os.write("-----BEGIN CERTIFICATE-----\n".getBytes("US-ASCII"));
 			os.write(Base64.encodeBase64(x509cert.getEncoded(), true));
 			os.write("-----END CERTIFICATE-----\n".getBytes("US-ASCII"));
 			os.close();			
+			
 			certificateService.save(new Certificate(selfCertificate.getSerialNumber(),false));
-			/*//------------
-			X509CertSelector targetConstraints = new X509CertSelector();
 
-			targetConstraints.setCertificate(x509cert);
-
-			try {
-				PKIXBuilderParameters params = new PKIXBuilderParameters(keyStore, targetConstraints);
-				params.setRevocationEnabled(true);
-				System.out.println(params.isRevocationEnabled());
-			} catch (InvalidAlgorithmParameterException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} 
-			
-			//-----------*/
-			
-
-			//Certificate readCertificate = readCertificateFromKeyStore("selfSignedCertificate.jks", "123", "mika");
-			
-			
-			//keyStore.store(new FileInputStream("selfSignedCertificate.jks"), "pass".toCharArray());
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CertificateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (KeyStoreException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-	
-		
 	}
-	
-	
-	@GetMapping("/getExistingCertificate/{serialNumber}")
-	public List<X509Certificate> getExistingCertificate(@PathVariable String serialNumber) throws FileNotFoundException {
-		try {
-			KeyStore ks = KeyStore.getInstance("JKS", "SUN");
-			File file = new File("selfSignedCertificate.jks");
-			BufferedInputStream in = new BufferedInputStream(new FileInputStream(file));
-		
-			ks.load(in, "123".toCharArray());
-			
-			
-			List<X509Certificate> x509CertificateList = new ArrayList<X509Certificate>();
-			Enumeration<String> enumeration = ks.aliases();
-	        while(enumeration.hasMoreElements()) {
-	            String alias = (String)enumeration.nextElement();
-	            System.out.println("alias name: " + alias);
-	            X509Certificate certificate = (X509Certificate) ks.getCertificate(alias);
-	            
-	            if(certificate.getSerialNumber().equals(new BigInteger(serialNumber))){
-	            	System.out.println("pronasao sertifikat");
-	            	x509CertificateList.add(certificate);
-	            }
 
-	        }
-	        System.out.println(x509CertificateList.toString());
-	        return x509CertificateList;
-			
+	
+	@RequestMapping(value = "/commonName", method = RequestMethod.GET)
+	public List<String> getAllCommonNames()
+			throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
+		ArrayList<String> result = new ArrayList<>();
+		File dir = new File("ksCentralBank");
+		File[] listing = dir.listFiles(new FilenameFilter() {
+			public boolean accept(File dir, String filename) {
+				return filename.endsWith(".jks");
+			}
+		});
+
+		for (int i = 0; i < listing.length; i++) {
+
+			KeyStore ks = KeyStore.getInstance("JKS");
+			InputStream readStream = new FileInputStream(listing[i].getPath());
+			ks.load(readStream, "123".toCharArray());
+			Enumeration<String> aliases = ks.aliases();
+			if (checkCN(ks, aliases)) {
+				String s = listing[i].getPath().replaceAll("ksCentralBank", "");
+				String cName = s.replaceAll(".jks", "");
+				result.add(cName.substring(1));
+			}
+		}
+		return result;
+	}
+
+	private boolean checkCN(KeyStore ks, Enumeration<String> aliases) {
+		boolean result = false;
+		while (aliases.hasMoreElements()) {
+			String alias = aliases.nextElement();
+			if (isCA(alias, ks)) {
+				result = true;
+				break;
+			}
+		}
+		return result;
+	}
+
+	@RequestMapping(value = "/commonName/{cn}/aliases", method = RequestMethod.GET)
+	public List<String> getAliases(@PathVariable String cn)
+			throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
+		
+		KeyStore ks = KeyStore.getInstance("JKS");
+		
+		InputStream readStream = new FileInputStream("ksCentralBank\\"+cn + ".jks");
+		ks.load(readStream, "123".toCharArray());
+		Enumeration<String> aliases = ks.aliases();
+		ArrayList<String> result = new ArrayList<>();
+		while (aliases.hasMoreElements()) {
+			String alias = aliases.nextElement();
+			if (isCA(alias, ks))
+				result.add(alias);
+		}
+		readStream.close();
+		return result;
+	}
+
+	private boolean isCA(String alias, KeyStore ks) {
+		try {
+			X509Certificate c = (X509Certificate) ks.getCertificate(alias);
+
+			c.checkValidity();
+			// ovo mi treba da bih proverio da li je povucen
+			bank.certificate.Certificate cert = certificateService.findBySerialNumber(c.getSerialNumber().toString());
+			return c.getBasicConstraints() != -1 && !cert.isPovucen();
 		} catch (KeyStoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (NoSuchProviderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CertificateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (CertificateExpiredException e) {
+			return false;// ako je istekao vraa false
+		} catch (CertificateNotYetValidException e) {
+			return false;
 		}
-		
-		return null;
-		
-	}
+		return false;
+	}	
+	
+
+	
 
 	private X500Name generateIssuerData(PrivateKey issuerKey, SelfCertificate selfCertificate) {
 		X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
@@ -229,6 +220,5 @@ public class NationalBankController {
 		}
 		return null;
 	}
-
 
 }

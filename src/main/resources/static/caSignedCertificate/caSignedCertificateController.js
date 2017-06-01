@@ -47,7 +47,8 @@ app.controller('caSignedCertificateController',['$scope','caSignedCertificateSer
 
 		caSignedCertificateService.createCertificate($scope.certificateRequest)
 		.then(function(response){
-			$scope.certificateRequest = {};
+			$scope.state = 'home.addCaSignedCertificate.feedback';
+			$location.path('home/addCaSignedCertificate/feedback')
 		},
 		function(response){
 			

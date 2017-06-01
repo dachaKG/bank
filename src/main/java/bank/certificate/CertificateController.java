@@ -3,7 +3,6 @@ package bank.certificate;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -60,46 +59,27 @@ public class CertificateController {
 	}
 
 	@RequestMapping(value = "/commonName", method = RequestMethod.GET)
-	public List<String> getAllCommonNames() {
+	public List<String> getAllCommonNames()
+			throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
 		ArrayList<String> result = new ArrayList<>();
-		File dir = new File(".");
-		File[] listing = dir.listFiles(new FilenameFilter() { // ovo ce mi
-																// trebati kada
-																// budem listao
-																// sve
-																// sertifikate
+		File dir = new File("ksBanks");
+		File[] listing = dir.listFiles(new FilenameFilter() {
 			public boolean accept(File dir, String filename) {
 				return filename.endsWith(".jks");
 			}
 		});
+
 		for (int i = 0; i < listing.length; i++) {
 
-			try {
-				KeyStore ks = KeyStore.getInstance("JKS");
-				InputStream readStream = new FileInputStream(listing[i].getPath());
-				ks.load(readStream, "123".toCharArray());
-				Enumeration<String> aliases = ks.aliases();
-				if (checkCN(ks, aliases)) {
-					String cName = listing[i].getPath().replaceAll(".jks", "");
-					result.add(cName.substring(2));
-				}
-			} catch (KeyStoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (CertificateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			KeyStore ks = KeyStore.getInstance("JKS");
+			InputStream readStream = new FileInputStream(listing[i].getPath());
+			ks.load(readStream, "123".toCharArray());
+			Enumeration<String> aliases = ks.aliases();
+			if (checkCN(ks, aliases)) {
+				String s = listing[i].getPath().replaceAll("ksBanks", "");
+				String cName = s.replaceAll(".jks", "");
+				result.add(cName.substring(1));
 			}
-
 		}
 		return result;
 	}
@@ -117,38 +97,22 @@ public class CertificateController {
 	}
 
 	@RequestMapping(value = "/commonName/{cn}/aliases", method = RequestMethod.GET)
-	public List<String> getAliases(@PathVariable String cn) {
-		try {
-			KeyStore ks = KeyStore.getInstance("JKS");
-			InputStream readStream = new FileInputStream(cn + ".jks");
-			ks.load(readStream, "123".toCharArray());
-			Enumeration<String> aliases = ks.aliases();
-			ArrayList<String> result = new ArrayList<>();
-			while (aliases.hasMoreElements()) {
-				String alias = aliases.nextElement();
-				if (isCA(alias, ks))
-					result.add(alias);
-			}
-			readStream.close();
-			return result;
-		} catch (KeyStoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (CertificateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public List<String> getAliases(@PathVariable String cn)
+			throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
+		
+		KeyStore ks = KeyStore.getInstance("JKS");
+		
+		InputStream readStream = new FileInputStream("ksBanks\\"+cn + ".jks");
+		ks.load(readStream, "123".toCharArray());
+		Enumeration<String> aliases = ks.aliases();
+		ArrayList<String> result = new ArrayList<>();
+		while (aliases.hasMoreElements()) {
+			String alias = aliases.nextElement();
+			if (isCA(alias, ks))
+				result.add(alias);
 		}
-
-		return null;
+		readStream.close();
+		return result;
 	}
 
 	private boolean isCA(String alias, KeyStore ks) {
@@ -179,65 +143,52 @@ public class CertificateController {
 
 		KeyStore ks = KeyStore.getInstance("JKS", "SUN");
 		KeyPair keyPairSubject = generateKeyPair();
-		BufferedInputStream in = new BufferedInputStream(new FileInputStream(bc.getIssuerCommonName() + ".jks"));
+		BufferedInputStream in = new BufferedInputStream(new FileInputStream("ksCentralBank\\"+bc.getIssuerCommonName() + ".jks"));
 		ks.load(in, "123".toCharArray());
 
 		if (ks.isKeyEntry(bc.getIssuerAlias())) {
 
-			PrivateKey issuerPrivateKey = (PrivateKey) ks.getKey(bc.getIssuerAlias(),
-					bc.getIssuerPassword().toCharArray());// privatni kljuc
-															// issuer-a
+			PrivateKey issuerPrivateKey = (PrivateKey) ks.getKey(bc.getIssuerAlias(),bc.getIssuerPassword().toCharArray());// privatni kljuc issuer-a
 			Certificate issuerCert = ks.getCertificate(bc.getIssuerAlias());
 			X500Name issuerX500Name = new JcaX509CertificateHolder((X509Certificate) issuerCert).getSubject();
-			Certificate[] issuerChain = ks.getCertificateChain(bc.getIssuerAlias());// certificate chain if issuer , kako bi odredio ceo chain za  subject
+			Certificate[] issuerChain = ks.getCertificateChain(bc.getIssuerAlias());// certificate chain if issuer , kako bi odredio ceo chain/ za subject
 
-			// sada imam potrebne podatke vezane za issuer-a za potpis
-			// sertifikata
-			System.out.println(issuerX500Name.toString());
-			System.out.println(issuerPrivateKey);
-			System.out.println(bc.getSerialNumber());
+			// sada imam potrebne podatke vezane za issuer-a za potpis sertifikata
+
 
 			SubjectData subject = generateSubjectData(bc, keyPairSubject);
 			CertificateGenerator cg = new CertificateGenerator();
-			X509Certificate certificate = cg.generateCertificate(subject, issuerPrivateKey, issuerX500Name,true);
-			boolean ca = certificate.getBasicConstraints() != -1;// proveravam
-																	// da li
-																	// sam
-																	// dobro
-																	// podesio
-																	// CA
-			System.out.println("CA: " + ca);
+			X509Certificate certificate = cg.generateCertificate(subject, issuerPrivateKey, issuerX500Name, true);
+
 			Certificate[] chain = new Certificate[issuerChain.length + 1];
 			chain[0] = certificate;
 			for (int i = 0; i < issuerChain.length; i++) {
 				chain[i + 1] = issuerChain[i];
 			}
-			File file = new File(bc.getCommonName() + ".jks");
-			// keyStore.load(null, null);
+			File file = new File("ksBanks\\"+bc.getCommonName() + ".jks");
 
 			if (!file.exists()) {
 				file.createNewFile();
 				ks.load(null, "123".toCharArray());
 			} else {
-				ks.load(new FileInputStream(bc.getCommonName() + ".jks"), null);
+				ks.load(new FileInputStream(file), null);
 			}
 			ks.setKeyEntry(bc.getAlias(), keyPairSubject.getPrivate(), bc.getPassword().toCharArray(), chain);
-			ks.store(new FileOutputStream(bc.getCommonName() + ".jks"), "123".toCharArray());
+			ks.store(new FileOutputStream(file), "123".toCharArray());
 
 			// cuvanje u bazu serial number-revoke
 			certificateService.save(new bank.certificate.Certificate(bc.getSerialNumber(), false));
 
 			// export to .cer fajl
-			File cerFile = new File("certificates\\"+certificate.getSerialNumber() + ".cer");
+			File cerFile = new File("certificates\\" + certificate.getSerialNumber() + ".cer");
 			final FileOutputStream os = new FileOutputStream(cerFile);
 			os.write("-----BEGIN CERTIFICATE-----\n".getBytes("US-ASCII"));
 			os.write(Base64.encodeBase64(certificate.getEncoded(), true));
 			os.write("-----END CERTIFICATE-----\n".getBytes("US-ASCII"));
 			os.close();
 		}
-
 	}
-	
+
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	@PutMapping("/{serialNumber}")
 	public bank.certificate.Certificate revokeCertificate(@PathVariable("serialNumber") String serialNumber) {
@@ -254,7 +205,7 @@ public class CertificateController {
 
 		response.setContentType("application/x-x509-ca-cert");
 
-		File file = new File(serialNumber + ".cer");
+		File file = new File("certificates\\"+serialNumber + ".cer");
 
 		InputStream inputStream = new FileInputStream(file);
 		IOUtils.copy(inputStream, response.getOutputStream());
@@ -278,7 +229,6 @@ public class CertificateController {
 	private SubjectData generateSubjectData(BankCertificate bc, KeyPair keyPairSubject) {
 		X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
 		builder.addRDN(BCStyle.CN, bc.getCommonName());
-
 		builder.addRDN(BCStyle.O, bc.getOrganization());
 		builder.addRDN(BCStyle.OU, bc.getOrganizationUnit());
 		builder.addRDN(BCStyle.C, bc.getCountry());

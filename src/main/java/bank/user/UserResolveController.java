@@ -1,7 +1,11 @@
 package bank.user;
 
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import bank.privilege.Privilege;
-import bank.privilege.PrivilegeService;
 import bank.security.UserDetailServiceImpl;
 import bank.userBadPassword.UserBadPasswordService;
 
@@ -20,8 +23,6 @@ public class UserResolveController {
 	private final UserService userService;
 	private final UserDetailsService userDetailsService;
 	
-	@Autowired
-	private PrivilegeService privilegeService;
 	
 	@Autowired
 	private UserBadPasswordService userBadPasswordService;
@@ -40,9 +41,10 @@ public class UserResolveController {
 	public boolean userPermissionAddCertificate(){
 		UserDetails userDetails = getUserDetails();
 		User user = userService.findByUsername(userDetails.getUsername());
+		
 		for(Role role : user.getRoles()){
 			for(Privilege privilege : role.getPrivileges()){
-				if(privilege.getPrivilege().equals(privilegeService.findOne(1L).getPrivilege()))
+				if(privilege.getPrivilege().equals("addCertificate"))
 					return true;
 			}
 		}
@@ -55,7 +57,7 @@ public class UserResolveController {
 		User user = userService.findByUsername(userDetails.getUsername());
 		for(Role role : user.getRoles()){
 			for(Privilege privilege : role.getPrivileges()){
-				if(privilege.getPrivilege().equals(privilegeService.findOne(4L).getPrivilege()))
+				if(privilege.getPrivilege().equals("addCaSignedCertificate"))
 					return true;
 			}
 		}
@@ -68,7 +70,7 @@ public class UserResolveController {
 		User user = userService.findByUsername(userDetails.getUsername());
 		for(Role role : user.getRoles()){
 			for(Privilege privilege : role.getPrivileges()){
-				if(privilege.getPrivilege().equals(privilegeService.findOne(3L).getPrivilege()))
+				if(privilege.getPrivilege().equals("registerUser"))
 					return true;
 			}
 		}

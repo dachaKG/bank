@@ -19,12 +19,6 @@ angular.module('routerApp', ['ui.router',
 	
 	
 	$stateProvider
-	
-	.state('login',{
-		url : "/login",
-		templateUrl : 'login.html',
-		controller : 'loginController'
-	})
 	.state('home.nationalBank',{
 		url : '/nationalBank',
 		templateUrl : 'nationalBank/nationalBankPartial.html',
@@ -48,6 +42,10 @@ angular.module('routerApp', ['ui.router',
 			}
 		}
 	})
+	/*.state('home.addCertificate.feedback',{
+		url : '/feedback',
+		templateUrl : 'nationalBank/feedback.html'
+	})*/
 	.state('home.addCaSignedCertificate',{
 		url : '/addCaSignedCertificate',
 		templateUrl : 'caSignedCertificate/caSignedCertificate.html',
@@ -66,12 +64,19 @@ angular.module('routerApp', ['ui.router',
 			}
 		}
 	})
+	.state('home.addCaSignedCertificate.feedback',{
+		url : '/feedback',
+		templateUrl : 'caSignedCertificate/feedback.html'
+	})
 	.state('home.addSignedCertificate',{
 		url : '/addSignedCertificate',
 		templateUrl : 'signedCertificate/signedCertificate.html',
 		controller : 'signedCertificateController'
 	})
-	
+	.state('home.addSignedCertificate.feedback',{
+		url : '/feedback',
+		templateUrl : 'signedCertificate/feedback.html'
+	})
 	.state('home.addNationalBank',{
 		url : '/addNationalBank',
 		templateUrl : 'nationalBank/addNationalBank.html',
@@ -86,12 +91,18 @@ angular.module('routerApp', ['ui.router',
 		url : '/revokeCertificate',
 		templateUrl : 'revokeCertificate/revokeCertificate.html',
 		controller : 'revokeCertificateController'
-	})	
+	})
+
 	.state('home.csr',{
 		url : '/csr',
 		templateUrl : 'csr/signCsr.html',
 		controller : 'csrController'
-	})		
+	})
+
+	.state('home.csr.feedback',{
+		url : '/feedback',
+		templateUrl : 'csr/feedback.html'
+	})
 	.state('home.changePassword',{
 		url : '/changePassword',
 		templateUrl : 'user/changePassword.html',
@@ -165,7 +176,8 @@ angular.module('routerApp', ['ui.router',
 		
 		function auth(){
 			for(var i = 0 ; i < $scope.authorities.length; i++){
-				if($scope.authorities[i] == "ROLE_ADMIN"){
+				if($scope.authorities[i] == "addCertificate" || $scope.authorities[i] == "revokeCertificate"
+					|| $scope.authorities[i] == "registerUser"){
 					$scope.role_admin = true;
 				} else if($scope.authorities[i] == "ROLE_BANKER"){
 					$scope.role_banker = true;
