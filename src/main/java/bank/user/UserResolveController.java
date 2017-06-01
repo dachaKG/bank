@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import bank.privilege.Privilege;
+import bank.privilege.PrivilegeService;
 import bank.security.UserDetailServiceImpl;
 import bank.userBadPassword.UserBadPasswordService;
 
@@ -54,6 +56,19 @@ public class UserResolveController {
 		for(Role role : user.getRoles()){
 			for(Privilege privilege : role.getPrivileges()){
 				if(privilege.getPrivilege().equals(privilegeService.findOne(4L).getPrivilege()))
+					return true;
+			}
+		}
+		return false;
+	}
+	
+	@GetMapping("/userPermissionRegisterUser")
+	private boolean userPermissionRegisterUser(){
+		UserDetails userDetails = getUserDetails();
+		User user = userService.findByUsername(userDetails.getUsername());
+		for(Role role : user.getRoles()){
+			for(Privilege privilege : role.getPrivileges()){
+				if(privilege.getPrivilege().equals(privilegeService.findOne(3L).getPrivilege()))
 					return true;
 			}
 		}

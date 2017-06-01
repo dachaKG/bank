@@ -1,4 +1,4 @@
-package bank.user;
+package bank.privilege;
 
 import java.util.List;
 

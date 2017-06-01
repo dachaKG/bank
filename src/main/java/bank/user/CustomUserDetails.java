@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 
+import bank.privilege.Privilege;
+
 public class CustomUserDetails implements org.springframework.security.core.userdetails.UserDetails{
 	 
 	private static final long serialVersionUID = 1L; 
@@ -24,7 +26,18 @@ public class CustomUserDetails implements org.springframework.security.core.user
 		
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
         for(Role role : user.getRoles()){
-        	authorities.add(new GrantedAuthority() {
+        	authorities.addAll(getPermissions(role));
+        	
+        }
+       
+        return authorities;
+	}
+
+	private Collection<? extends GrantedAuthority> getPermissions(Role role) {
+		List<GrantedAuthority> privileges = new ArrayList<GrantedAuthority>();
+		for(Privilege privilege : role.getPrivileges()){
+			privileges.add(new GrantedAuthority() {
+				
 				/**
 				 * 
 				 */
@@ -32,12 +45,12 @@ public class CustomUserDetails implements org.springframework.security.core.user
 
 				@Override
 				public String getAuthority() {
-					return role.getEnumRole().toString();
+					return privilege.getPrivilege();
 				}
 			});
-        }
-       
-        return authorities;
+		}
+		
+		return privileges;
 	}
 
 	@Override

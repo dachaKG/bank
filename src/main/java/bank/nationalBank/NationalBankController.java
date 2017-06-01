@@ -62,7 +62,7 @@ public class NationalBankController {
 		return nationalBankService.findAll();
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	@PreAuthorize("hasAuthority('addCertificate')")
 	@PostMapping("/addCertificate")
 	public void addCertificate(@Valid @RequestBody SelfCertificate selfCertificate) throws KeyStoreException, NoSuchProviderException {
 		int unique_id= (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);

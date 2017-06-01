@@ -9,7 +9,8 @@ angular.module('routerApp', ['ui.router',
 	'signedCertificate.services','signedCertificate.controllers',
 	'revokeCertificate.services','revokeCertificate.controllers',
 	'csr.services','csr.controllers',
-	'user.services', 'user.controllers']) 
+	'user.services', 'user.controllers',
+	'login.services','login.controllers']) 
 
 
 .config(function($stateProvider,$urlRouterProvider){
@@ -18,6 +19,12 @@ angular.module('routerApp', ['ui.router',
 	
 	
 	$stateProvider
+	
+	.state('login',{
+		url : "/login",
+		templateUrl : 'login.html',
+		controller : 'loginController'
+	})
 	.state('home.nationalBank',{
 		url : '/nationalBank',
 		templateUrl : 'nationalBank/nationalBankPartial.html',
@@ -90,6 +97,24 @@ angular.module('routerApp', ['ui.router',
 		templateUrl : 'user/changePassword.html',
 		controller : 'userController'
 	})
+	.state('home.register',{
+		url : '/registerUser',
+		templateUrl : 'user/registerUser.html',
+		controller : 'userController',
+		resolve : {
+			registerUser : function($http){
+				return $http.get("/userPermissionRegisterUser").then(
+					function(response){
+						if(response.data == "true"){
+							return true;
+						} else {
+							history.back();
+						}
+					}
+				)
+			}
+		}
+	})
 	.state('home',{
 		url : '/home',
 		templateUrl : 'home.html',
@@ -102,19 +127,25 @@ angular.module('routerApp', ['ui.router',
 		return $http.get("/userDetails");
 	}
 	
+	
 }]).controller('appController',['$scope','appService','$location',
 	function($scope, appService,$location, Authentication) {
 		
 		$scope.authorities = [];
 		userDetails();
+		
 		$scope.role_admin = false;
 		$scope.role_banker = false;
 		$scope.role_user = false;
+		
+		$scope.error = false;
 		
 		$scope.toggleShowDiv = function(){
 		    console.log('fired');
 		    $scope.role_banker = !$scope.role_banker;
 		  }
+		
+		
 		
 		function userDetails(){
 			appService.userDetails().then(

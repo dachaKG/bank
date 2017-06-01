@@ -1,4 +1,4 @@
-<div ng-if="role_admin || role_banker">
+<div>
 	<form ng-model="user" name="userForm" method="post">
 		<div>
 			<label>username</label> <input type="text" ng-model="user.username"
@@ -6,6 +6,10 @@
 		</div>
 		<div>
 			<label>password</label> <input type="text" ng-model="user.password"
+				required="true" />
+		</div>
+		<div>
+			<label>Email</label> <input type="email" ng-model="user.email"
 				required="true" />
 		</div>
 		<div>

@@ -1,4 +1,4 @@
-package bank.user;
+package bank.privilege;
 
 import java.util.List;
 
@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+
+import bank.user.Role;
 
 @Entity
 public class Privilege {

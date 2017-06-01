@@ -16,38 +16,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	UserDetailServiceImpl userDetailsService;
-	
+
 	@Autowired
 	AuthFailure authFailure;
-	
+
 	@Autowired
 	AuthSuccess authSuccess;
-	
-	 /*@Autowired
-	 @Qualifier("authenticationProvider")
-	 AuthenticationProvider authenticationProvider;*/
 	
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		
-		http.csrf().disable().
-		exceptionHandling()
-		.and().authorizeRequests().anyRequest().authenticated()
-		.and().formLogin().and().logout();
-     
+
+		http.csrf().disable().exceptionHandling().and().authorizeRequests()
+				.antMatchers("/login.html", "/forgotPassword.html", "/forgotPasswordMail/*")
+				.permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login.html")
+				.defaultSuccessUrl("/#/home", true).failureUrl("/login.html?error=true").permitAll().and().logout()
+				.logoutSuccessUrl("/login.html");
+
 	}
-	
+
 	@Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(new BCryptPasswordEncoder());
-    }
-	
-	/* @Autowired
-	 public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		 auth.authenticationProvider(authenticationProvider);
-	 }
-	*/
+	public void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
+	}
+
 }

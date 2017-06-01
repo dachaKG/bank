@@ -18,6 +18,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 	
 	@Autowired
 	private UserService userService;
+
 	
     @Autowired
     private LoginAttemptService loginAttemptService;
