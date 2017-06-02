@@ -4,6 +4,8 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +26,9 @@ public class LoginController {
 	@Autowired
 	UserService userService;
 	
+    @Autowired
+    private JavaMailSender javaMailSender;
+	
 	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(5, new SecureRandom());
 
 
@@ -36,10 +41,20 @@ public class LoginController {
 		SecureRandom random = new SecureRandom();
 
 		String newPassword = nextSessionId(random);
-		System.out.println("Nova sifra " + newPassword);
+		//System.out.println("Nova sifra " + newPassword);
 		user.setPassword(encoder.encode(newPassword));
 		userService.save(user);
-
+		try{
+			SimpleMailMessage email = new SimpleMailMessage();
+			email.setTo(user.getEmail());// umesto ovoga guest.mail..ako neces da testiras
+			email.setFrom("isarestorani2@gmail.com");
+			email.setSubject("New password");
+			email.setText("Your new password is " + newPassword);
+	
+			javaMailSender.send(email);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		//return user;
 	}
 

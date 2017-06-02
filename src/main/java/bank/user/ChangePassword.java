@@ -5,6 +5,8 @@ public class ChangePassword {
 	private String oldPassword;
 	
 	private String newPassword;
+	
+	private String checkNewPassword;
 
 	public String getOldPassword() {
 		return oldPassword;
@@ -20,6 +22,14 @@ public class ChangePassword {
 
 	public void setNewPassword(String newPassword) {
 		this.newPassword = newPassword;
+	}
+
+	public String getCheckNewPassword() {
+		return checkNewPassword;
+	}
+
+	public void setCheckNewPassword(String checkNewPassword) {
+		this.checkNewPassword = checkNewPassword;
 	}
 	
 	
