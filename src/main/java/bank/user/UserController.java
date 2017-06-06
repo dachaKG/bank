@@ -45,7 +45,7 @@ public class UserController {
 	@Autowired
 	private UserBadPasswordService userBadPasswordService;
 
-	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(5, new SecureRandom());
+	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
 	@Autowired
 	public UserController(UserService userService, final UserDetailsService userDetailsService, final RoleService roleService) {

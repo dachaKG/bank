@@ -46,7 +46,7 @@ public class LoginController {
 		userService.save(user);
 		try{
 			SimpleMailMessage email = new SimpleMailMessage();
-			email.setTo(user.getEmail());// umesto ovoga guest.mail..ako neces da testiras
+			email.setTo("choda.94@gmail.com");// umesto ovoga guest.mail..ako neces da testiras
 			email.setFrom("isarestorani2@gmail.com");
 			email.setSubject("New password");
 			email.setText("Your new password is " + newPassword);

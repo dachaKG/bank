@@ -1,4 +1,4 @@
-package invoice;
+package bank.invoice;
 
 
 import javax.persistence.Column;

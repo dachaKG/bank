@@ -1,0 +1,16 @@
+
+<div>
+	<table ng-init = "findAll()">
+		<tr>
+			<th>Naziv dobavljaca</th>
+			<th>Adresa dobavljaca</th>
+			<th>Ukupno roba i usluge</th>
+		</tr>
+		<tr	ng-repeat = "fakture in fakture">
+			<td>{{fakture.nazivDobavljaca}}</td>
+			<td>{{fakture.adresaDobavljaca}}</td>
+			<td>{{fakture.ukupnoRobaIUsluge}}</td>
+			<td><button ng-click = "obradi(faktura)"></button></td>
+		</tr>
+	</table>
+</div>

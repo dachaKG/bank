@@ -10,7 +10,8 @@ angular.module('routerApp', ['ui.router',
 	'revokeCertificate.services','revokeCertificate.controllers',
 	'csr.services','csr.controllers',
 	'user.services', 'user.controllers',
-	'login.services','login.controllers']) 
+	'login.services','login.controllers',
+	'faktura.services', 'faktura.controllers',]) 
 
 
 .config(function($stateProvider,$urlRouterProvider){
@@ -107,6 +108,16 @@ angular.module('routerApp', ['ui.router',
 		url : '/changePassword',
 		templateUrl : 'user/changePassword.html',
 		controller : 'userController'
+	})
+	.state('home.addFaktura',{
+		url : '/addFaktura',
+		templateUrl : 'faktura/faktura.html',
+		controller : 'fakturaController'
+	})
+	.state('home.listaFaktura',{
+		url : '/listaFaktura',
+		templateUrl : 'faktura/faktureList.html',
+		controller : 'fakturaController'
 	})
 	.state('home.register',{
 		url : '/registerUser',

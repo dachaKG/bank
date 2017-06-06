@@ -1,10 +1,15 @@
 package bank.firm;
 
+import java.util.List;
 
 public interface FirmService {
+	
+	public List<Firma> findAll();
 
-	public Firm findOnde(Long id);
+	public Firma findOne(Long id);
+	
+	public Firma findByName(String pib);
 
-	public Firm save(Firm certificate);
+	public Firma save(Firma certificate);
 
 }

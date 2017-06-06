@@ -3,14 +3,7 @@ var app = angular.module('login.controllers',[]);
 
 app.controller('loginController',['$scope','loginService','$location',
 	function($scope, loginService, $location) {
-	
-	/*$scope.credentials = function(){
-		loginService.getLogin().then(
-			function(response){
-				return response.data;
-			}
-		)
-	}*/
+
 	
 	$scope.error = false;
 	$scope.login = function(){
@@ -24,18 +17,6 @@ app.controller('loginController',['$scope','loginService','$location',
 			}
 		)
 	}
-	
-	/*$scope.login = function() {
-	      authenticate($scope.credentials, function() {
-	        if ($rootScope.authenticated) {
-	          $location.path("/home");
-	          $scope.error = false;
-	        } else {
-	          $location.path("/login");
-	          $scope.error = true;
-	        }
-	      });
-	  };*/
-	
+
 	
 }]);

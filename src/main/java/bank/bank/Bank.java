@@ -1,14 +1,21 @@
 package bank.bank;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
+import javax.persistence.OneToMany;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import bank.firm.Firma;
 
 @Entity
 public class Bank {
@@ -47,9 +54,9 @@ public class Bank {
 	@Column(length = 20)
 	private String fax;
 	
-	@Column
-	@NotNull
-	private boolean bank;
+	@JsonIgnore
+	@OneToMany(mappedBy = "bank", cascade = CascadeType.ALL)
+	private List<Firma> firms;
 
 	public Long getId() {
 		return id;
@@ -123,12 +130,13 @@ public class Bank {
 		this.fax = fax;
 	}
 
-	public boolean isBank() {
-		return bank;
+
+	public List<Firma> getFirms() {
+		return firms;
 	}
 
-	public void setBank(boolean bank) {
-		this.bank = bank;
+	public void setFirms(List<Firma> firms) {
+		this.firms = firms;
 	}
 	
 	
