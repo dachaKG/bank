@@ -1,0 +1,5 @@
+insert into bank (bank_code, pib, name, address, email, web, phone, fax) values ('200', '0123456789', 'Erste bank', 'Bulevar Oslobodjenja 4', 'erste@fbank.com', 'www.erste.com', '021333444', '021333443');
+insert into bank (bank_code, pib, name, address, email, web, phone, fax) values ('300', '1921681234', 'Uni credit bank', 'Narodnog fronta 5', 'unicredit@bank.com', 'www.unicredit.com', '021123123', '021123122');
+insert into bank (bank_code, pib, name, address, email, web, phone, fax) values ('400', '1221221211', 'Komercijalna banka', 'Ulica Modene', 'komercijalna@banka.com', 'www.komercijalna.com', '021456789', '021456788');
+insert into bank (bank_code, pib, name, address, email, web, phone, fax) values ('402', '1921921788', 'Pro credit bank', 'Vuka Karadzica bb', 'procredit@bank.com', 'www.procredit.com', '011122111', '011122112');
+insert into bank (bank_code, pib, name, address, email, web, phone, fax) values ('205', '1631637894', 'Raiffeisen bank', 'Cara Dusana 5', 'raiffeisen@bank.com', 'ww.raiffeisen.', '011454444', '011454445');
