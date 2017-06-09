@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import bank.firm.FirmClient;
 import bank.firm.FirmService;
 import bank.firm.Firma;
 import bank.user.User;
 import bank.user.UserService;
+import localhost._8080.ws.nalogzaplacanje.GetNalogZaPlacanjeRequest;
 
 @RestController
 @RequestMapping("/faktura")
@@ -31,6 +33,9 @@ public class FakturaController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	FirmClient firmClitent;
 	
 	@GetMapping
 	public List<Faktura> getFakture(){
@@ -78,14 +83,8 @@ public class FakturaController {
 	private User getUserDetails() {
 
 		SecurityContext context = SecurityContextHolder.getContext();
-
-		Authentication authentication = context.getAuthentication();
-
-		/*org.springframework.security.core.userdetails.UserDetails currentUser = userDetailsService
-				.loadUserByUsername(authentication.getName());*/
-		
+		Authentication authentication = context.getAuthentication();		
 		User user = userService.findByUsername(authentication.getName());
-
 
 		return user;
 
