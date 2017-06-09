@@ -2,63 +2,11 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
     targetNamespace="http://localhost:8080/ws/mt102" xmlns:mt102="http://localhost:8080/ws/mt102">
 
-    <xs:element name="mt102">
+    <xs:element name="getMt102Request">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="id_poruke">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:maxLength value="50"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="swift_kod_banke_duznika">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:length value="8"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="obracunski_racun_banke_duznika">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:pattern value="\d{3}-\d{13}-\d{2}"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="SWIFT_kod_banke_poverioca">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:length value="8"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="obracunski_racun_banke_poverioca">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:length value="18"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="ukupan_iznos">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:decimal">
-                            <xs:totalDigits value="15"/>
-                            <xs:fractionDigits value="2"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element maxOccurs="unbounded" name="nalogZaMT102" type="mt102:nalogZaMT102"/>
+                <xs:element name="id_poruke" type="xs:string"/>
             </xs:sequence>
-            <xs:attribute name="datum" type="xs:date"/>
-            <xs:attribute name="datum_valute" type="xs:date"/>
-            <xs:attribute name="sifra_valute">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:length value="3"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
         </xs:complexType>
     </xs:element>
     <xs:complexType name="nalogZaMT102">
@@ -153,4 +101,68 @@
             </xs:element>
         </xs:sequence>
     </xs:complexType>
+    <xs:complexType name="mt102">
+        <xs:sequence>
+            <xs:element name="id_poruke">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="50"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="swift_kod_banke_duznika">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:length value="8"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="obracunski_racun_banke_duznika">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="\d{3}-\d{13}-\d{2}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="SWIFT_kod_banke_poverioca">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:length value="8"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="obracunski_racun_banke_poverioca">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:length value="18"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="ukupan_iznos">
+                <xs:simpleType>
+                    <xs:restriction base="xs:decimal">
+                        <xs:totalDigits value="15"/>
+                        <xs:fractionDigits value="2"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element maxOccurs="unbounded" name="nalogZaMT102" type="mt102:nalogZaMT102"/>
+        </xs:sequence>
+        <xs:attribute name="datum" type="xs:date"/>
+        <xs:attribute name="datum_valute" type="xs:date"/>
+        <xs:attribute name="sifra_valute">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:length value="3"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:element name="getMt102Response">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="mt102" type="mt102:mt102"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
 </xs:schema>

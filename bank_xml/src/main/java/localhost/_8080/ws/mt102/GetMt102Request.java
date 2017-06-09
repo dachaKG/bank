@@ -6,7 +6,7 @@
 //
 
 
-package localhost._8080.__.bank.ws;
+package localhost._8080.ws.mt102;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="ZahtevZaDobijanjeIzvoda" type="{http://localhost:8080/#/bank/ws/}Zahtev_za_dobijanje_izvoda"/>
+ *         &lt;element name="id_poruke" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,36 +36,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "zahtevZaDobijanjeIzvoda"
+    "idPoruke"
 })
-@XmlRootElement(name = "getZahtevResponse")
-public class GetZahtevResponse {
+@XmlRootElement(name = "getMt102Request")
+public class GetMt102Request {
 
-    @XmlElement(name = "ZahtevZaDobijanjeIzvoda", required = true)
-    protected ZahtevZaDobijanjeIzvoda zahtevZaDobijanjeIzvoda;
+    @XmlElement(name = "id_poruke", required = true)
+    protected String idPoruke;
 
     /**
-     * Gets the value of the zahtevZaDobijanjeIzvoda property.
+     * Gets the value of the idPoruke property.
      * 
      * @return
      *     possible object is
-     *     {@link ZahtevZaDobijanjeIzvoda }
+     *     {@link String }
      *     
      */
-    public ZahtevZaDobijanjeIzvoda getZahtevZaDobijanjeIzvoda() {
-        return zahtevZaDobijanjeIzvoda;
+    public String getIdPoruke() {
+        return idPoruke;
     }
 
     /**
-     * Sets the value of the zahtevZaDobijanjeIzvoda property.
+     * Sets the value of the idPoruke property.
      * 
      * @param value
      *     allowed object is
-     *     {@link ZahtevZaDobijanjeIzvoda }
+     *     {@link String }
      *     
      */
-    public void setZahtevZaDobijanjeIzvoda(ZahtevZaDobijanjeIzvoda value) {
-        this.zahtevZaDobijanjeIzvoda = value;
+    public void setIdPoruke(String value) {
+        this.idPoruke = value;
     }
 
 }

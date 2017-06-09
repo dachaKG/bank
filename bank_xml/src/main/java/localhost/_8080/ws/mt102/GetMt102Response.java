@@ -6,7 +6,7 @@
 //
 
 
-package localhost._8080.__.bank.ws;
+package localhost._8080.ws.mt102;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="ZahtevZaDobijanjeIzvoda" type="{http://localhost:8080/#/bank/ws/}Zahtev_za_dobijanje_izvoda"/>
+ *         &lt;element name="mt102" type="{http://localhost:8080/ws/mt102}mt102"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,36 +36,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "zahtevZaDobijanjeIzvoda"
+    "mt102"
 })
-@XmlRootElement(name = "getZahtevResponse")
-public class GetZahtevResponse {
+@XmlRootElement(name = "getMt102Response")
+public class GetMt102Response {
 
-    @XmlElement(name = "ZahtevZaDobijanjeIzvoda", required = true)
-    protected ZahtevZaDobijanjeIzvoda zahtevZaDobijanjeIzvoda;
+    @XmlElement(required = true)
+    protected Mt102 mt102;
 
     /**
-     * Gets the value of the zahtevZaDobijanjeIzvoda property.
+     * Gets the value of the mt102 property.
      * 
      * @return
      *     possible object is
-     *     {@link ZahtevZaDobijanjeIzvoda }
+     *     {@link Mt102 }
      *     
      */
-    public ZahtevZaDobijanjeIzvoda getZahtevZaDobijanjeIzvoda() {
-        return zahtevZaDobijanjeIzvoda;
+    public Mt102 getMt102() {
+        return mt102;
     }
 
     /**
-     * Sets the value of the zahtevZaDobijanjeIzvoda property.
+     * Sets the value of the mt102 property.
      * 
      * @param value
      *     allowed object is
-     *     {@link ZahtevZaDobijanjeIzvoda }
+     *     {@link Mt102 }
      *     
      */
-    public void setZahtevZaDobijanjeIzvoda(ZahtevZaDobijanjeIzvoda value) {
-        this.zahtevZaDobijanjeIzvoda = value;
+    public void setMt102(Mt102 value) {
+        this.mt102 = value;
     }
 
 }
