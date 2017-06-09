@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
-    targetNamespace="http://localhost:8080/#/bank/ws/" xmlns:ws="http://localhost:8080/#/bank/ws/">
+    targetNamespace="http://localhost:8080/#/bank/zahtev"
+    xmlns:ws="http://localhost:8080/#/bank/zahtev">
 
     <xs:complexType name="Zahtev_za_dobijanje_izvoda">
         <xs:sequence>

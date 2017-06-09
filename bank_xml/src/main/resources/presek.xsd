@@ -2,11 +2,10 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
     targetNamespace="http://localhost:8080/ws/izvod" xmlns:izvod="http://localhost:8080/ws/izvod">
 
-    <xs:element name="Presek">
+    <xs:element name="getPresekResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="zaglavlje" type="izvod:zaglavljePreseka"/>
-                <xs:element maxOccurs="unbounded" name="stavka" type="izvod:stavkaPreseka"/>
+                <xs:element name="Presek" type="izvod:Presek"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -146,4 +145,17 @@
         <xs:attribute name="datumNaloga" type="xs:date"/>
         <xs:attribute name="datumValute" type="xs:date"/>
     </xs:complexType>
+    <xs:complexType name="Presek">
+        <xs:sequence>
+            <xs:element name="zaglavlje" type="izvod:zaglavljePreseka"/>
+            <xs:element maxOccurs="unbounded" name="stavka" type="izvod:stavkaPreseka"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:element name="getPresekRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="IdPreseka" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
 </xs:schema>

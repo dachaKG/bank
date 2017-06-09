@@ -1,55 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
     targetNamespace="http://localhost:8080/ws/mt910" xmlns:mt910="http://localhost:8080/ws/mt910">
-
-    <xs:element name="mt910">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="id_poruke">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:maxLength value="50"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="swift_kod_banke_poverioca">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:length value="8"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="obracunski_racun_banke_poverioca">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:pattern value="\d{3}-\d{13}-\d{2}"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="id_poruke_naloga">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:maxLength value="50"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="iznos">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:decimal">
-                            <xs:totalDigits value="15"/>
-                            <xs:fractionDigits value="2"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-            </xs:sequence>
-            <xs:attribute name="datum_valute" type="xs:date"/>
-            <xs:attribute name="sifra_valute">
+    <xs:complexType name="mt910">
+        <xs:sequence>
+            <xs:element name="id_poruke">
                 <xs:simpleType>
                     <xs:restriction base="xs:string">
-                        <xs:length value="3"/>
+                        <xs:maxLength value="50"/>
                     </xs:restriction>
                 </xs:simpleType>
-            </xs:attribute>
+            </xs:element>
+            <xs:element name="swift_kod_banke_poverioca">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:length value="8"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="obracunski_racun_banke_poverioca">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="\d{3}-\d{13}-\d{2}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="id_poruke_naloga">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="50"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="iznos">
+                <xs:simpleType>
+                    <xs:restriction base="xs:decimal">
+                        <xs:totalDigits value="15"/>
+                        <xs:fractionDigits value="2"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="datum_valute" type="xs:date"/>
+        <xs:attribute name="sifra_valute">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:length value="3"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:element name="getMt910Request">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="id_poruke" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getMt910Response">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="mt910" type="mt910:mt910"/>
+            </xs:sequence>
         </xs:complexType>
     </xs:element>
 </xs:schema>

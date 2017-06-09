@@ -2,54 +2,66 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
     targetNamespace="http://localhost:8080/ws/mt900" xmlns:mt900="http://localhost:8080/ws/mt900">
 
-    <xs:element name="mt900">
+    <xs:element name="getMt900Request">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="id_poruke">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:maxLength value="50"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="swift_banke_duznika">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:length value="8"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="obracunski_racun_banke_duznika">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:pattern value="\d{3}-\d{13}-\d{2}"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="id_poruke_naloga">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:string">
-                            <xs:maxLength value="50"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
-                <xs:element name="iznos">
-                    <xs:simpleType>
-                        <xs:restriction base="xs:decimal">
-                            <xs:totalDigits value="15"/>
-                            <xs:fractionDigits value="2"/>
-                        </xs:restriction>
-                    </xs:simpleType>
-                </xs:element>
+                <xs:element name="mt900" type="xs:string"/>
             </xs:sequence>
-            <xs:attribute name="datum_valute" type="xs:date"/>
-            <xs:attribute name="sifra_valute">
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="mt900">
+        <xs:sequence>
+            <xs:element name="id_poruke">
                 <xs:simpleType>
                     <xs:restriction base="xs:string">
-                        <xs:length value="3"/>
+                        <xs:maxLength value="50"/>
                     </xs:restriction>
                 </xs:simpleType>
-            </xs:attribute>
+            </xs:element>
+            <xs:element name="swift_banke_duznika">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:length value="8"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="obracunski_racun_banke_duznika">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="\d{3}-\d{13}-\d{2}"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="id_poruke_naloga">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:maxLength value="50"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="iznos">
+                <xs:simpleType>
+                    <xs:restriction base="xs:decimal">
+                        <xs:totalDigits value="15"/>
+                        <xs:fractionDigits value="2"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="datum_valute" type="xs:date"/>
+        <xs:attribute name="sifra_valute">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:length value="3"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:element name="getMt900Response">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="mt900" type="mt900:mt900"/>
+            </xs:sequence>
         </xs:complexType>
     </xs:element>
 </xs:schema>
