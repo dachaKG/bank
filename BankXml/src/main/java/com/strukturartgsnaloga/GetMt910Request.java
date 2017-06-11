@@ -25,7 +25,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="strukturaRtgsNaloga" type="{http://strukturaRtgsNaloga.com}struktura_rtgs_naloga"/>
+ *         &lt;element name="mt910" type="{http://strukturaRtgsNaloga.com}mt910"/>
+ *         &lt;element name="rtgsNalog" type="{http://strukturaRtgsNaloga.com}struktura_rtgs_naloga"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,36 +37,63 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "strukturaRtgsNaloga"
+    "mt910",
+    "rtgsNalog"
 })
-@XmlRootElement(name = "getStrukturaRtgsNalogaRequest")
-public class GetStrukturaRtgsNalogaRequest {
+@XmlRootElement(name = "getMt910Request")
+public class GetMt910Request {
 
     @XmlElement(required = true)
-    protected StrukturaRtgsNaloga strukturaRtgsNaloga;
+    protected Mt910 mt910;
+    @XmlElement(required = true)
+    protected StrukturaRtgsNaloga rtgsNalog;
 
     /**
-     * Gets the value of the strukturaRtgsNaloga property.
+     * Gets the value of the mt910 property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Mt910 }
+     *     
+     */
+    public Mt910 getMt910() {
+        return mt910;
+    }
+
+    /**
+     * Sets the value of the mt910 property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Mt910 }
+     *     
+     */
+    public void setMt910(Mt910 value) {
+        this.mt910 = value;
+    }
+
+    /**
+     * Gets the value of the rtgsNalog property.
      * 
      * @return
      *     possible object is
      *     {@link StrukturaRtgsNaloga }
      *     
      */
-    public StrukturaRtgsNaloga getStrukturaRtgsNaloga() {
-        return strukturaRtgsNaloga;
+    public StrukturaRtgsNaloga getRtgsNalog() {
+        return rtgsNalog;
     }
 
     /**
-     * Sets the value of the strukturaRtgsNaloga property.
+     * Sets the value of the rtgsNalog property.
      * 
      * @param value
      *     allowed object is
      *     {@link StrukturaRtgsNaloga }
      *     
      */
-    public void setStrukturaRtgsNaloga(StrukturaRtgsNaloga value) {
-        this.strukturaRtgsNaloga = value;
+    public void setRtgsNalog(StrukturaRtgsNaloga value) {
+        this.rtgsNalog = value;
     }
 
 }
