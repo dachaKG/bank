@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.ws.client.core.WebServiceTemplate;
 import org.springframework.ws.config.annotation.EnableWs;
 import org.springframework.ws.config.annotation.WsConfigurerAdapter;
 import org.springframework.ws.transport.http.MessageDispatcherServlet;
@@ -14,7 +16,7 @@ import org.springframework.xml.xsd.commons.CommonsXsdSchemaCollection;
 
 @EnableWs
 @Configuration
-public class WebServiceConfig extends WsConfigurerAdapter{
+public class WebServiceConfig extends WsConfigurerAdapter {
 
 	@Bean
 	public ServletRegistrationBean messageDispatcherServlet(ApplicationContext applicationContext) {
@@ -24,7 +26,7 @@ public class WebServiceConfig extends WsConfigurerAdapter{
 
 		return new ServletRegistrationBean(servlet, "/ws/*");
 	}
-	
+
 	@Bean(name = "banka")
 	public DefaultWsdl11Definition defaultWsdl11Definition(CommonsXsdSchemaCollection schemaCollection)
 			throws Exception {
@@ -38,13 +40,32 @@ public class WebServiceConfig extends WsConfigurerAdapter{
 
 		return wsdl11Definition;
 	}
-	
+
 	@Bean
 	public CommonsXsdSchemaCollection schemeCollection() {
-		CommonsXsdSchemaCollection collection = new CommonsXsdSchemaCollection(new Resource[] {
-				new ClassPathResource("/nalogZaPlacanje.xsd")});
-				
+		CommonsXsdSchemaCollection collection = new CommonsXsdSchemaCollection(
+				new Resource[] { new ClassPathResource("/nalogZaPlacanje.xsd") });
+
 		collection.setInline(true);
 		return collection;
+	}
+
+	@Bean
+	Jaxb2Marshaller jaxb2Marshaller() {
+
+		Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
+		jaxb2Marshaller.setContextPath("com.nalogzaplacanje");
+		return jaxb2Marshaller;
+	}
+
+	@Bean
+	public WebServiceTemplate webServiceTemplate() {
+
+		WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
+		webServiceTemplate.setMarshaller(jaxb2Marshaller());
+		webServiceTemplate.setUnmarshaller(jaxb2Marshaller());
+		webServiceTemplate.setDefaultUri("http://localhost:8083/ws");
+
+		return webServiceTemplate;
 	}
 }

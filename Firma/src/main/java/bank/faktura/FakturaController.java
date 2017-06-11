@@ -82,7 +82,7 @@ public class FakturaController {
 	@PostMapping("/obrada")
 	public void obradi(@RequestBody Faktura faktura){
 		Faktura f = fakturaService.findOne(faktura.getId());
-		firmClient.sendNalog(f);
+		firmClient.sendNalog(f,2);
 	}
 	private User getUserDetails() {
 
