@@ -17,4 +17,8 @@ services.service('fakturaService',['$http',function($http){
 		return $http.get("/faktura/findAllFirms");
 	}
 	
+	this.obradi = function(faktura){
+		return $http.post('/faktura/obrada',faktura);
+	}
+	
 }])

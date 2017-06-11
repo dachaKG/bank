@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
-    targetNamespace="http://localhost:8080/ws/nalogZaPlacanje"
-    xmlns:nzp="http://localhost:8080/ws/nalogZaPlacanje">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://nalogZaPlacanje.com"
+    xmlns:tns="http://nalogZaPlacanje.com" elementFormDefault="qualified">
+    
+    
+    
+    <xs:element name="getNalogZaPlacanjeRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="nalogZaPlacanje" type="tns:nalogZaPlacanje"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getNalogZaPlacanjeResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="nalogZaPlacanje" type="tns:nalogZaPlacanje"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>    
     <xs:complexType name="nalogZaPlacanje">
         <xs:sequence>
             <xs:element name="idPoruke">
@@ -78,18 +94,5 @@
         <xs:attribute name="datumValute" type="xs:date"/>
         <xs:attribute name="hitno" type="xs:boolean"/>
     </xs:complexType>
-    <xs:element name="getNalogZaPlacanjeRequest">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="nalogZaPlacanje" type="nzp:nalogZaPlacanje"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="getNalogZaPlacanjeResponse">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="nalogZaPlacanje" type="nzp:nalogZaPlacanje"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
+
 </xs:schema>

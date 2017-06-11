@@ -64,5 +64,13 @@ app.controller('fakturaController',['$scope','fakturaService','$location',
 		$scope.faktura.adresaKupca = firm.address;
 		
 	}
-	
+	$scope.obradi = function(faktura){
+		fakturaService.obradi(faktura)
+		.then(function(response){
+			$scope.findAll();
+		},
+		function(response){
+			
+		})
+	}
 }]);

@@ -36,9 +36,8 @@ public class Faktura {
 	@Column(columnDefinition = "CHAR(11)")
 	private String pibKupca;
 
-	@Column
-	@Max(value = 999999)
-	private Integer brojRacuna;
+	@Column(columnDefinition = "CHAR(18)")
+	private String brojRacuna;
 
 	@Column
 	private Date datumRacuna;
@@ -165,11 +164,13 @@ public class Faktura {
 		this.pibKupca = pibKupca;
 	}
 
-	public Integer getBrojRacuna() {
+	
+
+	public String getBrojRacuna() {
 		return brojRacuna;
 	}
 
-	public void setBrojRacuna(Integer brojRacuna) {
+	public void setBrojRacuna(String brojRacuna) {
 		this.brojRacuna = brojRacuna;
 	}
 

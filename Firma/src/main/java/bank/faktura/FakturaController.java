@@ -20,7 +20,6 @@ import bank.firm.FirmService;
 import bank.firm.Firma;
 import bank.user.User;
 import bank.user.UserService;
-import localhost._8080.ws.nalogzaplacanje.GetNalogZaPlacanjeRequest;
 
 @RestController
 @RequestMapping("/faktura")
@@ -35,7 +34,7 @@ public class FakturaController {
 	private UserService userService;
 	
 	@Autowired
-	FirmClient firmClitent;
+	FirmClient firmClient;
 	
 	@GetMapping
 	public List<Faktura> getFakture(){
@@ -80,6 +79,11 @@ public class FakturaController {
 		return firms;
 	}
 	
+	@PostMapping("/obrada")
+	public void obradi(@RequestBody Faktura faktura){
+		Faktura f = fakturaService.findOne(faktura.getId());
+		firmClient.sendNalog(f);
+	}
 	private User getUserDetails() {
 
 		SecurityContext context = SecurityContextHolder.getContext();

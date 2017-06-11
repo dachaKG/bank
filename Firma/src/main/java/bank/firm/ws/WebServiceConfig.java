@@ -44,26 +44,31 @@ public class WebServiceConfig extends WsConfigurerAdapter{
 	@Bean
 	public CommonsXsdSchemaCollection schemeCollection() {
 		CommonsXsdSchemaCollection collection = new CommonsXsdSchemaCollection(new Resource[] {
-				new ClassPathResource("/ZahtevZaDobijanjeIzvoda.xsd"),
-				new ClassPathResource("/strukturaRtgsNaloga.xsd"), new ClassPathResource("/nalogZaPlacanje.xsd") });
+				new ClassPathResource("/nalogZaPlacanje.xsd")});
+				
 		collection.setInline(true);
 		return collection;
 	}
 
-	@Bean
-	public WebServiceTemplate webServiceTemplate() {
+	  @Bean
+	  Jaxb2Marshaller jaxb2Marshaller() {
 
-		WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
-		Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
-		marshaller.setContextPath(
-				"localhost._8080.ws.nalogzaplacanje:localhost._8080.ws.izvod:localhost._8080.ws.mt102:localhost._8080.ws.strukturartgsnaloga:"
-						+ "localhost._8080.ws.mt910:localhost._8080.ws.mt900");
+	    Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
+	    jaxb2Marshaller.setContextPath("com.nalogzaplacanje");
+	    return jaxb2Marshaller;
+	  }
+	  
+	  
 
-		webServiceTemplate.setMarshaller(marshaller);
-		webServiceTemplate.setUnmarshaller(marshaller);
-		webServiceTemplate.setDefaultUri("http://localhost:8081/ws/");
+	  @Bean
+	  public WebServiceTemplate webServiceTemplate() {
 
-		return webServiceTemplate;
-	}
+	    WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
+	    webServiceTemplate.setMarshaller(jaxb2Marshaller());
+	    webServiceTemplate.setUnmarshaller(jaxb2Marshaller());
+	    webServiceTemplate.setDefaultUri("http://localhost:8080/ws");
+
+	    return webServiceTemplate;
+	  }
 
 }
