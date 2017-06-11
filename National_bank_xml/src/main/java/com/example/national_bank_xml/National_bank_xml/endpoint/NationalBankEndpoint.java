@@ -18,6 +18,7 @@ public class NationalBankEndpoint {
 	@ResponsePayload
 	public GetNalogZaPlacanjeResponse getNalogZaPlacanje(@RequestPayload GetNalogZaPlacanjeRequest request) {
 		GetNalogZaPlacanjeResponse response = new GetNalogZaPlacanjeResponse();
+		System.out.println("usao narodna banka");
 		//response.setCountry(countryRepository.findCountry(request.getName()));
 		//bankClient.sendToNationalBank(response.getNalogZaPlacanje());
 		return response;

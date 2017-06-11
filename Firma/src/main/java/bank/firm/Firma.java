@@ -51,7 +51,7 @@ public class Firma {
 	@Column(name = "web")
 	private String web;
 	
-	@Column(columnDefinition = "CHAR(11)",unique = true)
+	@Column(unique = true, columnDefinition = "CHAR(11)")
 	private String pibFirm;
 
 	@ManyToOne
@@ -151,6 +151,14 @@ public class Firma {
 
 	public void setFakture(List<Faktura> fakture) {
 		this.fakture = fakture;
+	}
+
+	public String getPibFirm() {
+		return pibFirm;
+	}
+
+	public void setPibFirm(String pibFirm) {
+		this.pibFirm = pibFirm;
 	}
 	
 	
