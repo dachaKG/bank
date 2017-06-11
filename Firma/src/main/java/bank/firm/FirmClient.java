@@ -18,28 +18,16 @@ public class FirmClient {
 	@Autowired
 	private WebServiceTemplate webServiceTemplate;
 
-	// private static final Logger LOGGER =
-	// LoggerFactory.getLogger(BankClient.class);
 
-	public void sendNalog(Faktura f) {
+	public void sendNalog(Faktura f, int s) {
 		ObjectFactory factory = new ObjectFactory();
 		GetNalogZaPlacanjeRequest nalogZaPlacanjeRequest = factory.createGetNalogZaPlacanjeRequest();
 		nalogZaPlacanjeRequest.setNalogZaPlacanje(factory.createNalogZaPlacanje());
 		nalogZaPlacanjeRequest.getNalogZaPlacanje().setDuznikNalogodavac(f.getNazivKupca());
-		/*nalogZaPlacanjeRequest.getNalogZaPlacanje().setIznos(new BigDecimal(f.getIznosZaUplatu()));
-*/	
-		//GetNalogZaPlacanjeResponse nalogZaPlacanjeResponse= (GetNalogZaPlacanjeResponse) webServiceTemplate.marshalSendAndReceive(nalogZaPlacanjeRequest);
-		/*final SoapActionCallback soapActionCallback = new SoapActionCallback("getNalogZaPlacanje");
-		nalogZaPlacanjeResponse = (GetNalogZaPlacanjeResponse) webServiceTemplate
-		    .marshalSendAndReceive(nalogZaPlacanjeRequest, soapActionCallback );
-		//responseString = response.getAnswer().toString();
-		System.out.println(nalogZaPlacanjeResponse.getNalogZaPlacanje().getDuznikNalogodavac());*/
 		
-		/*io.spring.guides.gs_producing_web_service.ObjectFactory factory = new io.spring.guides.gs_producing_web_service.ObjectFactory();
-		GetCountryRequest countryRequest = factory.createGetCountryRequest();
-		countryRequest.setName("NAME");
-		GetCountryResponse getCountryResponse = (GetCountryResponse) webServiceTemplate.marshalSendAndReceive(countryRequest);
-		*/
+		/*String sub = webServiceTemplate.getDefaultUri().substring(0, 20);
+		webServiceTemplate.setDefaultUri(sub+"5/ws");*/
+		
 		GetNalogZaPlacanjeResponse getNalogZaPlacanjeResponse = (GetNalogZaPlacanjeResponse) webServiceTemplate.marshalSendAndReceive(nalogZaPlacanjeRequest);
 
 		}

@@ -1,4 +1,4 @@
-package com.example.bankXml.BankXml;
+package com.example.national_bank_xml.National_bank_xml.endpoint;
 
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -10,7 +10,7 @@ import com.nalogzaplacanje.GetNalogZaPlacanjeResponse;
 
 
 @Endpoint
-public class BankEndpoint {
+public class NationalBankEndpoint {
 
 	private static final String NAMESPACE_URI1 = "http://nalogZaPlacanje.com";
 
@@ -19,7 +19,7 @@ public class BankEndpoint {
 	public GetNalogZaPlacanjeResponse getNalogZaPlacanje(@RequestPayload GetNalogZaPlacanjeRequest request) {
 		GetNalogZaPlacanjeResponse response = new GetNalogZaPlacanjeResponse();
 		//response.setCountry(countryRepository.findCountry(request.getName()));
-
+		//bankClient.sendToNationalBank(response.getNalogZaPlacanje());
 		return response;
 	}
 	
