@@ -1,20 +1,18 @@
-<div>
-
-	<div>
-		<label>username</label> <input type="text" ng-model="user.username"
-			required="true" />
-	</div>
-	<!-- 		<div>
-			<label>password</label> <input type="text" ng-model="user.password"
-				required="true" />
-		</div> -->
-	<div>
-		<label>Email</label> <input type="email" ng-model="user.email"
-			required="true" />
-	</div>
+<div class = "col-sm-5">
+<legend>Register new user</legend>
+	<form name = "registerNewUser" role = "form" ng-submit = "registerUser()" method = "post">
 	
 	<div>
-		<button ng-click="registerUser()">Register</button>
+		<label class="control-label">Username</label> 
+		<input type="text" class = "form-control" ng-model="user.username" required />
+	</div>
+	<div>
+		<label class="control-label">Email</label>
+		<input type="email" class = "form-control" ng-model="user.email" required />
 	</div>
 
+	<div>
+		<button type = "submit" class = "btn btn-primary" ng-disabled="registerNewUser.$invalid">Register</button>
+	</div>
+</form>
 </div>

@@ -21,15 +21,18 @@ app.controller('findCertificateController',['$scope','findCertificateService','$
 		$scope.checkCertificateStatus = function(){
 			findCertificateService.checkCertificateStatus($scope.certificateSerialNumber)
 			.then(function(response){
-				if(response.data != "")
+				if(response.data != ""){
 					if(response.data.povucen == true){
 						$scope.status = 0;
 					}
 					else
 						$scope.status = 1;
+					} else {
+						$scope.status = 2;
+					}
 				},
 				function(response){
-					
+					alert("NOT FOUND")
 				})
 		}
 

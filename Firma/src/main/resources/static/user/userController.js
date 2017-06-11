@@ -24,9 +24,11 @@ app.controller('userController',['$scope','userService','$location',
 							$scope.errorNewPassword = false;
 							$location.path("/home");
 						} else if(response.data == "badOldPassword") {
-							alert("nije tacna stara lozinka");
+							$scope.errorOldPassword = true;
+							$scope.errorNewPassword = false;
 						} else if(response.data == "password didn't match"){
 							$scope.errorNewPassword = true;
+							$scope.errorOldPassword = false;
 						}
 					}, function(response){
 						$scope.errorNewPassword = true;
@@ -34,6 +36,7 @@ app.controller('userController',['$scope','userService','$location',
 					}
 				)
 			} else {
+				$scope.errorOldPassword = false;
 				$scope.errorNewPassword = true;
 			}
 		}
