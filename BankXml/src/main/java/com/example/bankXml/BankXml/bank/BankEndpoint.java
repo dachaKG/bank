@@ -12,6 +12,8 @@ import com.example.bankXml.BankXml.firm.Firma;
 import com.nalogzaplacanje.GetNalogZaPlacanjeRequest;
 import com.nalogzaplacanje.GetNalogZaPlacanjeResponse;
 import com.nalogzaplacanje.NalogZaPlacanje;
+import com.strukturartgsnaloga.GetMt910Request;
+import com.strukturartgsnaloga.GetMt910Response;
 import com.strukturartgsnaloga.GetStrukturaRtgsNalogaRequest;
 import com.strukturartgsnaloga.GetStrukturaRtgsNalogaResponse;
 import com.strukturartgsnaloga.ObjectFactory;
@@ -27,7 +29,8 @@ public class BankEndpoint {
 	@Autowired
 	private FirmService firmService;
 	
-	
+	private static final String NAMESPACE_URI = "http://strukturaRtgsNaloga.com";
+
 	private static final String NAMESPACE_URI1 = "http://nalogZaPlacanje.com";
 
 	@PayloadRoot(namespace = NAMESPACE_URI1, localPart = "getNalogZaPlacanjeRequest")
@@ -83,14 +86,19 @@ public class BankEndpoint {
 		else{
 			//MT102
 		}
-		
-		
-		
-		
-		
+
 		GetNalogZaPlacanjeResponse response = new GetNalogZaPlacanjeResponse();
 		bankClient.sendToNationalBank(response.getNalogZaPlacanje());
 		return response;
+	}
+	
+	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "getMt910Request")
+	@ResponsePayload
+	public GetMt910Response getMt910(@RequestPayload GetMt910Request request){
+		Firma poverilac = firmService.findByAccount(request.getRtgsNalog().getRacunPoverioca());
+		poverilac.setStanjeRacuna(poverilac.getStanjeRacuna()+ request.getRtgsNalog().getIznos().intValue());
+		firmService.save(poverilac);
+		return null;
 	}
 	
 }
