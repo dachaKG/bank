@@ -5,6 +5,9 @@ app.controller('fakturaController',['$scope','fakturaService','$location',
 	function($scope, fakturaService, $location) {
 
 	$scope.faktura = new Object();
+	$scope.faktura.stavkeFakture = [];
+	
+	$scope.dodajStavkuDiv = false;
 	$scope.findFirm = function(){
 		fakturaService.findFirm().then(
 			function(response){
@@ -15,6 +18,16 @@ app.controller('fakturaController',['$scope','fakturaService','$location',
 			}
 		)
 	}
+	
+	$scope.dodajStavkuFakture = function(stavka){
+		$scope.faktura.stavkeFakture.push(stavka);
+		$scope.dodajStavkuDiv = false;
+	}
+	
+	$scope.dodajStavku = function(){
+		$scope.dodajStavkuDiv = true;
+	}
+	
 	
 	$scope.findAll = function(){
 		fakturaService.findAll().then(
@@ -53,15 +66,18 @@ app.controller('fakturaController',['$scope','fakturaService','$location',
 	
 	$scope.okModal = function(){
 		var modal = document.getElementById('myModal');
+		$scope.faktura.nazivKupca = $scope.selectedFirm.name;
+		$scope.faktura.pibKupca = $scope.selectedFirm.pibFirm;
+		$scope.faktura.adresaKupca = $scope.selectedFirm.address;
 		modal.style.display = "none";		
 	
 	}
 	$scope.selectedFirm = null;
 	$scope.setSelectedFirm = function(firm){
 		$scope.selectedFirm = firm;
-		$scope.faktura.nazivKupca = firm.name;
+		/*$scope.faktura.nazivKupca = firm.name;
 		$scope.faktura.pibKupca = firm.pibFirm;
-		$scope.faktura.adresaKupca = firm.address;
+		$scope.faktura.adresaKupca = firm.address;*/
 		
 	}
 	$scope.obradi = function(faktura){

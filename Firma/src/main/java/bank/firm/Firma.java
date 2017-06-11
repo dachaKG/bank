@@ -50,7 +50,7 @@ public class Firma {
 	@Column(name = "web")
 	private String web;
 	
-	@Column(columnDefinition = "CHAR(11)",unique = true)
+	@Column(unique = true, columnDefinition = "CHAR(11)")
 	private String pibFirm;
 
 	private Integer stanjeRacuna;
@@ -158,6 +158,7 @@ public class Firma {
 		this.pibFirm = pibFirm;
 	}
 
+
 	public Integer getStanjeRacuna() {
 		return stanjeRacuna;
 	}
@@ -173,6 +174,7 @@ public class Firma {
 	public void setBrojRacuna(String brojRacuna) {
 		this.brojRacuna = brojRacuna;
 	}
+
 	
 	
 
