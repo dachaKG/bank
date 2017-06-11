@@ -54,7 +54,7 @@ public class WebServiceConfig extends WsConfigurerAdapter {
 	Jaxb2Marshaller jaxb2Marshaller() {
 
 		Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
-		jaxb2Marshaller.setContextPath("com.nalogzaplacanje");
+		jaxb2Marshaller.setContextPath("com.nalogzaplacanje:com.strukturartgsnaloga");
 		return jaxb2Marshaller;
 	}
 

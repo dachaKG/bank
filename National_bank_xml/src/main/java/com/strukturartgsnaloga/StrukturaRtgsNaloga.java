@@ -6,7 +6,7 @@
 //
 
 
-package com.nalogzaplacanje;
+package com.strukturartgsnaloga;
 
 import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -19,55 +19,101 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java class for nalogZaPlacanje complex type.
+ * <p>Java class for struktura_rtgs_naloga complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="nalogZaPlacanje">
+ * &lt;complexType name="struktura_rtgs_naloga">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="idPoruke">
+ *         &lt;element name="id_poruke">
  *           &lt;simpleType>
  *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
  *               &lt;maxLength value="50"/>
  *             &lt;/restriction>
  *           &lt;/simpleType>
  *         &lt;/element>
- *         &lt;element name="duznik-nalogodavac" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="svrhaPlacanja" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="primalac-poverilac" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="racunDuznika">
+ *         &lt;element name="swift_kod_banke_duznika">
  *           &lt;simpleType>
  *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *               &lt;length value="18"/>
+ *               &lt;length value="8"/>
  *             &lt;/restriction>
  *           &lt;/simpleType>
  *         &lt;/element>
- *         &lt;element name="modelZaduzenja">
+ *         &lt;element name="obracunski_racun_banke_duznika">
+ *           &lt;simpleType>
+ *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+ *               &lt;pattern value="\d{3}-\d{13}-\d{2}"/>
+ *             &lt;/restriction>
+ *           &lt;/simpleType>
+ *         &lt;/element>
+ *         &lt;element name="swift_kod_banke_poverioca">
+ *           &lt;simpleType>
+ *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+ *               &lt;length value="8"/>
+ *             &lt;/restriction>
+ *           &lt;/simpleType>
+ *         &lt;/element>
+ *         &lt;element name="obracunski_racun_banke_poverioca">
+ *           &lt;simpleType>
+ *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+ *               &lt;pattern value="\d{3}-\d{13}-\d{2}"/>
+ *             &lt;/restriction>
+ *           &lt;/simpleType>
+ *         &lt;/element>
+ *         &lt;element name="duznik_nalogodavac">
+ *           &lt;simpleType>
+ *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+ *               &lt;maxLength value="255"/>
+ *             &lt;/restriction>
+ *           &lt;/simpleType>
+ *         &lt;/element>
+ *         &lt;element name="svrha_placanja">
+ *           &lt;simpleType>
+ *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+ *               &lt;maxLength value="255"/>
+ *             &lt;/restriction>
+ *           &lt;/simpleType>
+ *         &lt;/element>
+ *         &lt;element name="primalac_poverilac">
+ *           &lt;simpleType>
+ *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+ *               &lt;maxLength value="255"/>
+ *             &lt;/restriction>
+ *           &lt;/simpleType>
+ *         &lt;/element>
+ *         &lt;element name="racun_duznika">
+ *           &lt;simpleType>
+ *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+ *               &lt;pattern value="\d{3}-\d{13}-\d{2}"/>
+ *             &lt;/restriction>
+ *           &lt;/simpleType>
+ *         &lt;/element>
+ *         &lt;element name="model_zaduzenja">
  *           &lt;simpleType>
  *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}int">
- *               &lt;maxInclusive value="99"/>
  *               &lt;minInclusive value="10"/>
+ *               &lt;maxInclusive value="99"/>
  *             &lt;/restriction>
  *           &lt;/simpleType>
  *         &lt;/element>
- *         &lt;element name="pozivNaBrojZaduzenja">
+ *         &lt;element name="poziv_na_broj_zaduzenja">
  *           &lt;simpleType>
  *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *               &lt;length value="20"/>
+ *               &lt;maxLength value="20"/>
  *             &lt;/restriction>
  *           &lt;/simpleType>
  *         &lt;/element>
- *         &lt;element name="racunPoverioca">
+ *         &lt;element name="racun_poverioca">
  *           &lt;simpleType>
  *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *               &lt;length value="18"/>
+ *               &lt;pattern value="\d{3}-\d{13}-\d{2}"/>
  *             &lt;/restriction>
  *           &lt;/simpleType>
  *         &lt;/element>
- *         &lt;element name="modelOdobrenja">
+ *         &lt;element name="model_odobrenja">
  *           &lt;simpleType>
  *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}int">
  *               &lt;minInclusive value="10"/>
@@ -75,10 +121,10 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *             &lt;/restriction>
  *           &lt;/simpleType>
  *         &lt;/element>
- *         &lt;element name="pozivNaBrojOdobrenja">
+ *         &lt;element name="poziv_na_broj_odobrenja">
  *           &lt;simpleType>
  *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *               &lt;length value="20"/>
+ *               &lt;maxLength value="20"/>
  *             &lt;/restriction>
  *           &lt;/simpleType>
  *         &lt;/element>
@@ -90,17 +136,16 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *             &lt;/restriction>
  *           &lt;/simpleType>
  *         &lt;/element>
- *         &lt;element name="oznakaValute">
- *           &lt;simpleType>
- *             &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *               &lt;length value="3"/>
- *             &lt;/restriction>
- *           &lt;/simpleType>
- *         &lt;/element>
  *       &lt;/sequence>
- *       &lt;attribute name="datumNaloga" type="{http://www.w3.org/2001/XMLSchema}date" />
- *       &lt;attribute name="datumValute" type="{http://www.w3.org/2001/XMLSchema}date" />
- *       &lt;attribute name="hitno" type="{http://www.w3.org/2001/XMLSchema}boolean" />
+ *       &lt;attribute name="datum_naloga" type="{http://www.w3.org/2001/XMLSchema}date" />
+ *       &lt;attribute name="datum_valute" type="{http://www.w3.org/2001/XMLSchema}date" />
+ *       &lt;attribute name="sifra_valute">
+ *         &lt;simpleType>
+ *           &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
+ *             &lt;length value="3"/>
+ *           &lt;/restriction>
+ *         &lt;/simpleType>
+ *       &lt;/attribute>
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -109,8 +154,12 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "nalogZaPlacanje", propOrder = {
+@XmlType(name = "struktura_rtgs_naloga", propOrder = {
     "idPoruke",
+    "swiftKodBankeDuznika",
+    "obracunskiRacunBankeDuznika",
+    "swiftKodBankePoverioca",
+    "obracunskiRacunBankePoverioca",
     "duznikNalogodavac",
     "svrhaPlacanja",
     "primalacPoverilac",
@@ -120,41 +169,48 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "racunPoverioca",
     "modelOdobrenja",
     "pozivNaBrojOdobrenja",
-    "iznos",
-    "oznakaValute"
+    "iznos"
 })
-public class NalogZaPlacanje {
+public class StrukturaRtgsNaloga {
 
-    @XmlElement(required = true)
+    @XmlElement(name = "id_poruke", required = true)
     protected String idPoruke;
-    @XmlElement(name = "duznik-nalogodavac", required = true)
+    @XmlElement(name = "swift_kod_banke_duznika", required = true)
+    protected String swiftKodBankeDuznika;
+    @XmlElement(name = "obracunski_racun_banke_duznika", required = true)
+    protected String obracunskiRacunBankeDuznika;
+    @XmlElement(name = "swift_kod_banke_poverioca", required = true)
+    protected String swiftKodBankePoverioca;
+    @XmlElement(name = "obracunski_racun_banke_poverioca", required = true)
+    protected String obracunskiRacunBankePoverioca;
+    @XmlElement(name = "duznik_nalogodavac", required = true)
     protected String duznikNalogodavac;
-    @XmlElement(required = true)
+    @XmlElement(name = "svrha_placanja", required = true)
     protected String svrhaPlacanja;
-    @XmlElement(name = "primalac-poverilac", required = true)
+    @XmlElement(name = "primalac_poverilac", required = true)
     protected String primalacPoverilac;
-    @XmlElement(required = true)
+    @XmlElement(name = "racun_duznika", required = true)
     protected String racunDuznika;
+    @XmlElement(name = "model_zaduzenja")
     protected int modelZaduzenja;
-    @XmlElement(required = true)
+    @XmlElement(name = "poziv_na_broj_zaduzenja", required = true)
     protected String pozivNaBrojZaduzenja;
-    @XmlElement(required = true)
+    @XmlElement(name = "racun_poverioca", required = true)
     protected String racunPoverioca;
+    @XmlElement(name = "model_odobrenja")
     protected int modelOdobrenja;
-    @XmlElement(required = true)
+    @XmlElement(name = "poziv_na_broj_odobrenja", required = true)
     protected String pozivNaBrojOdobrenja;
     @XmlElement(required = true)
     protected BigDecimal iznos;
-    @XmlElement(required = true)
-    protected String oznakaValute;
-    @XmlAttribute(name = "datumNaloga")
+    @XmlAttribute(name = "datum_naloga")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar datumNaloga;
-    @XmlAttribute(name = "datumValute")
+    @XmlAttribute(name = "datum_valute")
     @XmlSchemaType(name = "date")
     protected XMLGregorianCalendar datumValute;
-    @XmlAttribute(name = "hitno")
-    protected Boolean hitno;
+    @XmlAttribute(name = "sifra_valute")
+    protected String sifraValute;
 
     /**
      * Gets the value of the idPoruke property.
@@ -178,6 +234,102 @@ public class NalogZaPlacanje {
      */
     public void setIdPoruke(String value) {
         this.idPoruke = value;
+    }
+
+    /**
+     * Gets the value of the swiftKodBankeDuznika property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getSwiftKodBankeDuznika() {
+        return swiftKodBankeDuznika;
+    }
+
+    /**
+     * Sets the value of the swiftKodBankeDuznika property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setSwiftKodBankeDuznika(String value) {
+        this.swiftKodBankeDuznika = value;
+    }
+
+    /**
+     * Gets the value of the obracunskiRacunBankeDuznika property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getObracunskiRacunBankeDuznika() {
+        return obracunskiRacunBankeDuznika;
+    }
+
+    /**
+     * Sets the value of the obracunskiRacunBankeDuznika property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setObracunskiRacunBankeDuznika(String value) {
+        this.obracunskiRacunBankeDuznika = value;
+    }
+
+    /**
+     * Gets the value of the swiftKodBankePoverioca property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getSwiftKodBankePoverioca() {
+        return swiftKodBankePoverioca;
+    }
+
+    /**
+     * Sets the value of the swiftKodBankePoverioca property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setSwiftKodBankePoverioca(String value) {
+        this.swiftKodBankePoverioca = value;
+    }
+
+    /**
+     * Gets the value of the obracunskiRacunBankePoverioca property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getObracunskiRacunBankePoverioca() {
+        return obracunskiRacunBankePoverioca;
+    }
+
+    /**
+     * Sets the value of the obracunskiRacunBankePoverioca property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setObracunskiRacunBankePoverioca(String value) {
+        this.obracunskiRacunBankePoverioca = value;
     }
 
     /**
@@ -405,30 +557,6 @@ public class NalogZaPlacanje {
     }
 
     /**
-     * Gets the value of the oznakaValute property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getOznakaValute() {
-        return oznakaValute;
-    }
-
-    /**
-     * Sets the value of the oznakaValute property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setOznakaValute(String value) {
-        this.oznakaValute = value;
-    }
-
-    /**
      * Gets the value of the datumNaloga property.
      * 
      * @return
@@ -477,27 +605,27 @@ public class NalogZaPlacanje {
     }
 
     /**
-     * Gets the value of the hitno property.
+     * Gets the value of the sifraValute property.
      * 
      * @return
      *     possible object is
-     *     {@link Boolean }
+     *     {@link String }
      *     
      */
-    public Boolean isHitno() {
-        return hitno;
+    public String getSifraValute() {
+        return sifraValute;
     }
 
     /**
-     * Sets the value of the hitno property.
+     * Sets the value of the sifraValute property.
      * 
      * @param value
      *     allowed object is
-     *     {@link Boolean }
+     *     {@link String }
      *     
      */
-    public void setHitno(Boolean value) {
-        this.hitno = value;
+    public void setSifraValute(String value) {
+        this.sifraValute = value;
     }
 
 }

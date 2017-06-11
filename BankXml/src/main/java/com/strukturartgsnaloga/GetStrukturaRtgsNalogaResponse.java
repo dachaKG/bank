@@ -6,7 +6,7 @@
 //
 
 
-package com.nalogzaplacanje;
+package com.strukturartgsnaloga;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="nalogZaPlacanje" type="{http://nalogZaPlacanje.com}nalogZaPlacanje"/>
+ *         &lt;element name="mt900" type="{http://strukturaRtgsNaloga.com}mt900"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,36 +36,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "nalogZaPlacanje"
+    "mt900"
 })
-@XmlRootElement(name = "getNalogZaPlacanjeRequest")
-public class GetNalogZaPlacanjeRequest {
+@XmlRootElement(name = "getStrukturaRtgsNalogaResponse")
+public class GetStrukturaRtgsNalogaResponse {
 
     @XmlElement(required = true)
-    protected NalogZaPlacanje nalogZaPlacanje;
+    protected Mt900 mt900;
 
     /**
-     * Gets the value of the nalogZaPlacanje property.
+     * Gets the value of the mt900 property.
      * 
      * @return
      *     possible object is
-     *     {@link NalogZaPlacanje }
+     *     {@link Mt900 }
      *     
      */
-    public NalogZaPlacanje getNalogZaPlacanje() {
-        return nalogZaPlacanje;
+    public Mt900 getMt900() {
+        return mt900;
     }
 
     /**
-     * Sets the value of the nalogZaPlacanje property.
+     * Sets the value of the mt900 property.
      * 
      * @param value
      *     allowed object is
-     *     {@link NalogZaPlacanje }
+     *     {@link Mt900 }
      *     
      */
-    public void setNalogZaPlacanje(NalogZaPlacanje value) {
-        this.nalogZaPlacanje = value;
+    public void setMt900(Mt900 value) {
+        this.mt900 = value;
     }
 
 }

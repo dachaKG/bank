@@ -1,4 +1,4 @@
-package bank.firm;
+package com.example.bankXml.BankXml.firm;
 
 import java.util.List;
 
@@ -12,10 +12,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
+import com.example.bankXml.BankXml.bank.Bank;
+import com.example.bankXml.BankXml.faktura.Faktura;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import bank.bank.Bank;
-import bank.faktura.Faktura;
+
 
 @Entity
 public class Firma {
@@ -61,7 +62,6 @@ public class Firma {
 	@ManyToOne
 	private Bank bank;
 	
-
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "firma", cascade = CascadeType.ALL)
@@ -141,6 +141,7 @@ public class Firma {
 	public void setBank(Bank bank) {
 		this.bank = bank;
 	}
+
 
 	public List<Faktura> getFakture() {
 		return fakture;

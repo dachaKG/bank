@@ -1,4 +1,4 @@
-package bank.bank;
+package com.example.national_bank_xml.National_bank_xml.bank;
 
 import java.util.List;
 
@@ -13,9 +13,9 @@ import javax.persistence.OneToMany;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.example.national_bank_xml.National_bank_xml.firm.Firma;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import bank.firm.Firma;
 
 @Entity
 public class Bank {
@@ -35,7 +35,7 @@ public class Bank {
 
 	@Column(unique = true, columnDefinition = "CHAR(18)")
 	@NotBlank
-	private String obracunskiRacunBanke;
+	private String obracunskiRacunBanke;	
 
 	@Column(unique = true, columnDefinition = "CHAR(8)")
 	@NotBlank	
@@ -172,6 +172,9 @@ public class Bank {
 	public void setStanjeRacunaBanke(Integer stanjeRacunaBanke) {
 		this.stanjeRacunaBanke = stanjeRacunaBanke;
 	}
+	
+	
+	
 	
 	
 	

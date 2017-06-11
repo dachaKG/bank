@@ -42,7 +42,7 @@ public class WebServiceConfig {
 	@Bean
 	public CommonsXsdSchemaCollection schemeCollection() {
 		CommonsXsdSchemaCollection collection = new CommonsXsdSchemaCollection(
-				new Resource[] { new ClassPathResource("/nalogZaPlacanje.xsd") });
+				new Resource[] { new ClassPathResource("/nalogZaPlacanje.xsd"),new ClassPathResource("/strukturaRtgsNaloga.xsd") });
 
 		collection.setInline(true);
 		return collection;

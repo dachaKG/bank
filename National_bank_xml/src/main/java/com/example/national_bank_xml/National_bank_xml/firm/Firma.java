@@ -1,21 +1,16 @@
-package bank.firm;
+package com.example.national_bank_xml.National_bank_xml.firm;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.national_bank_xml.National_bank_xml.bank.Bank;
 
-import bank.bank.Bank;
-import bank.faktura.Faktura;
+
 
 @Entity
 public class Firma {
@@ -61,11 +56,8 @@ public class Firma {
 	@ManyToOne
 	private Bank bank;
 	
-
 	
-	@JsonIgnore
-	@OneToMany(mappedBy = "firma", cascade = CascadeType.ALL)
-	private List<Faktura> fakture;
+
 
 	
 	
@@ -140,14 +132,6 @@ public class Firma {
 
 	public void setBank(Bank bank) {
 		this.bank = bank;
-	}
-
-	public List<Faktura> getFakture() {
-		return fakture;
-	}
-
-	public void setFakture(List<Faktura> fakture) {
-		this.fakture = fakture;
 	}
 
 	public String getPibFirm() {

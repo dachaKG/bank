@@ -6,7 +6,7 @@
 //
 
 
-package com.nalogzaplacanje;
+package com.strukturartgsnaloga;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="nalogZaPlacanje" type="{http://nalogZaPlacanje.com}nalogZaPlacanje"/>
+ *         &lt;element name="strukturaRtgsNaloga" type="{http://strukturaRtgsNaloga.com}struktura_rtgs_naloga"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,36 +36,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "nalogZaPlacanje"
+    "strukturaRtgsNaloga"
 })
-@XmlRootElement(name = "getNalogZaPlacanjeRequest")
-public class GetNalogZaPlacanjeRequest {
+@XmlRootElement(name = "getStrukturaRtgsNalogaRequest")
+public class GetStrukturaRtgsNalogaRequest {
 
     @XmlElement(required = true)
-    protected NalogZaPlacanje nalogZaPlacanje;
+    protected StrukturaRtgsNaloga strukturaRtgsNaloga;
 
     /**
-     * Gets the value of the nalogZaPlacanje property.
+     * Gets the value of the strukturaRtgsNaloga property.
      * 
      * @return
      *     possible object is
-     *     {@link NalogZaPlacanje }
+     *     {@link StrukturaRtgsNaloga }
      *     
      */
-    public NalogZaPlacanje getNalogZaPlacanje() {
-        return nalogZaPlacanje;
+    public StrukturaRtgsNaloga getStrukturaRtgsNaloga() {
+        return strukturaRtgsNaloga;
     }
 
     /**
-     * Sets the value of the nalogZaPlacanje property.
+     * Sets the value of the strukturaRtgsNaloga property.
      * 
      * @param value
      *     allowed object is
-     *     {@link NalogZaPlacanje }
+     *     {@link StrukturaRtgsNaloga }
      *     
      */
-    public void setNalogZaPlacanje(NalogZaPlacanje value) {
-        this.nalogZaPlacanje = value;
+    public void setStrukturaRtgsNaloga(StrukturaRtgsNaloga value) {
+        this.strukturaRtgsNaloga = value;
     }
 
 }

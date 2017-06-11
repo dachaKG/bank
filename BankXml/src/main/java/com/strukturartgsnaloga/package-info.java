@@ -5,5 +5,5 @@
 // Generated on: 2017.06.11 at 07:27:01 PM CEST 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://nalogZaPlacanje.com", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
-package com.nalogzaplacanje;
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://strukturaRtgsNaloga.com", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+package com.strukturartgsnaloga;
