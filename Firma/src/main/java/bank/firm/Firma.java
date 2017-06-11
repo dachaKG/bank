@@ -16,7 +16,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import bank.bank.Bank;
 import bank.faktura.Faktura;
-import bank.user.User;
 
 @Entity
 public class Firma {
@@ -54,17 +53,23 @@ public class Firma {
 	@Column(unique = true, columnDefinition = "CHAR(11)")
 	private String pibFirm;
 
+	private Integer stanjeRacuna;
+	
+	@Column(columnDefinition = "CHAR(18)",unique = true)	
+	private String brojRacuna;
+
 	@ManyToOne
 	private Bank bank;
 	
-	@JsonIgnore
-	@OneToMany(mappedBy = "firma", cascade = CascadeType.ALL)
-	private List<User> users;
+
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "firma", cascade = CascadeType.ALL)
 	private List<Faktura> fakture;
 
+	
+	
+	
 	public Long getId() {
 		return id;
 	}
@@ -137,14 +142,6 @@ public class Firma {
 		this.bank = bank;
 	}
 
-	public List<User> getUsers() {
-		return users;
-	}
-
-	public void setUsers(List<User> users) {
-		this.users = users;
-	}
-
 	public List<Faktura> getFakture() {
 		return fakture;
 	}
@@ -160,6 +157,24 @@ public class Firma {
 	public void setPibFirm(String pibFirm) {
 		this.pibFirm = pibFirm;
 	}
+
+
+	public Integer getStanjeRacuna() {
+		return stanjeRacuna;
+	}
+
+	public void setStanjeRacuna(Integer stanjeRacuna) {
+		this.stanjeRacuna = stanjeRacuna;
+	}
+
+	public String getBrojRacuna() {
+		return brojRacuna;
+	}
+
+	public void setBrojRacuna(String brojRacuna) {
+		this.brojRacuna = brojRacuna;
+	}
+
 	
 	
 

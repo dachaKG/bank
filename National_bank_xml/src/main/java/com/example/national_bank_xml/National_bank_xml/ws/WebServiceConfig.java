@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import org.springframework.ws.client.core.WebServiceTemplate;
 import org.springframework.ws.config.annotation.EnableWs;
 import org.springframework.ws.transport.http.MessageDispatcherServlet;
 import org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition;
@@ -42,7 +43,7 @@ public class WebServiceConfig {
 	@Bean
 	public CommonsXsdSchemaCollection schemeCollection() {
 		CommonsXsdSchemaCollection collection = new CommonsXsdSchemaCollection(
-				new Resource[] { new ClassPathResource("/nalogZaPlacanje.xsd") });
+				new Resource[] { new ClassPathResource("/nalogZaPlacanje.xsd"),new ClassPathResource("/strukturaRtgsNaloga.xsd") });
 
 		collection.setInline(true);
 		return collection;
@@ -52,8 +53,17 @@ public class WebServiceConfig {
 	Jaxb2Marshaller jaxb2Marshaller() {
 
 		Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
-		jaxb2Marshaller.setContextPath("com.nalogzaplacanje");
+		jaxb2Marshaller.setContextPath("com.strukturartgsnaloga");
 		return jaxb2Marshaller;
 	}
+	@Bean
+	public WebServiceTemplate webServiceTemplate() {
 
+		WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
+		webServiceTemplate.setMarshaller(jaxb2Marshaller());
+		webServiceTemplate.setUnmarshaller(jaxb2Marshaller());
+		webServiceTemplate.setDefaultUri("http://localhost:8082/ws");
+
+		return webServiceTemplate;
+	}
 }

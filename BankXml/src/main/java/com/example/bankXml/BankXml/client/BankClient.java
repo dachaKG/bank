@@ -8,6 +8,8 @@ import com.nalogzaplacanje.GetNalogZaPlacanjeRequest;
 import com.nalogzaplacanje.GetNalogZaPlacanjeResponse;
 import com.nalogzaplacanje.NalogZaPlacanje;
 import com.nalogzaplacanje.ObjectFactory;
+import com.strukturartgsnaloga.GetStrukturaRtgsNalogaRequest;
+import com.strukturartgsnaloga.GetStrukturaRtgsNalogaResponse;
 
 @Component
 public class BankClient {
@@ -21,6 +23,11 @@ public class BankClient {
 		
 		GetNalogZaPlacanjeResponse response = (GetNalogZaPlacanjeResponse) webServiceTemplate.marshalSendAndReceive(nalogZaPlacanjeRequest);
 		
+	}
+	
+	public GetStrukturaRtgsNalogaResponse sendMt103ToNationalBank(GetStrukturaRtgsNalogaRequest request){
+		
+		return (GetStrukturaRtgsNalogaResponse) webServiceTemplate.marshalSendAndReceive(request);
 	}
 	
 }

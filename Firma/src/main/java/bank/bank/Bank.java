@@ -33,6 +33,16 @@ public class Bank {
 	@NotBlank
 	private String PIB;
 
+	@Column(unique = true, columnDefinition = "CHAR(18)")
+	@NotBlank
+	private String obracunskiRacunBanke;
+
+	@Column(unique = true, columnDefinition = "CHAR(8)")
+	@NotBlank	
+	private String swiftKodBanke;
+	
+	private Integer stanjeRacunaBanke;
+	
 	@Column(length = 120)
 	@NotBlank
 	private String name;
@@ -138,9 +148,30 @@ public class Bank {
 	public void setFirms(List<Firma> firms) {
 		this.firms = firms;
 	}
-	
-	
-	
+
+	public String getObracunskiRacunBanke() {
+		return obracunskiRacunBanke;
+	}
+
+	public void setObracunskiRacunBanke(String obracunskiRacunBanke) {
+		this.obracunskiRacunBanke = obracunskiRacunBanke;
+	}
+
+	public String getSwiftKodBanke() {
+		return swiftKodBanke;
+	}
+
+	public void setSwiftKodBanke(String swiftKodBanke) {
+		this.swiftKodBanke = swiftKodBanke;
+	}
+
+	public Integer getStanjeRacunaBanke() {
+		return stanjeRacunaBanke;
+	}
+
+	public void setStanjeRacunaBanke(Integer stanjeRacunaBanke) {
+		this.stanjeRacunaBanke = stanjeRacunaBanke;
+	}
 	
 	
 	

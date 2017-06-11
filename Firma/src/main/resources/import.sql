@@ -1,13 +1,13 @@
 insert into national_bank (common_name, country, email, organization, organization_unit) values ('NBS','Srbija','nbs@nbs','org','orgU');
 
-insert into bank(bank_code,pib,name,address,email,web,phone,fax) values ('UCR','asdfggfdsa','uni credit','glavna','uni@gmail.com','web','4892810','fax');
-insert into bank(bank_code,pib,name,address,email,web,phone,fax) values ('ERS','pooppooppo','erste','bulevar','erste@gmail.com','web','4892810','fax');
-insert into bank(bank_code,pib,name,address,email,web,phone,fax) values ('BIN','intesansns','intesa','glavna','intesa@gmail.com','web','4892810','fax');
+insert into bank(bank_code,pib,name,address,email,web,phone,fax,obracunski_racun_banke,swift_kod_banke,stanje_racuna_banke) values ('BAC','asdfggfdsa','uni credit','glavna','uni@gmail.com','web','4892810','fax','200123456123141124','BACXRSBG',0);
+insert into bank(bank_code,pib,name,address,email,web,phone,fax,obracunski_racun_banke,swift_kod_banke,stanje_racuna_banke) values ('GIB','pooppooppo','erste','bulevar','erste@gmail.com','web','4892810','fax','300124510974841158','GIBARS22',0);
+insert into bank(bank_code,pib,name,address,email,web,phone,fax,obracunski_racun_banke,swift_kod_banke,stanje_racuna_banke) values ('DBD','intesansns','intesa','glavna','intesa@gmail.com','web','4892810','fax','400123456321454147','DBDBRSBG',0);
 
-insert into firma(name,address,city,country,email,phone,web,bank_id,pib_firm) values ('levi','trifkovicev trg','Novi Sad','Srbija','levi@levi.com','012656','web',1,'asdfggfdsaa');
-insert into firma(name,address,city,country,email,phone,web,bank_id,pib_firm) values ('vega','trifkovicev trg','Novi Sad','Srbija','vega@vega.com','012656','web',1,'asdfggfdsas');
-insert into firma(name,address,city,country,email,phone,web,bank_id,pib_firm) values ('dms','trifkovicev trg','Novi Sad','Srbija','dms@dms.com','012656','web',2,'asdfggfdsrr');
-insert into firma(name,address,city,country,email,phone,web,bank_id,pib_firm) values ('ftn','bulevar','Novi Sad','Srbija','ftn@uns.com','012656','web',3,'asdfggfdsea');
+insert into firma(name,address,city,country,email,phone,web,bank_id,pib_firm,stanje_racuna,broj_racuna) values ('levi','trifkovicev trg','Novi Sad','Srbija','levi@levi.com','012656','web',1,'asdfggfdsaa',0,'200636547896321456');
+insert into firma(name,address,city,country,email,phone,web,bank_id,pib_firm,stanje_racuna,broj_racuna) values ('vega','trifkovicev trg','Novi Sad','Srbija','vega@vega.com','012656','web',1,'asdfggfdsas',0,'200854578787874202');
+insert into firma(name,address,city,country,email,phone,web,bank_id,pib_firm,stanje_racuna,broj_racuna) values ('dms','trifkovicev trg','Novi Sad','Srbija','dms@dms.com','012656','web',2,'asdfggfdsrr',0,'300874521693695451');
+insert into firma(name,address,city,country,email,phone,web,bank_id,pib_firm,stanje_racuna,broj_racuna) values ('ftn','bulevar','Novi Sad','Srbija','ftn@uns.com','012656','web',3,'asdfggfdsea',0,'400254547845612156');
 
 
 insert into user (username, password, email, firma_id) values ('dachakg','$2a$10$bdLAFEAmvgWUApO.uKWqvOjVDlN7riKyB/d0/4w.9e.aeTF1Z3KQ.','a@s.com',1);
