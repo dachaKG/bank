@@ -14,6 +14,7 @@ import com.example.bankXml.BankXml.firm.Firma;
 import com.example.bankXml.BankXml.mt102.Mt102;
 import com.example.bankXml.BankXml.mt102.Mt102Service;
 import com.example.bankXml.BankXml.mt102.NalogZaMT102;
+import com.example.bankXml.BankXml.mt102.NalogZaMT102Service;
 import com.nalogzaplacanje.GetNalogZaPlacanjeRequest;
 import com.nalogzaplacanje.GetNalogZaPlacanjeResponse;
 import com.nalogzaplacanje.NalogZaPlacanje;
@@ -36,6 +37,9 @@ public class BankEndpoint {
 	
 	@Autowired
 	private Mt102Service mt102Service;
+	
+	@Autowired
+	private NalogZaMT102Service nalogZaMt102Service;
 	
 	private static final String NAMESPACE_URI = "http://strukturaRtgsNaloga.com";
 
@@ -94,7 +98,7 @@ public class BankEndpoint {
 		}
 		else{
 			//MT102
-			Mt102 mt102 = mt102Service.checkBankAccount(duznik.getBank().getObracunskiRacunBanke(), poverilac.getBank().getObracunskiRacunBanke());
+			Mt102 mt102 = mt102Service.checkBankAccount(duznik.getBank().getObracunskiRacunBanke(), poverilac.getBank().getObracunskiRacunBanke(),false);
 			if(mt102 == null){
 				mt102 = new Mt102();
 				mt102.setIdPoruke("MT102");
@@ -122,8 +126,13 @@ public class BankEndpoint {
 				nalog.setPozivNaBrojOdobrenja(nalogZaPlacanje.getPozivNaBrojOdobrenja());
 				nalog.setIznos(nalogZaPlacanje.getIznos());
 				nalog.setSifraValute("SRB");
-				mt102.getNalogZaMT102().add(nalog);
-				mt102Service.save(mt102);
+				
+				mt102 = mt102Service.save(mt102);
+				nalog.setMt102(mt102);
+				nalogZaMt102Service.save(nalog);
+				//mt102.getNalogZaMT102().add(nalog);
+				//nalog.setMt102(mt102);
+				//mt102Service.save(mt102);
 			} else {
 				//Mt102 mt102 = new Mt102();
 				NalogZaMT102 nalog = new NalogZaMT102();
@@ -140,9 +149,13 @@ public class BankEndpoint {
 				nalog.setPozivNaBrojOdobrenja(nalogZaPlacanje.getPozivNaBrojOdobrenja());
 				nalog.setIznos(nalogZaPlacanje.getIznos());
 				nalog.setSifraValute("SRB");
-				mt102.getNalogZaMT102().add(nalog);
+				//mt102.getNalogZaMT102().add(nalog);
+				//mt102 = mt102Service.save(mt102);
+				nalog.setMt102(mt102);
+				
+				nalogZaMt102Service.save(nalog);
 				//mt102.setNalogZaMT102(nalogZaMT102);
-				mt102Service.save(mt102);
+				//mt102Service.save(mt102);
 			}
 		}
 

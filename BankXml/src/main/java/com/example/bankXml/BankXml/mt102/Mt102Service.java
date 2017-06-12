@@ -12,6 +12,6 @@ public interface Mt102Service {
 	
 	public Mt102 save(Mt102 mt102);
 	
-	public Mt102 checkBankAccount(String duznik, String poverilac);
+	public Mt102 checkBankAccount(String duznik, String poverilac,boolean obradjen);
 
 }

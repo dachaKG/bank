@@ -37,10 +37,11 @@ public class Mt102ServiceImpl implements Mt102Service {
 	}
 
 	@Override
-	public Mt102 checkBankAccount(String duznik, String poverilac) {
-		Query query = entityManager.createQuery("SELECT m FROM Mt102 m WHERE m.obracunskiRacunBankeDuznika=?1 and m.obracunskiRacunBankePoverioca=?2");
+	public Mt102 checkBankAccount(String duznik, String poverilac, boolean obradjen) {
+		Query query = entityManager.createQuery("SELECT m FROM Mt102 m WHERE m.obracunskiRacunBankeDuznika=?1 and m.obracunskiRacunBankePoverioca=?2 and m.obradjen=?3");
 		query.setParameter(1, duznik);
 		query.setParameter(2, poverilac);
+		query.setParameter(3, obradjen);
 		try{
 			Mt102 mt102 = (Mt102) query.getSingleResult();
 			return mt102;
