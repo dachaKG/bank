@@ -45,8 +45,10 @@ public class FirmServiceImpl implements FirmService {
 
 	@Override
 	public Firma findByAccount(String racun) {
-		// TODO Auto-generated method stub
-		return repository.findByAccount(racun);
+		Query query = entityManager.createQuery("SELECT f FROM Firma f WHERE f.brojRacuna=?1");
+		query.setParameter(1, racun);
+		Firma firm = (Firma) query.getSingleResult();
+		return firm;
 	}
 	
 	

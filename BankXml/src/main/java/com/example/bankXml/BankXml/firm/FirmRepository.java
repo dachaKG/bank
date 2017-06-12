@@ -6,7 +6,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface FirmRepository extends CrudRepository<Firma, Long> {
 
-	@Query("select f from Firma f where f.brojRacuna like :racun")
+	/*@Query("select f from Firma f where f.brojRacuna like :racun")
 	Firma findByAccount(@Param("racun")String racun);
-
+*/
 }

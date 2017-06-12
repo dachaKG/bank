@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import bank.firm.Firma;
 
 @Entity
@@ -77,6 +79,7 @@ public class Faktura {
 	@ManyToOne
 	private Firma firma;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "faktura", cascade = CascadeType.ALL) 
 	private List<StavkaFakture> stavkeFakture;
 	

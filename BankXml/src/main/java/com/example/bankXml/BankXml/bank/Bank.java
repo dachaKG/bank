@@ -14,8 +14,8 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import com.example.bankXml.BankXml.firm.Firma;
+import com.example.bankXml.BankXml.mt102.Mt102;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 
 @Entity
 public class Bank {
@@ -35,14 +35,14 @@ public class Bank {
 
 	@Column(unique = true, columnDefinition = "CHAR(18)")
 	@NotBlank
-	private String obracunskiRacunBanke;	
+	private String obracunskiRacunBanke;
 
 	@Column(unique = true, columnDefinition = "CHAR(8)")
-	@NotBlank	
+	@NotBlank
 	private String swiftKodBanke;
-	
+
 	private Integer stanjeRacunaBanke;
-	
+
 	@Column(length = 120)
 	@NotBlank
 	private String name;
@@ -57,16 +57,20 @@ public class Bank {
 
 	@Column(length = 128)
 	private String web;
-	
+
 	@Column(length = 20)
 	private String phone;
-	
+
 	@Column(length = 20)
 	private String fax;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "bank", cascade = CascadeType.ALL)
 	private List<Firma> firms;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "banka", cascade = CascadeType.ALL)
+	private List<Mt102> mt102;
 
 	public Long getId() {
 		return id;
@@ -140,7 +144,6 @@ public class Bank {
 		this.fax = fax;
 	}
 
-
 	public List<Firma> getFirms() {
 		return firms;
 	}
@@ -172,12 +175,14 @@ public class Bank {
 	public void setStanjeRacunaBanke(Integer stanjeRacunaBanke) {
 		this.stanjeRacunaBanke = stanjeRacunaBanke;
 	}
-	
-	
-	
-	
-	
-	
 
+	public List<Mt102> getMt102() {
+		return mt102;
+	}
+
+	public void setMt102(List<Mt102> mt102) {
+		this.mt102 = mt102;
+	}
+	
 
 }

@@ -1,5 +1,7 @@
 package com.example.bankXml.BankXml.bank;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
@@ -9,6 +11,9 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 import com.example.bankXml.BankXml.client.BankClient;
 import com.example.bankXml.BankXml.firm.FirmService;
 import com.example.bankXml.BankXml.firm.Firma;
+import com.example.bankXml.BankXml.mt102.Mt102;
+import com.example.bankXml.BankXml.mt102.Mt102Service;
+import com.example.bankXml.BankXml.mt102.NalogZaMT102;
 import com.nalogzaplacanje.GetNalogZaPlacanjeRequest;
 import com.nalogzaplacanje.GetNalogZaPlacanjeResponse;
 import com.nalogzaplacanje.NalogZaPlacanje;
@@ -29,6 +34,9 @@ public class BankEndpoint {
 	@Autowired
 	private FirmService firmService;
 	
+	@Autowired
+	private Mt102Service mt102Service;
+	
 	private static final String NAMESPACE_URI = "http://strukturaRtgsNaloga.com";
 
 	private static final String NAMESPACE_URI1 = "http://nalogZaPlacanje.com";
@@ -41,7 +49,7 @@ public class BankEndpoint {
 		String oznakaBankePoverioca = request.getNalogZaPlacanje().getRacunPoverioca().substring(0,3);
 		Firma duznik = firmService.findByAccount(request.getNalogZaPlacanje().getRacunDuznika());
 		Firma poverilac = firmService.findByAccount(request.getNalogZaPlacanje().getRacunPoverioca());
-
+		GetNalogZaPlacanjeResponse responseNalog = new GetNalogZaPlacanjeResponse();
 		if(oznakaBankeDuznika.equals(oznakaBankePoverioca)){
 		//u istoj su banci, samo prebaci novac sa racuna na racun
 			
@@ -82,13 +90,64 @@ public class BankEndpoint {
 				duznik.setStanjeRacuna(duznik.getStanjeRacuna()-response.getMt900().getIznos().intValue());
 				firmService.save(duznik);
 			}
+			bankClient.sendToNationalBank(responseNalog.getNalogZaPlacanje());
 		}
 		else{
 			//MT102
+			Mt102 mt102 = mt102Service.checkBankAccount(duznik.getBank().getObracunskiRacunBanke(), poverilac.getBank().getObracunskiRacunBanke());
+			if(mt102 == null){
+				mt102 = new Mt102();
+				mt102.setIdPoruke("MT102");
+				mt102.setSwiftKodBankeDuznika(duznik.getBank().getSwiftKodBanke());
+				mt102.setSWIFTKodBankePoverioca(poverilac.getBank().getSwiftKodBanke());
+				mt102.setObracunskiRacunBankePoverioca(poverilac.getBank().getObracunskiRacunBanke());
+				mt102.setObracunskiRacunBankeDuznika(duznik.getBank().getObracunskiRacunBanke());
+				mt102.setUkupanIznos(nalogZaPlacanje.getIznos());
+				mt102.setDatum(new Date());
+				mt102.setDatumValute(new Date());
+				mt102.setSifraValute("RSD");
+				mt102.setBanka(duznik.getBank());
+				mt102.setObradjen(false);
+				NalogZaMT102 nalog = new NalogZaMT102();
+				nalog.setIdNalogaZaPlacanje("idNaloga");
+				nalog.setDuznikNalogodavac(nalogZaPlacanje.getDuznikNalogodavac());
+				nalog.setSvrhaPlacanja(nalogZaPlacanje.getSvrhaPlacanja());
+				nalog.setPrimalacPoverilac(nalogZaPlacanje.getPrimalacPoverilac());
+				nalog.setDatumNaloga(nalogZaPlacanje.getDatumNaloga());
+				nalog.setRacunDuznika(nalogZaPlacanje.getRacunDuznika());
+				nalog.setModelZaduzenja(nalogZaPlacanje.getModelZaduzenja());
+				nalog.setPozivNaBrojZaduzenja(nalogZaPlacanje.getPozivNaBrojZaduzenja());
+				nalog.setRacunPoverioca(nalogZaPlacanje.getRacunPoverioca());
+				nalog.setModelOdobrenja(nalogZaPlacanje.getModelOdobrenja());
+				nalog.setPozivNaBrojOdobrenja(nalogZaPlacanje.getPozivNaBrojOdobrenja());
+				nalog.setIznos(nalogZaPlacanje.getIznos());
+				nalog.setSifraValute("SRB");
+				mt102.getNalogZaMT102().add(nalog);
+				mt102Service.save(mt102);
+			} else {
+				//Mt102 mt102 = new Mt102();
+				NalogZaMT102 nalog = new NalogZaMT102();
+				nalog.setIdNalogaZaPlacanje("idNaloga");
+				nalog.setDuznikNalogodavac(nalogZaPlacanje.getDuznikNalogodavac());
+				nalog.setSvrhaPlacanja(nalogZaPlacanje.getSvrhaPlacanja());
+				nalog.setPrimalacPoverilac(nalogZaPlacanje.getPrimalacPoverilac());
+				nalog.setDatumNaloga(nalogZaPlacanje.getDatumNaloga());
+				nalog.setRacunDuznika(nalogZaPlacanje.getRacunDuznika());
+				nalog.setModelZaduzenja(nalogZaPlacanje.getModelZaduzenja());
+				nalog.setPozivNaBrojZaduzenja(nalogZaPlacanje.getPozivNaBrojZaduzenja());
+				nalog.setRacunPoverioca(nalogZaPlacanje.getRacunPoverioca());
+				nalog.setModelOdobrenja(nalogZaPlacanje.getModelOdobrenja());
+				nalog.setPozivNaBrojOdobrenja(nalogZaPlacanje.getPozivNaBrojOdobrenja());
+				nalog.setIznos(nalogZaPlacanje.getIznos());
+				nalog.setSifraValute("SRB");
+				mt102.getNalogZaMT102().add(nalog);
+				//mt102.setNalogZaMT102(nalogZaMT102);
+				mt102Service.save(mt102);
+			}
 		}
 
 		GetNalogZaPlacanjeResponse response = new GetNalogZaPlacanjeResponse();
-		bankClient.sendToNationalBank(response.getNalogZaPlacanje());
+		
 		return response;
 	}
 	

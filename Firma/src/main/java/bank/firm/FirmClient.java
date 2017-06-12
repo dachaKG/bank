@@ -1,6 +1,7 @@
 package bank.firm;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,7 +11,6 @@ import com.nalogzaplacanje.GetNalogZaPlacanjeRequest;
 import com.nalogzaplacanje.GetNalogZaPlacanjeResponse;
 import com.nalogzaplacanje.NalogZaPlacanje;
 import com.nalogzaplacanje.ObjectFactory;
-import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 
 import bank.faktura.Faktura;
 
@@ -28,12 +28,12 @@ public class FirmClient {
 		GetNalogZaPlacanjeRequest nalogZaPlacanjeRequest = factory.createGetNalogZaPlacanjeRequest();
 		
 		NalogZaPlacanje nalogZaPlacanje = factory.createNalogZaPlacanje();
-		nalogZaPlacanje.setDatumNaloga(new XMLGregorianCalendarImpl());
-		nalogZaPlacanje.setDatumValute(new XMLGregorianCalendarImpl());
+		nalogZaPlacanje.setDatumNaloga(new Date());
+		nalogZaPlacanje.setDatumValute(new Date());
 		nalogZaPlacanje.setDuznikNalogodavac("levi");
 		nalogZaPlacanje.setHitno(false);
 		nalogZaPlacanje.setIdPoruke("Nalog za prenos");
-		nalogZaPlacanje.setIznos(new BigDecimal("250200"));
+		nalogZaPlacanje.setIznos(new BigDecimal("25000"));
 		nalogZaPlacanje.setModelOdobrenja(97);
 		nalogZaPlacanje.setModelZaduzenja(92);
 		nalogZaPlacanje.setOznakaValute("RSD");

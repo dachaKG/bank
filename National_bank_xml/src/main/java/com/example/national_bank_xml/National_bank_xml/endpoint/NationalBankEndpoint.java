@@ -6,6 +6,9 @@ import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
+import com.example.bankxml.bankxml.mt102.GetMt102Request;
+import com.example.bankxml.bankxml.mt102.GetMt102Response;
+import com.example.bankxml.bankxml.mt102.Mt102;
 import com.example.national_bank_xml.National_bank_xml.bank.Bank;
 import com.example.national_bank_xml.National_bank_xml.bank.BankService;
 import com.example.national_bank_xml.National_bank_xml.client.NationalBankClient;
@@ -28,6 +31,8 @@ public class NationalBankEndpoint {
 	
 	private static final String NAMESPACE_URI1 = "http://nalogZaPlacanje.com";
 	private static final String NAMESPACE_URI = "http://strukturaRtgsNaloga.com";
+	private static final String NAMESPACE_URI2 = "http://mt102.BankXml.bankXml.example.com";
+	
 	
 	@Autowired
 	private NationalBankClient client;
@@ -69,9 +74,6 @@ public class NationalBankEndpoint {
 		mt910Request.setRtgsNalog(rtgsNalog);
 		GetMt910Response mt910Response = client.sendMt910(mt910Request);
 		
-		
-		
-		
 		Mt900 mt900 = new Mt900();
 		mt900.setDatumValute(null);
 		mt900.setIdPoruke("MT900");
@@ -87,4 +89,27 @@ public class NationalBankEndpoint {
 		response.setMt900(mt900);
 		return response;
 	}	
+	
+	@PayloadRoot(namespace = NAMESPACE_URI2, localPart = "getMt102Request")
+	@ResponsePayload
+	public GetMt102Response getMt102(@RequestPayload GetMt102Request request) {
+		//Mt102 mt102 = request.getMt102();
+		com.example.bankxml.bankxml.mt102.Mt900 mt900 = new com.example.bankxml.bankxml.mt102.Mt900();
+		mt900.setDatumValute(null);
+		mt900.setIdPoruke("MT900");
+		mt900.setIdPorukeNaloga("Nalog za prenos");
+		mt900.setIznos(request.getMt102().getUkupanIznos());
+		mt900.setObracunskiRacunBankeDuznika(request.getMt102().getObracunskiRacunBankeDuznika());
+		mt900.setSifraValute(request.getMt102().getSifraValute());
+		mt900.setSwiftBankeDuznika(request.getMt102().getSwiftKodBankeDuznika());
+		GetMt102Response response = new GetMt102Response();
+		response.setMt900(mt900);
+		/*
+		System.out.println(mt102.getIdPoruke());
+		System.out.println("usao narodna banka");
+		GetMt102Response response = new GetMt102Response();
+		response
+		*/
+		return response;
+	}
 }
