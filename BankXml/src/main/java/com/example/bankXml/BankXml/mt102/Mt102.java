@@ -13,10 +13,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,7 +32,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import com.example.bankXml.BankXml.AddaptDate;
 import com.example.bankXml.BankXml.bank.Bank;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -140,8 +137,7 @@ public class Mt102 {
     @XmlElement(name = "ukupan_iznos", required = true)
     protected BigDecimal ukupanIznos;
     @XmlElement(required = true)
-    @JsonIgnore
-    @OneToMany(mappedBy = "mt102", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany
     protected List<NalogZaMT102> nalogZaMT102;
     @XmlAttribute(name = "datum")
     @XmlSchemaType(name = "date")

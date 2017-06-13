@@ -6,7 +6,7 @@
 //
 
 
-package com.strukturartgsnaloga;
+package com.example.bankXml.BankXml.mt102;
 
 import java.math.BigDecimal;
 import javax.xml.bind.annotation.XmlAccessType;

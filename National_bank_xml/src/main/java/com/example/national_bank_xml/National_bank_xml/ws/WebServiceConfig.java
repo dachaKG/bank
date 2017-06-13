@@ -43,7 +43,7 @@ public class WebServiceConfig {
 	@Bean
 	public CommonsXsdSchemaCollection schemeCollection() {
 		CommonsXsdSchemaCollection collection = new CommonsXsdSchemaCollection(
-				new Resource[] { new ClassPathResource("/nalogZaPlacanje.xsd"),new ClassPathResource("/strukturaRtgsNaloga.xsd") });
+				new Resource[] { new ClassPathResource("/nalogZaPlacanje.xsd"),new ClassPathResource("/strukturaRtgsNaloga.xsd"),new ClassPathResource("/mt102.xsd") });
 
 		collection.setInline(true);
 		return collection;
@@ -53,7 +53,7 @@ public class WebServiceConfig {
 	Jaxb2Marshaller jaxb2Marshaller() {
 
 		Jaxb2Marshaller jaxb2Marshaller = new Jaxb2Marshaller();
-		jaxb2Marshaller.setContextPath("com.strukturartgsnaloga");
+		jaxb2Marshaller.setContextPath("com.strukturartgsnaloga:com.example.bankxml.bankxml.mt102");
 		return jaxb2Marshaller;
 	}
 	@Bean
@@ -62,7 +62,7 @@ public class WebServiceConfig {
 		WebServiceTemplate webServiceTemplate = new WebServiceTemplate();
 		webServiceTemplate.setMarshaller(jaxb2Marshaller());
 		webServiceTemplate.setUnmarshaller(jaxb2Marshaller());
-		webServiceTemplate.setDefaultUri("http://localhost:8080/ws");
+		webServiceTemplate.setDefaultUri("http://localhost:8082/ws");
 
 		return webServiceTemplate;
 	}

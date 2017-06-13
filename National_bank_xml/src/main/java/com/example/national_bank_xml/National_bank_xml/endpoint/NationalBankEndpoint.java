@@ -8,6 +8,7 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
 import com.example.bankxml.bankxml.mt102.GetMt102Request;
 import com.example.bankxml.bankxml.mt102.GetMt102Response;
+import com.example.bankxml.bankxml.mt102.GetMt910RequestMt102;
 import com.example.bankxml.bankxml.mt102.Mt102;
 import com.example.national_bank_xml.National_bank_xml.bank.Bank;
 import com.example.national_bank_xml.National_bank_xml.bank.BankService;
@@ -93,7 +94,24 @@ public class NationalBankEndpoint {
 	@PayloadRoot(namespace = NAMESPACE_URI2, localPart = "getMt102Request")
 	@ResponsePayload
 	public GetMt102Response getMt102(@RequestPayload GetMt102Request request) {
-		//Mt102 mt102 = request.getMt102();
+		////
+		com.example.bankxml.bankxml.mt102.ObjectFactory factory = new com.example.bankxml.bankxml.mt102.ObjectFactory();
+		com.example.bankxml.bankxml.mt102.Mt910 mt910 = factory.createMt910();
+		GetMt910RequestMt102 mt910Request = factory.createGetMt910RequestMt102();
+		
+		mt910.setDatumValute(null);
+		mt910.setIdPoruke("MT910");
+		mt910.setIdPorukeNaloga("Nalog za prenos");
+		mt910.setIznos(request.getMt102().getUkupanIznos());
+		mt910.setObracunskiRacunBankePoverioca(request.getMt102().getObracunskiRacunBankePoverioca());
+		mt910.setSifraValute(request.getMt102().getSifraValute());
+		mt910.setSwiftKodBankePoverioca(request.getMt102().getSWIFTKodBankePoverioca());
+		
+		mt910Request.setMt910(mt910);
+		mt910Request.setMt102(request.getMt102());
+		com.example.bankxml.bankxml.mt102.GetMt910Response mt910response = client.sendMt910mt102(mt910Request);
+		
+		/////////////////////
 		com.example.bankxml.bankxml.mt102.Mt900 mt900 = new com.example.bankxml.bankxml.mt102.Mt900();
 		mt900.setDatumValute(null);
 		mt900.setIdPoruke("MT900");
@@ -104,12 +122,7 @@ public class NationalBankEndpoint {
 		mt900.setSwiftBankeDuznika(request.getMt102().getSwiftKodBankeDuznika());
 		GetMt102Response response = new GetMt102Response();
 		response.setMt900(mt900);
-		/*
-		System.out.println(mt102.getIdPoruke());
-		System.out.println("usao narodna banka");
-		GetMt102Response response = new GetMt102Response();
-		response
-		*/
+	
 		return response;
 	}
 }

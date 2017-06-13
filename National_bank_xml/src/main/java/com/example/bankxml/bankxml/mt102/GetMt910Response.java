@@ -6,7 +6,7 @@
 //
 
 
-package com.nalogzaplacanje;
+package com.example.bankxml.bankxml.mt102;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="nalogZaPlacanje" type="{http://nalogZaPlacanje.com}nalogZaPlacanje"/>
+ *         &lt;element name="mt910" type="{http://mt102.BankXml.bankXml.example.com}mt910"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -36,36 +36,36 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "nalogZaPlacanje"
+    "mt910"
 })
-@XmlRootElement(name = "getNalogZaPlacanjeResponse")
-public class GetNalogZaPlacanjeResponse {
+@XmlRootElement(name = "getMt910Response")
+public class GetMt910Response {
 
     @XmlElement(required = true)
-    protected NalogZaPlacanje nalogZaPlacanje;
+    protected Mt910 mt910;
 
     /**
-     * Gets the value of the nalogZaPlacanje property.
+     * Gets the value of the mt910 property.
      * 
      * @return
      *     possible object is
-     *     {@link NalogZaPlacanje }
+     *     {@link Mt910 }
      *     
      */
-    public NalogZaPlacanje getNalogZaPlacanje() {
-        return nalogZaPlacanje;
+    public Mt910 getMt910() {
+        return mt910;
     }
 
     /**
-     * Sets the value of the nalogZaPlacanje property.
+     * Sets the value of the mt910 property.
      * 
      * @param value
      *     allowed object is
-     *     {@link NalogZaPlacanje }
+     *     {@link Mt910 }
      *     
      */
-    public void setNalogZaPlacanje(NalogZaPlacanje value) {
-        this.nalogZaPlacanje = value;
+    public void setMt910(Mt910 value) {
+        this.mt910 = value;
     }
 
 }
