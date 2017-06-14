@@ -1,12 +1,32 @@
 package com.example.bankXml.BankXml.bank;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.security.PrivateKey;
 import java.util.Date;
+
+import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import com.example.bankXml.BankXml.client.BankClient;
 import com.example.bankXml.BankXml.firm.FirmService;
@@ -24,6 +44,10 @@ import com.strukturartgsnaloga.GetStrukturaRtgsNalogaRequest;
 import com.strukturartgsnaloga.GetStrukturaRtgsNalogaResponse;
 import com.strukturartgsnaloga.ObjectFactory;
 import com.strukturartgsnaloga.StrukturaRtgsNaloga;
+
+import encryption.KeyStoreReader;
+import encryption.XMLEncryptionUtility;
+
 
 
 @Endpoint
@@ -44,7 +68,7 @@ public class BankEndpoint {
 	private static final String NAMESPACE_URI = "http://strukturaRtgsNaloga.com";
 
 	private static final String NAMESPACE_URI1 = "http://nalogZaPlacanje.com";
-
+	/*
 	@PayloadRoot(namespace = NAMESPACE_URI1, localPart = "getNalogZaPlacanjeRequest")
 	@ResponsePayload
 	public GetNalogZaPlacanjeResponse getNalogZaPlacanje(@RequestPayload GetNalogZaPlacanjeRequest request) {
@@ -163,6 +187,92 @@ public class BankEndpoint {
 		
 		return response;
 	}
+	*/
+	
+	
+	@PayloadRoot(namespace = NAMESPACE_URI1, localPart = "getNalogZaPlacanjeRequest")
+	@XmlAnyElement
+	@ResponsePayload
+	public GetNalogZaPlacanjeResponse getNalogZaPlacanje(@RequestPayload Element request) {
+		System.out.println("--------Stigao---------");
+		try{
+			
+		Document document = request.getOwnerDocument();
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+		Document document1 = db.newDocument();
+		NodeList nodeList = document.getElementsByTagNameNS("*", "nalogZaPlacanje");
+		document1.appendChild(document1.adoptNode(nodeList.item(0).cloneNode(true)));
+		saveDocument(document1,"C:\\Users\\Nebojsa\\Desktop\\dokument_Pristigao.xml");
+		
+		XMLEncryptionUtility encUtility = new XMLEncryptionUtility();
+        KeyStoreReader ksReader = new KeyStoreReader();
+		PrivateKey privateKey = ksReader.readPrivateKey("C:\\Users\\Nebojsa\\Desktop\\primer.jks", "primer", "primer", "primer");
+		document1 = encUtility.decrypt(document1, privateKey);
+		saveDocument(document1,"C:\\Users\\Nebojsa\\Desktop\\dokument_Dekriptovan.xml");
+		
+		
+		}catch(Exception g)
+		{
+			g.printStackTrace();
+		}
+
+		return null;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	private void saveDocument(Document doc, String fileName) {
+		try {
+			File outFile = new File(fileName);
+			FileOutputStream f = new FileOutputStream(outFile);
+
+			TransformerFactory factory = TransformerFactory.newInstance();
+			Transformer transformer = factory.newTransformer();
+			
+			DOMSource source = new DOMSource(doc);
+			StreamResult result = new StreamResult(f);
+			
+			transformer.transform(source, result);
+			f.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (TransformerConfigurationException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (TransformerFactoryConfigurationError e) {
+			e.printStackTrace();
+		} catch (TransformerException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "getMt910Request")
 	@ResponsePayload

@@ -10,6 +10,9 @@ import java.security.PrivateKey;
 import java.security.cert.Certificate;
 
 import javax.crypto.SecretKey;
+import javax.xml.bind.JAXBContext;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -26,6 +29,10 @@ import org.springframework.ws.client.core.WebServiceMessageExtractor;
 import org.springframework.ws.client.core.WebServiceTemplate;
 import org.springframework.ws.support.MarshallingUtils;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import com.nalogzaplacanje.NalogZaPlacanje;
 
 import encryption.KeyStoreReader;
 import encryption.XMLEncryptionUtility;
@@ -73,9 +80,9 @@ public class WSTemplate extends WebServiceTemplate {
 				XMLSigningUtility sigUtility = new XMLSigningUtility();
 				SecretKey secretKey = encUtility.generateDataEncryptionKey();
 				Certificate cert = ksReader.readCertificate("C:\\Users\\Nebojsa\\Desktop\\primer.jks", "primer", "primer");
-				//doc = encUtility.encrypt(doc, secretKey, cert);
+				doc = encUtility.encrypt(doc, secretKey, cert);
 				PrivateKey privateKey = ksReader.readPrivateKey("C:\\Users\\Nebojsa\\Desktop\\primer.jks", "primer", "primer", "primer");
-				//doc = sigUtility.signDocument(doc, privateKey, cert);
+				doc = sigUtility.signDocument(doc, privateKey, cert);
 				saveDocument(doc,"C:\\Users\\Nebojsa\\Desktop\\dokument_sifrovan.xml");
 				//-----------------------------------------------------------------------------------------------------------------
 				//------------------desifrovanje--------------------
@@ -139,8 +146,6 @@ public class WSTemplate extends WebServiceTemplate {
 			e.printStackTrace();
 		}
 	}
-	
-	
 	
 	
 

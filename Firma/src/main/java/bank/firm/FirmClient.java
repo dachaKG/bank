@@ -21,7 +21,7 @@ import bank.firm.ws.WSTemplate;
 public class FirmClient {
 
 	@Autowired
-	private WebServiceTemplate webServiceTemplate;
+	private WSTemplate webServiceTemplate;
 
 
 	public void sendNalog(Faktura f, int s) {
