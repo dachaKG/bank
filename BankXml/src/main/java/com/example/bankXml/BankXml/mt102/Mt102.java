@@ -32,6 +32,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import com.example.bankXml.BankXml.AddaptDate;
 import com.example.bankXml.BankXml.bank.Bank;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 /**
@@ -137,7 +138,8 @@ public class Mt102 {
     @XmlElement(name = "ukupan_iznos", required = true)
     protected BigDecimal ukupanIznos;
     @XmlElement(required = true)
-    @OneToMany
+    @JsonIgnore
+    @OneToMany(mappedBy = "mt102")
     protected List<NalogZaMT102> nalogZaMT102;
     @XmlAttribute(name = "datum")
     @XmlSchemaType(name = "date")

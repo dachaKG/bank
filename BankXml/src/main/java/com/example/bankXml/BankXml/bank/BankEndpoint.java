@@ -11,6 +11,7 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 import com.example.bankXml.BankXml.client.BankClient;
 import com.example.bankXml.BankXml.firm.FirmService;
 import com.example.bankXml.BankXml.firm.Firma;
+import com.example.bankXml.BankXml.mt102.GetMt910RequestMt102;
 import com.example.bankXml.BankXml.mt102.Mt102;
 import com.example.bankXml.BankXml.mt102.Mt102Service;
 import com.example.bankXml.BankXml.mt102.NalogZaMT102;
@@ -44,6 +45,8 @@ public class BankEndpoint {
 	private static final String NAMESPACE_URI = "http://strukturaRtgsNaloga.com";
 
 	private static final String NAMESPACE_URI1 = "http://nalogZaPlacanje.com";
+	
+	private static final String NAMESPACE_URI2 = "http://mt102.BankXml.bankXml.example.com";
 
 	@PayloadRoot(namespace = NAMESPACE_URI1, localPart = "getNalogZaPlacanjeRequest")
 	@ResponsePayload
@@ -164,7 +167,7 @@ public class BankEndpoint {
 		return response;
 	}
 	
-	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "getMt910Request")
+	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "getMt910Request")//za rtgs tj mt103
 	@ResponsePayload
 	public GetMt910Response getMt910(@RequestPayload GetMt910Request request){
 		Firma poverilac = firmService.findByAccount(request.getRtgsNalog().getRacunPoverioca());
@@ -173,6 +176,18 @@ public class BankEndpoint {
 		return null;
 	}
 	
+	@PayloadRoot(namespace = NAMESPACE_URI2, localPart = "getMt910RequestMt102")//za mt102
+	@ResponsePayload
+	public com.example.bankXml.BankXml.mt102.GetMt910Response getMt910(@RequestPayload GetMt910RequestMt102 request){
+		String racunPoverioca = null;
+		for(int i =0; i < request.getMt102().getNalogZaMT102().size();i++){
+			racunPoverioca = request.getMt102().getNalogZaMT102().get(i).getRacunPoverioca();
+			Firma poverilac = firmService.findByAccount(racunPoverioca);
+			poverilac.setStanjeRacuna(poverilac.getStanjeRacuna()+ request.getMt102().getNalogZaMT102().get(i).getIznos().intValue());
+			firmService.save(poverilac);
+		}
+		return null;
+	}
 	
 	
 }
