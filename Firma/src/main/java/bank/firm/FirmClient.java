@@ -13,6 +13,7 @@ import com.nalogzaplacanje.NalogZaPlacanje;
 import com.nalogzaplacanje.ObjectFactory;
 
 import bank.faktura.Faktura;
+import bank.firm.ws.WSTemplate;
 
 
 
@@ -20,7 +21,7 @@ import bank.faktura.Faktura;
 public class FirmClient {
 
 	@Autowired
-	private WebServiceTemplate webServiceTemplate;
+	private WSTemplate webServiceTemplate;
 
 
 	public void sendNalog(Faktura f, int s) {

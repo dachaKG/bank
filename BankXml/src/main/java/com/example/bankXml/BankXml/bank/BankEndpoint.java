@@ -8,6 +8,8 @@ import java.net.MalformedURLException;
 import java.security.PrivateKey;
 import java.util.Date;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -48,6 +50,7 @@ import com.strukturartgsnaloga.StrukturaRtgsNaloga;
 
 import encryption.KeyStoreReader;
 import encryption.XMLEncryptionUtility;
+import encryption.XMLSigningUtility;
 
 
 
@@ -74,23 +77,29 @@ public class BankEndpoint {
 	private static final String NAMESPACE_URI2 = "http://mt102.BankXml.bankXml.example.com";
 
 	@PayloadRoot(namespace = NAMESPACE_URI1, localPart = "getNalogZaPlacanjeRequest")
+	@XmlAnyElement
 	@ResponsePayload
-	public GetNalogZaPlacanjeResponse getNalogZaPlacanje(@RequestPayload GetNalogZaPlacanjeRequest request) {
-		NalogZaPlacanje nalogZaPlacanje = request.getNalogZaPlacanje();
-		String oznakaBankeDuznika = request.getNalogZaPlacanje().getRacunDuznika().substring(0, 3);
-		String oznakaBankePoverioca = request.getNalogZaPlacanje().getRacunPoverioca().substring(0,3);
-		Firma duznik = firmService.findByAccount(request.getNalogZaPlacanje().getRacunDuznika());
-		Firma poverilac = firmService.findByAccount(request.getNalogZaPlacanje().getRacunPoverioca());
+	public GetNalogZaPlacanjeResponse getNalogZaPlacanje(@RequestPayload Element request) {
+		Document doc = null;
+		if(checkSignature(request))
+			doc = decrypt(request);
+		//----------------------------------gotov deo za desifrovanje-------------
+		NalogZaPlacanje nalogZaPlacanje = getObjectFromXMLDoc(doc);
+		//------------------------------------------------------------------------
+		String oznakaBankeDuznika = nalogZaPlacanje.getRacunDuznika().substring(0, 3);
+		String oznakaBankePoverioca = nalogZaPlacanje.getRacunPoverioca().substring(0,3);
+		Firma duznik = firmService.findByAccount(nalogZaPlacanje.getRacunDuznika());
+		Firma poverilac = firmService.findByAccount(nalogZaPlacanje.getRacunPoverioca());
 		GetNalogZaPlacanjeResponse responseNalog = new GetNalogZaPlacanjeResponse();
 		if(oznakaBankeDuznika.equals(oznakaBankePoverioca)){
 		//u istoj su banci, samo prebaci novac sa racuna na racun
 			
-			duznik.setStanjeRacuna(duznik.getStanjeRacuna() - request.getNalogZaPlacanje().getIznos().intValue());
+			duznik.setStanjeRacuna(duznik.getStanjeRacuna() - nalogZaPlacanje.getIznos().intValue());
 			firmService.save(duznik);
-			poverilac.setStanjeRacuna(poverilac.getStanjeRacuna()+ request.getNalogZaPlacanje().getIznos().intValue());
+			poverilac.setStanjeRacuna(poverilac.getStanjeRacuna()+ nalogZaPlacanje.getIznos().intValue());
 			firmService.save(poverilac);
 		}
-		else if(request.getNalogZaPlacanje().isHitno() || request.getNalogZaPlacanje().getIznos().intValue() > 250000){
+		else if(nalogZaPlacanje.isHitno() || nalogZaPlacanje.getIznos().intValue() > 250000){
 			//RTGS
 			ObjectFactory factory = new ObjectFactory();
 			GetStrukturaRtgsNalogaRequest rtgs = factory.createGetStrukturaRtgsNalogaRequest();
@@ -192,89 +201,6 @@ public class BankEndpoint {
 		return response;
 	}
 	
-	/*
-	@PayloadRoot(namespace = NAMESPACE_URI1, localPart = "getNalogZaPlacanjeRequest")
-	@XmlAnyElement
-	@ResponsePayload
-	public GetNalogZaPlacanjeResponse getNalogZaPlacanje(@RequestPayload Element request) {
-		System.out.println("--------Stigao---------");
-		try{
-			
-		Document document = request.getOwnerDocument();
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-		Document document1 = db.newDocument();
-		NodeList nodeList = document.getElementsByTagNameNS("*", "nalogZaPlacanje");
-		document1.appendChild(document1.adoptNode(nodeList.item(0).cloneNode(true)));
-		saveDocument(document1,"C:\\Users\\Nebojsa\\Desktop\\dokument_Pristigao.xml");
-		
-		XMLEncryptionUtility encUtility = new XMLEncryptionUtility();
-        KeyStoreReader ksReader = new KeyStoreReader();
-		PrivateKey privateKey = ksReader.readPrivateKey("C:\\Users\\Nebojsa\\Desktop\\primer.jks", "primer", "primer", "primer");
-		document1 = encUtility.decrypt(document1, privateKey);
-		saveDocument(document1,"C:\\Users\\Nebojsa\\Desktop\\dokument_Dekriptovan.xml");
-		
-		
-		}catch(Exception g)
-		{
-			g.printStackTrace();
-		}
-
-		return null;
-	}
-	
-	*/
-	
-	
-	
-	
-	
-	
-	private void saveDocument(Document doc, String fileName) {
-		try {
-			File outFile = new File(fileName);
-			FileOutputStream f = new FileOutputStream(outFile);
-
-			TransformerFactory factory = TransformerFactory.newInstance();
-			Transformer transformer = factory.newTransformer();
-			
-			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(f);
-			
-			transformer.transform(source, result);
-			f.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (TransformerConfigurationException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (TransformerFactoryConfigurationError e) {
-			e.printStackTrace();
-		} catch (TransformerException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "getMt910Request")//za rtgs tj mt103
@@ -297,6 +223,78 @@ public class BankEndpoint {
 			firmService.save(poverilac);
 		}
 		return null;
+	}
+	
+	
+	
+	public boolean checkSignature(Element request){
+		Document doc = request.getOwnerDocument();
+		XMLSigningUtility sigUtility = new XMLSigningUtility();
+		boolean res = sigUtility.verifySignature(doc);
+		System.out.println("signature ok: "+res);
+		return res;
+	}
+	
+	
+	
+	public Document decrypt(Element request){
+		try{
+		Document document = request.getOwnerDocument();
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+		Document document1 = db.newDocument();
+		NodeList nodeList = document.getElementsByTagNameNS("*", "nalogZaPlacanje");
+		document1.appendChild(document1.adoptNode(nodeList.item(0).cloneNode(true)));
+		saveDocument(document1,"nalog_encrypted.xml");
+		
+		XMLEncryptionUtility encUtility = new XMLEncryptionUtility();
+        KeyStoreReader ksReader = new KeyStoreReader();
+		PrivateKey privateKey = ksReader.readPrivateKey("primer.jks", "primer", "primer", "primer");
+		document1 = encUtility.decrypt(document1, privateKey);
+		return document1;
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	
+	public static NalogZaPlacanje getObjectFromXMLDoc(Document document){
+		try{
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+		Document document1 = db.newDocument();
+		NodeList nodeList = document.getElementsByTagNameNS("*", "nalogZaPlacanje");
+		document1.appendChild(document1.adoptNode(nodeList.item(0).cloneNode(true)));
+		JAXBContext context = JAXBContext.newInstance(NalogZaPlacanje.class);
+		Unmarshaller unmarshaller = context.createUnmarshaller();
+		NalogZaPlacanje nzp = (NalogZaPlacanje) unmarshaller.unmarshal(document1);
+		System.out.println("----UNMARSHALED----\n "+nzp.getIdPoruke());
+		return nzp;
+		}catch(Exception tt)
+		{
+			tt.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	
+	/*
+	 * Postoji samo radi testiranja enkripcije
+	 */
+	private void saveDocument(Document doc, String fileName) {
+		try {
+			File outFile = new File(fileName);
+			FileOutputStream f = new FileOutputStream(outFile);
+			TransformerFactory factory = TransformerFactory.newInstance();
+			Transformer transformer = factory.newTransformer();
+			DOMSource source = new DOMSource(doc);
+			StreamResult result = new StreamResult(f);
+			transformer.transform(source, result);
+			f.close();
+		} catch (Exception r){r.printStackTrace();}
 	}
 	
 	

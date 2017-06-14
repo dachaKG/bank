@@ -116,6 +116,7 @@ import bank.AddaptDate;
  * 
  * 
  */
+@XmlRootElement(name="nalogZaPlacanje")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "nalogZaPlacanje", propOrder = {
     "idPoruke",

@@ -62,45 +62,31 @@ public class WSTemplate extends WebServiceTemplate {
 						requestCallback.doWithMessage(request);
 					}
 				}
-				System.out.println("-----------------SOURCE--------------");
-				//------print na izlaz
+				
 				DOMSource source = (DOMSource) request.getPayloadSource();
 				Document doc = source.getNode().getOwnerDocument();
+				
+				
+				//-----sve za print na izlaz----
 				StringWriter writer = new StringWriter();
 				StreamResult result = new StreamResult(writer);
 				TransformerFactory tf = TransformerFactory.newInstance();
 				Transformer transformer = tf.newTransformer();
 				transformer.transform(source, result);
 				System.out.println("XML IN String format is: \n" + writer.toString());
-				//----------------------------------------
 				
-				//---------sifrovanje test ----------
+				
+				//---------sifrovanje---------------------
 				KeyStoreReader ksReader = new KeyStoreReader();
 				XMLEncryptionUtility encUtility = new XMLEncryptionUtility();
 				XMLSigningUtility sigUtility = new XMLSigningUtility();
 				SecretKey secretKey = encUtility.generateDataEncryptionKey();
-				Certificate cert = ksReader.readCertificate("C:\\Users\\Nebojsa\\Desktop\\primer.jks", "primer", "primer");
+				Certificate cert = ksReader.readCertificate("primer.jks", "primer", "primer");
 				doc = encUtility.encrypt(doc, secretKey, cert);
-				PrivateKey privateKey = ksReader.readPrivateKey("C:\\Users\\Nebojsa\\Desktop\\primer.jks", "primer", "primer", "primer");
+				PrivateKey privateKey = ksReader.readPrivateKey("primer.jks", "primer", "primer", "primer");
 				doc = sigUtility.signDocument(doc, privateKey, cert);
-				saveDocument(doc,"C:\\Users\\Nebojsa\\Desktop\\dokument_sifrovan.xml");
-				//-----------------------------------------------------------------------------------------------------------------
-				//------------------desifrovanje--------------------
-				
-				/*System.out.println("\n===== Provera validnosti digitalnog potpisa =====");
-				boolean res = sigUtility.verifySignature(doc);
-				if(res) {
-					System.out.println("\n===== Potpis je validan, dokument se desifruje =====");
-					doc = encUtility.decrypt(doc, privateKey);
-					System.out.println("\n===== Desifrovanje zavrseno, tacka B je primila dokument =====");
-					//Ukoliko je proces uspesan garantovana je poverljivost i integritet poruke, kao i autentifikacija i neporecivost postupka slanja
-				} else {
-					System.out.println("\n===== Potpis nije validan, dokument se odbacuje =====");
-				}
-				
-				saveDocument(doc,"C:\\Users\\Nebojsa\\Desktop\\dokument_desifrovan.xml");*/
-				//--------------------------------------------------------------------------------------------------------------
-				
+				saveDocument(doc,"nalog_encrypted_and_signed.xml");
+					
 		}
 		}, new WebServiceMessageExtractor<Object>() {
 
