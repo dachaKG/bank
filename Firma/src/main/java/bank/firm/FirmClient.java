@@ -13,7 +13,6 @@ import com.nalogzaplacanje.NalogZaPlacanje;
 import com.nalogzaplacanje.ObjectFactory;
 
 import bank.faktura.Faktura;
-import bank.firm.ws.WSTemplate;
 
 
 

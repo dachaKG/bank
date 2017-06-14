@@ -39,11 +39,11 @@ public class BankController {
 			if(!mt102List.get(i).isObradjen()){
 				GetMt102Response response = bankClient.sendMt102ToNationalBank(mt102List.get(i));
 				Mt102 mt102 = mt102List.get(i);
-				for(int j = 0 ; j < mt102.getNalogZaMT102().size(); j++){
+				/*for(int j = 0 ; j < mt102.getNalogZaMT102().size(); j++){
 					Firma firm = firmService.findByAccount(mt102.getNalogZaMT102().get(j).getRacunDuznika());
 					firm.setStanjeRacuna(firm.getStanjeRacuna() - mt102.getNalogZaMT102().get(j).getIznos().intValueExact());
 					firmService.save(firm);
-				}
+				}*/
 				//Firma firm = firmService.findByAccount(response.getMt900().getObracunskiRacunBankeDuznika());
 				//firm.setStanjeRacuna(firm.getStanjeRacuna() - response.getMt900().getIznos().intValueExact());
 				mt102.setObradjen(true);
