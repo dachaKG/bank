@@ -77,9 +77,22 @@ public class WSTemplate extends WebServiceTemplate {
 				PrivateKey privateKey = ksReader.readPrivateKey("C:\\Users\\Nebojsa\\Desktop\\primer.jks", "primer", "primer", "primer");
 				//doc = sigUtility.signDocument(doc, privateKey, cert);
 				saveDocument(doc,"C:\\Users\\Nebojsa\\Desktop\\dokument_sifrovan.xml");
+				//-----------------------------------------------------------------------------------------------------------------
+				//------------------desifrovanje--------------------
 				
+				/*System.out.println("\n===== Provera validnosti digitalnog potpisa =====");
+				boolean res = sigUtility.verifySignature(doc);
+				if(res) {
+					System.out.println("\n===== Potpis je validan, dokument se desifruje =====");
+					doc = encUtility.decrypt(doc, privateKey);
+					System.out.println("\n===== Desifrovanje zavrseno, tacka B je primila dokument =====");
+					//Ukoliko je proces uspesan garantovana je poverljivost i integritet poruke, kao i autentifikacija i neporecivost postupka slanja
+				} else {
+					System.out.println("\n===== Potpis nije validan, dokument se odbacuje =====");
+				}
 				
-				
+				saveDocument(doc,"C:\\Users\\Nebojsa\\Desktop\\dokument_desifrovan.xml");*/
+				//--------------------------------------------------------------------------------------------------------------
 				
 		}
 		}, new WebServiceMessageExtractor<Object>() {
@@ -94,8 +107,6 @@ public class WSTemplate extends WebServiceTemplate {
 			}
 		});
 	}
-	
-	
 	
 	
 	
