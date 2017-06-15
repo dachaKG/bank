@@ -2,7 +2,9 @@ package bank.user;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 
@@ -34,7 +36,7 @@ public class CustomUserDetails implements org.springframework.security.core.user
 	}
 
 	private Collection<? extends GrantedAuthority> getPermissions(Role role) {
-		List<GrantedAuthority> privileges = new ArrayList<GrantedAuthority>();
+		Set<GrantedAuthority> privileges = new HashSet<GrantedAuthority>();
 		for(Privilege privilege : role.getPrivileges()){
 			privileges.add(new GrantedAuthority() {
 				
