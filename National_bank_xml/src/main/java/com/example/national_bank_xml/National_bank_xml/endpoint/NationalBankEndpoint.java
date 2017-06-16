@@ -1,10 +1,27 @@
 package com.example.national_bank_xml.National_bank_xml.endpoint;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.security.PrivateKey;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlAnyElement;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import com.example.bankxml.bankxml.mt102.GetMt102Request;
 import com.example.bankxml.bankxml.mt102.GetMt102Response;
@@ -15,6 +32,7 @@ import com.example.national_bank_xml.National_bank_xml.bank.BankService;
 import com.example.national_bank_xml.National_bank_xml.client.NationalBankClient;
 import com.nalogzaplacanje.GetNalogZaPlacanjeRequest;
 import com.nalogzaplacanje.GetNalogZaPlacanjeResponse;
+import com.nalogzaplacanje.NalogZaPlacanje;
 import com.strukturartgsnaloga.GetMt910Request;
 import com.strukturartgsnaloga.GetMt910Response;
 import com.strukturartgsnaloga.GetStrukturaRtgsNalogaRequest;
@@ -23,6 +41,10 @@ import com.strukturartgsnaloga.Mt900;
 import com.strukturartgsnaloga.Mt910;
 import com.strukturartgsnaloga.ObjectFactory;
 import com.strukturartgsnaloga.StrukturaRtgsNaloga;
+
+import encryption.KeyStoreReader;
+import encryption.XMLEncryptionUtility;
+import encryption.XMLSigningUtility;
 
 
 @Endpoint
@@ -42,8 +64,15 @@ public class NationalBankEndpoint {
 	private BankService bankService;
 	
 	@PayloadRoot(namespace = NAMESPACE_URI1, localPart = "getNalogZaPlacanjeRequest")
+	@XmlAnyElement
 	@ResponsePayload
-	public GetNalogZaPlacanjeResponse getNalogZaPlacanje(@RequestPayload GetNalogZaPlacanjeRequest request) {
+	public GetNalogZaPlacanjeResponse getNalogZaPlacanje(@RequestPayload Element request) {
+		Document doc = null;
+		if(checkSignature(request))
+			doc = decrypt(request);
+		//----------------------------------gotov deo za desifrovanje-------------
+		NalogZaPlacanje nalogZaPlacanje = getObjectFromXMLDoc(doc);
+		//------------------------------------------------------------------------
 		GetNalogZaPlacanjeResponse response = new GetNalogZaPlacanjeResponse();
 		System.out.println("usao narodna banka");
 		//response.setCountry(countryRepository.findCountry(request.getName()));
@@ -124,5 +153,78 @@ public class NationalBankEndpoint {
 		response.setMt900(mt900);
 	
 		return response;
+	}
+	
+	
+	
+	
+	
+	
+	public boolean checkSignature(Element request){
+		Document doc = request.getOwnerDocument();
+		XMLSigningUtility sigUtility = new XMLSigningUtility();
+		boolean res = sigUtility.verifySignature(doc);
+		System.out.println("signature ok: "+res);
+		return res;
+	}
+	
+	
+	
+	public Document decrypt(Element request){
+		try{
+		Document document = request.getOwnerDocument();
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+		Document document1 = db.newDocument();
+		NodeList nodeList = document.getElementsByTagNameNS("*", "nalogZaPlacanje");
+		document1.appendChild(document1.adoptNode(nodeList.item(0).cloneNode(true)));
+		saveDocument(document1,"nalog_encrypted.xml");
+		
+		XMLEncryptionUtility encUtility = new XMLEncryptionUtility();
+        KeyStoreReader ksReader = new KeyStoreReader();
+		PrivateKey privateKey = ksReader.readPrivateKey("primer.jks", "primer", "primer", "primer");
+		document1 = encUtility.decrypt(document1, privateKey);
+		return document1;
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	
+	public static NalogZaPlacanje getObjectFromXMLDoc(Document document){
+		try{
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+		Document document1 = db.newDocument();
+		NodeList nodeList = document.getElementsByTagNameNS("*", "nalogZaPlacanje");
+		document1.appendChild(document1.adoptNode(nodeList.item(0).cloneNode(true)));
+		JAXBContext context = JAXBContext.newInstance(NalogZaPlacanje.class);
+		Unmarshaller unmarshaller = context.createUnmarshaller();
+		NalogZaPlacanje nzp = (NalogZaPlacanje) unmarshaller.unmarshal(document1);
+		System.out.println("----UNMARSHALED----\n "+nzp.getIdPoruke());
+		return nzp;
+		}catch(Exception tt)
+		{
+			tt.printStackTrace();
+			return null;
+		}
+	}
+	
+	/*
+	 * Postoji samo radi testiranja enkripcije
+	 */
+	private void saveDocument(Document doc, String fileName) {
+		try {
+			File outFile = new File(fileName);
+			FileOutputStream f = new FileOutputStream(outFile);
+			TransformerFactory factory = TransformerFactory.newInstance();
+			Transformer transformer = factory.newTransformer();
+			DOMSource source = new DOMSource(doc);
+			StreamResult result = new StreamResult(f);
+			transformer.transform(source, result);
+			f.close();
+		} catch (Exception r){r.printStackTrace();}
 	}
 }

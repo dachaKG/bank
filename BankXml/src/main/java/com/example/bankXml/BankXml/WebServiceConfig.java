@@ -68,4 +68,15 @@ public class WebServiceConfig extends WsConfigurerAdapter {
 
 		return webServiceTemplate;
 	}
+	
+	@Bean
+	public WSTemplate wsTemplate() {
+
+		WSTemplate webServiceTemplate = new WSTemplate();
+		webServiceTemplate.setMarshaller(jaxb2Marshaller());
+		webServiceTemplate.setUnmarshaller(jaxb2Marshaller());
+		webServiceTemplate.setDefaultUri("http://localhost:8083/ws");
+
+		return webServiceTemplate;
+	}
 }

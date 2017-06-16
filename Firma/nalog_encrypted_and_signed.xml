@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><SOAP-ENV:Header/><SOAP-ENV:Body><ns2:getNalogZaPlacanjeRequest xmlns:ns2="http://nalogZaPlacanje.com"><ns2:nalogZaPlacanje datumNaloga="2017-06-16" datumValute="2017-06-16+02:00" hitno="false"><ns2:idPoruke><xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Type="http://www.w3.org/2001/04/xmlenc#Content"><xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#tripledes-cbc"/><ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><SOAP-ENV:Header/><SOAP-ENV:Body><ns2:getNalogZaPlacanjeRequest xmlns:ns2="http://nalogZaPlacanje.com"><ns2:nalogZaPlacanje datumNaloga="2017-06-17" datumValute="2017-06-17+02:00" hitno="false"><ns2:idPoruke><xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Type="http://www.w3.org/2001/04/xmlenc#Content"><xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#tripledes-cbc"/><ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
 <ds:KeyName>Sifrovan tajni kljuc</ds:KeyName>
-<xenc:EncryptedKey><xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-1_5"/><xenc:CipherData><xenc:CipherValue>gessUCHmZ5ctxghixPsMuBy4ENT1p9Xut+riwS5B8HBs8MiPgseGaqI0VTrkXZGkSAb5YXzteHqI&#13;
-i9VT5ZZFCzm8sHMf/UY5TB4LwX04HDy/DDkp9rMzEWlkQXOXsWQxnA0AhF0Vtq+POHJCJm2YuufV&#13;
-K6ejsJDddSD9EXeD6iA=</xenc:CipherValue></xenc:CipherData></xenc:EncryptedKey></ds:KeyInfo><xenc:CipherData><xenc:CipherValue>kymJCQJ35q+AkP1Vb/GOdIsiONQ+F1KP</xenc:CipherValue></xenc:CipherData></xenc:EncryptedData></ns2:idPoruke><ns2:duznik-nalogodavac>levi</ns2:duznik-nalogodavac><ns2:svrhaPlacanja>Svrha placanja</ns2:svrhaPlacanja><ns2:primalac-poverilac>ftn</ns2:primalac-poverilac><ns2:racunDuznika>200636547896321456</ns2:racunDuznika><ns2:modelZaduzenja>92</ns2:modelZaduzenja><ns2:pozivNaBrojZaduzenja>41247412</ns2:pozivNaBrojZaduzenja><ns2:racunPoverioca>400254547845612156</ns2:racunPoverioca><ns2:modelOdobrenja>97</ns2:modelOdobrenja><ns2:pozivNaBrojOdobrenja>147541214</ns2:pozivNaBrojOdobrenja><ns2:iznos>25000</ns2:iznos><ns2:oznakaValute>RSD</ns2:oznakaValute></ns2:nalogZaPlacanje></ns2:getNalogZaPlacanjeRequest></SOAP-ENV:Body><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+<xenc:EncryptedKey><xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-1_5"/><xenc:CipherData><xenc:CipherValue>d+pCL/DyPPOAb/UhZeWtn7QEY/bfM+MlIq1gQD1HMhES3KZvc9wQ6mWMHaI76K7Hg+nJzlwbV5XJ&#13;
+oR2magjDck8BKQVyF9xLgee0IhjcAFk/ZIfpJ9cYPGhXwk+xo0BYXV3gljJ9Wuq18V0LU5dh5rBG&#13;
+cip74+Suxr+pgkAzkeI=</xenc:CipherValue></xenc:CipherData></xenc:EncryptedKey></ds:KeyInfo><xenc:CipherData><xenc:CipherValue>c9CjG9yXj7/h8U5HJimpqcSlnJxibz35</xenc:CipherValue></xenc:CipherData></xenc:EncryptedData></ns2:idPoruke><ns2:duznik-nalogodavac>levi</ns2:duznik-nalogodavac><ns2:svrhaPlacanja>Svrha placanja</ns2:svrhaPlacanja><ns2:primalac-poverilac>ftn</ns2:primalac-poverilac><ns2:racunDuznika>200636547896321456</ns2:racunDuznika><ns2:modelZaduzenja>92</ns2:modelZaduzenja><ns2:pozivNaBrojZaduzenja>41247412</ns2:pozivNaBrojZaduzenja><ns2:racunPoverioca>400254547845612156</ns2:racunPoverioca><ns2:modelOdobrenja>97</ns2:modelOdobrenja><ns2:pozivNaBrojOdobrenja>147541214</ns2:pozivNaBrojOdobrenja><ns2:iznos>25000</ns2:iznos><ns2:oznakaValute>RSD</ns2:oznakaValute></ns2:nalogZaPlacanje></ns2:getNalogZaPlacanjeRequest></SOAP-ENV:Body><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
 <ds:SignedInfo>
 <ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
 <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
@@ -12,13 +12,13 @@ K6ejsJDddSD9EXeD6iA=</xenc:CipherValue></xenc:CipherData></xenc:EncryptedKey></d
 <ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments"/>
 </ds:Transforms>
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-<ds:DigestValue>YdXNrsCGiZRuxAO+M57MPWSguRk=</ds:DigestValue>
+<ds:DigestValue>OitW1f0on/7v8PjicQDWk5BEhJU=</ds:DigestValue>
 </ds:Reference>
 </ds:SignedInfo>
 <ds:SignatureValue>
-vXsS+108rH/PJFoNdiA/PtDIgqDcI59jXiCrkh4Z7pR1AXiLmEr8Qp20bsTDo67fU5K3KVyoFwzX&#13;
-hULzwoMy4iwA1dzRP1Cv5DSXT/ZzpM2witj5hFdBk3EjVK51ucdR11RCP2e5Vw/3NQV0u0kbXSEd&#13;
-gbZmrJlPBwDi6Jf7V/0=
+tyhUj6uF4eSkZBxUeCtQ/X/AQW6hPAsc+KLEEsTRFNpaV6aXWqYyhTPIT5XT42lBhMy3G22+tbdG&#13;
+sBFhos3qwHFTtQ22A9F4zG7dgG9KrIoS9t1Q3+8AEtiQrYboTsIvi2RzcktqplBk2zsFF3WbzjFA&#13;
+YX7sItmNRJUh/+fOVf4=
 </ds:SignatureValue>
 <ds:KeyInfo>
 <ds:KeyValue>
