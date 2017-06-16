@@ -47,6 +47,7 @@ import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.bouncycastle.util.io.pem.PemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -73,6 +74,7 @@ public class ClientController {
 		this.certificateService = certificateService;
 	}
 	
+	@PreAuthorize("hasAuthority('createCSR')")
 	@PostMapping("/certificates/csr")
 	public void generateCSR(@RequestBody ClientCertificate clientCertificate) throws OperatorCreationException, IOException, KeyStoreException, NoSuchProviderException, NoSuchAlgorithmException, CertificateException{
 		KeyPair pair = generateKeyPair();
@@ -156,8 +158,9 @@ public class ClientController {
 	}
 	
 	
+	@PreAuthorize("hasAuthority('signCSR')")
 	@RequestMapping(value = "/certificates",method = RequestMethod.POST)
-	public void addCertificate(@RequestBody BankCertificate bc) throws IOException, KeyStoreException,
+	public void signCSR(@RequestBody BankCertificate bc) throws IOException, KeyStoreException,
 			NoSuchProviderException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException, InvalidKeyException {
 
 		FileReader fileReader = new FileReader(bc.getSerialNumber()+".pem");

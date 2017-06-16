@@ -20,13 +20,13 @@
 
 <div class="navbar navbar-inverse">
   <ul class="nav navbar-nav">
-	<li><a ui-sref=".addFaktura">Faktura</a></li>
-	<li><a ui-sref=".listaFaktura">Lista faktura</a></li>
+	<li><a ui-sref=".addFaktura" ng-if = "sendInvoice">Faktura</a></li>
+	<li><a ui-sref=".listaFaktura" ng-if = "sendInvoice">Lista faktura</a></li>
 	
 	<li><a ui-sref=".addCertificate" ng-if = "addCertificate">New central bank certificate</a></li>
 	<li><a ui-sref=".addCaSignedCertificate" ng-if = "addCaSignedCertificate">New bank certificate</a></li>
-	<li><a ui-sref = ".addSignedCertificate">Create certificate signing request</a></li>
-	<li><a ui-sref = ".csr">Sign certificate signing request</a></li>
+	<li><a ui-sref = ".addSignedCertificate" ng-if = "createCSR">Create certificate signing request</a></li>
+	<li><a ui-sref = ".csr" ng-if = "signCSR">Sign certificate signing request</a></li>
 
     <li><a ui-sref=".findCertificate">Find certificate</a></li>
     <li><a ui-sref = ".revokeCertificate" ng-if = "revokeCertificate">Revoke certificate</a></li>

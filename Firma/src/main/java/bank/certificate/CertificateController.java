@@ -134,8 +134,9 @@ public class CertificateController {
 		return false;
 	}
 
+	@PreAuthorize("hasAuthority('addCaSignedCertificate')")
 	@RequestMapping(method = RequestMethod.POST)
-	public void addCertificate(@RequestBody BankCertificate bc) throws IOException, KeyStoreException,
+	public void addCaSignedCertificate(@RequestBody BankCertificate bc) throws IOException, KeyStoreException,
 			NoSuchProviderException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException {
 
 		int unique_id = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
@@ -189,7 +190,7 @@ public class CertificateController {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+	@PreAuthorize("hasAuthority('revokeCertificate')")
 	@PutMapping("/{serialNumber}")
 	public bank.certificate.Certificate revokeCertificate(@PathVariable("serialNumber") String serialNumber) {
 		return certificateService.revoke(serialNumber);

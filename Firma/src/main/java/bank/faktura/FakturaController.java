@@ -6,6 +6,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -56,14 +57,14 @@ public class FakturaController {
 		return firm;
 	}
 	
+	@PreAuthorize("hasAuthority('sendInvoice')")
 	@PostMapping
 	public void addFaktura(@Valid @RequestBody Faktura faktura){
 		Firma firm = firmService.findByName(faktura.getNazivKupca());
 		faktura.setFirma(firm);
 		faktura.setObradjena(false);
 		fakturaService.save(faktura);
-		
-		
+	
 	}
 	
 	@GetMapping("/findAllFirms")
@@ -79,6 +80,7 @@ public class FakturaController {
 		return firms;
 	}
 	
+	@PreAuthorize("hasAuthority('sendInvoice')")
 	@PostMapping("/obrada")
 	public void obradi(@RequestBody Faktura faktura){
 		Faktura f = fakturaService.findOne(faktura.getId());

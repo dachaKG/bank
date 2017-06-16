@@ -19,8 +19,7 @@ insert into user (username, password, email, firma_id) values ('rada', '$2a$10$Y
 
 insert into certificate (povucen, serial_number) values (0, '1497621275');
 insert into certificate (povucen, serial_number) values (0, '1497621358');
-
-
+insert into certificate (povucen, serial_number) values (0, '1497224618');
 
 
 insert into role (enum_role) values ('ROLE_ADMIN');
@@ -34,6 +33,8 @@ insert into users_roles(user_id, role_id) values (1,3);
 insert into users_roles(user_id, role_id) values (4,2);
 insert into users_roles(user_id, role_id) values (5,1);
 insert into users_roles(user_id, role_id) values (6,4);
+insert into users_roles(user_id, role_id) values (2,4);
+
 
 insert into privilege (privilege) values ('addCertificate');
 insert into privilege (privilege) values ('revokeCertificate');

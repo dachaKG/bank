@@ -160,6 +160,9 @@ angular.module('routerApp', ['ui.router',
 		$scope.revokeCertificate = false;
 		$scope.registerUserNav = false;
 		$scope.addCaSignedCertificate = false;
+		$scope.sendInvoice = false;
+		$scope.createCSR = false;
+		$scope.signCSR = false;
 		
 		$scope.error = false;
 		
@@ -196,6 +199,12 @@ angular.module('routerApp', ['ui.router',
 					$scope.registerUserNav = true;
 				if($scope.authorities[i] == "addCaSignedCertificate")
 					$scope.addCaSignedCertificate = true;
+				if($scope.authorities[i] == "sendInvoice")
+					$scope.sendInvoice = true;
+				if($scope.authorities[i] == "createCSR")
+					$scope.createCSR = true;
+				if($scope.authorities[i] == "signCSR")
+					$scope.signCSR = true;
 			}
 }
 
