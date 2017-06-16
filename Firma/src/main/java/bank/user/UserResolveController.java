@@ -72,8 +72,54 @@ public class UserResolveController {
 		}
 		return false;
 	}
-	
-	
+	@GetMapping("/userPermissionSendInvoice")
+	private boolean userPermissionSendInvoice(){
+		UserDetails userDetails = getUserDetails();
+		User user = userService.findByUsername(userDetails.getUsername());
+		for(Role role : user.getRoles()){
+			for(Privilege privilege : role.getPrivileges()){
+				if(privilege.getPrivilege().equals("sendInvoice"))
+					return true;
+			}
+		}
+		return false;
+	}	
+	@GetMapping("/userPermissionSignCSR")
+	private boolean userPermissionSignCsr(){
+		UserDetails userDetails = getUserDetails();
+		User user = userService.findByUsername(userDetails.getUsername());
+		for(Role role : user.getRoles()){
+			for(Privilege privilege : role.getPrivileges()){
+				if(privilege.getPrivilege().equals("signCSR"))
+					return true;
+			}
+		}
+		return false;
+	}	
+	@GetMapping("/userPermissionRevokeCertificate")
+	private boolean userPermissionRevokeCertificate(){
+		UserDetails userDetails = getUserDetails();
+		User user = userService.findByUsername(userDetails.getUsername());
+		for(Role role : user.getRoles()){
+			for(Privilege privilege : role.getPrivileges()){
+				if(privilege.getPrivilege().equals("revokeCertificate"))
+					return true;
+			}
+		}
+		return false;
+	}
+	@GetMapping("/userPermissionCreateCSR")
+	private boolean userPermissionCreateCSR(){
+		UserDetails userDetails = getUserDetails();
+		User user = userService.findByUsername(userDetails.getUsername());
+		for(Role role : user.getRoles()){
+			for(Privilege privilege : role.getPrivileges()){
+				if(privilege.getPrivilege().equals("createCSR"))
+					return true;
+			}
+		}
+		return false;
+	}		
 	
 	private CustomUserDetails getUserDetails(){
 

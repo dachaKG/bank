@@ -72,17 +72,26 @@ angular.module('routerApp', ['ui.router',
 	.state('home.addSignedCertificate',{
 		url : '/addSignedCertificate',
 		templateUrl : 'signedCertificate/signedCertificate.html',
-		controller : 'signedCertificateController'
+		controller : 'signedCertificateController',
+		resolve : {
+			registerUser : function($http){
+				return $http.get("/userPermissionCreateCSR").then(
+					function(response){
+						if(response.data == "true"){
+							return true;
+						} else {
+							history.back();
+						}
+					}
+				)
+			}
+		}
 	})
 	.state('home.addSignedCertificate.feedback',{
 		url : '/feedback',
 		templateUrl : 'signedCertificate/feedback.html'
 	})
-	.state('home.addNationalBank',{
-		url : '/addNationalBank',
-		templateUrl : 'nationalBank/addNationalBank.html',
-		controller : 'nationalBankController'
-	})
+
 	.state('home.findCertificate',{
 		url : '/getExistingCertificate',
 		templateUrl : 'findExistingCertificate/findCertificate.html',
@@ -91,13 +100,39 @@ angular.module('routerApp', ['ui.router',
 	.state('home.revokeCertificate',{
 		url : '/revokeCertificate',
 		templateUrl : 'revokeCertificate/revokeCertificate.html',
-		controller : 'revokeCertificateController'
+		controller : 'revokeCertificateController',
+		resolve : {
+			registerUser : function($http){
+				return $http.get("/userPermissionRevokeCertificate").then(
+					function(response){
+						if(response.data == "true"){
+							return true;
+						} else {
+							history.back();
+						}
+					}
+				)
+			}
+		}		
 	})
 
 	.state('home.csr',{
 		url : '/csr',
 		templateUrl : 'csr/signCsr.html',
-		controller : 'csrController'
+		controller : 'csrController',
+		resolve : {
+			registerUser : function($http){
+				return $http.get("/userPermissionSignCSR").then(
+					function(response){
+						if(response.data == "true"){
+							return true;
+						} else {
+							history.back();
+						}
+					}
+				)
+			}
+		}
 	})
 
 	.state('home.csr.feedback',{
@@ -112,12 +147,38 @@ angular.module('routerApp', ['ui.router',
 	.state('home.addFaktura',{
 		url : '/addFaktura',
 		templateUrl : 'faktura/faktura.html',
-		controller : 'fakturaController'
+		controller : 'fakturaController',
+		resolve : {
+			registerUser : function($http){
+				return $http.get("/userPermissionSendInvoice").then(
+					function(response){
+						if(response.data == "true"){
+							return true;
+						} else {
+							history.back();
+						}
+					}
+				)
+			}
+		}
 	})
 	.state('home.listaFaktura',{
 		url : '/listaFaktura',
 		templateUrl : 'faktura/faktureList.html',
-		controller : 'fakturaController'
+		controller : 'fakturaController',
+		resolve : {
+			registerUser : function($http){
+				return $http.get("/userPermissionSendInvoice").then(
+					function(response){
+						if(response.data == "true"){
+							return true;
+						} else {
+							history.back();
+						}
+					}
+				)
+			}
+		}
 	})
 	.state('home.register',{
 		url : '/registerUser',
