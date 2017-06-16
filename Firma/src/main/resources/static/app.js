@@ -187,14 +187,14 @@ angular.module('routerApp', ['ui.router',
 		
 		function auth(){
 			for(var i = 0 ; i < $scope.authorities.length; i++){
-				if($scope.authorities[i] == "addCertificate")
-					$scope.addCertificate = true;
-				if($scope.authorities[i] == "revokeCertificate")
-					$scope.revokeCertificate = true;
-				if($scope.authorities[i] == "registerUser")
-					$scope.registerUserNav = true;
-				if($scope.authorities[i] == "addCaSignedCertificate")
-					$scope.addCaSignedCertificate = true;
+				if($scope.authorities[i] == "addCertificate" || $scope.authorities[i] == "revokeCertificate"
+					|| $scope.authorities[i] == "registerUser"){
+					$scope.role_admin = true;
+				} else if($scope.authorities[i] == "ROLE_BANKER"){
+					$scope.role_banker = true;
+				} else {
+					$scope.role_user = true;
+				}
 			}
 		}
 

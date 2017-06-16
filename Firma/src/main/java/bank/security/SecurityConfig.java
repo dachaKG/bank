@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/login.html", "/forgotPassword.html", "/forgotPasswordMail/*")
 				.permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login.html")
 				.defaultSuccessUrl("/#/home", true).failureUrl("/login.html?error=true").permitAll().and().logout()
-				.logoutSuccessUrl("/login.html").and().headers().xssProtection().block(false);
+				.logoutSuccessUrl("/login.html");
 
 	}
 

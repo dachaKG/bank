@@ -37,7 +37,7 @@ public class User {
 	@NotBlank
 	private String password;
 
-	@Column
+	@Column(unique = true)
 	@NotBlank
 	@Email
 	private String email;

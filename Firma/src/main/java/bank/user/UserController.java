@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mifmif.common.regex.Generex;
-
 import bank.security.UserDetailServiceImpl;
 import bank.userBadPassword.UserBadPasswordService;
 
@@ -59,10 +57,8 @@ public class UserController {
 	@PreAuthorize("hasAuthority('registerUser')")
 	@PostMapping("/registerUser")
 	public void registerUser(@RequestBody User user) {
-		Generex regex = new Generex("([0-9]{1,}[a-z]{1,}[A-Z]{1,}){3,}");
-		//String password = nextSessionId(regex.random());
-		String password = regex.random();
-		
+
+		String password = nextSessionId(new SecureRandom());
 		System.out.println("Nova sifra " + password);
 		
 		user.setPassword(encoder.encode(password));
