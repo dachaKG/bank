@@ -74,7 +74,7 @@ public class ClientController {
 	}
 	
 	@PostMapping("/certificates/csr")
-	public void generateCSR(@RequestBody ClientCertificate clientCertificate) throws OperatorCreationException, IOException{
+	public void generateCSR(@RequestBody ClientCertificate clientCertificate) throws OperatorCreationException, IOException, KeyStoreException, NoSuchProviderException, NoSuchAlgorithmException, CertificateException{
 		KeyPair pair = generateKeyPair();
 
 	
@@ -97,6 +97,18 @@ public class ClientController {
 		//pemWriter.writeObject(pemObject);
 		pemWriter.close();
 
+		KeyStore ks = KeyStore.getInstance("JKS", "SUN");
+		File file = new File("ksClientsPrivateKeys\\"+clientCertificate.getCommonName() + ".jks");
+		// keyStore.load(null, null);
+
+		if (!file.exists()) {
+			file.createNewFile();
+			ks.load(null, "123".toCharArray());
+		} else {
+			ks.load(new FileInputStream(file), null);
+		}
+		
+	    
 
 		//str.close();
 		//System.out.println(str);

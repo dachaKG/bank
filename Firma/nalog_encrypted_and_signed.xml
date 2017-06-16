@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><SOAP-ENV:Header/><SOAP-ENV:Body><ns2:getNalogZaPlacanjeRequest xmlns:ns2="http://nalogZaPlacanje.com"><ns2:nalogZaPlacanje datumNaloga="2017-06-16" datumValute="2017-06-16+02:00" hitno="false"><ns2:idPoruke><xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Type="http://www.w3.org/2001/04/xmlenc#Content"><xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#tripledes-cbc"/><ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
 <ds:KeyName>Sifrovan tajni kljuc</ds:KeyName>
-<xenc:EncryptedKey><xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-1_5"/><xenc:CipherData><xenc:CipherValue>EzMHP+dDytQIJ7DTMB1fOm8xlQI14x9K8YYk+NdiWBuCA/rEzuS3LJYz0uEIrJXU1iA1qS1uhlwL&#13;
-olU1D7SB4dTcLvK+hFnFkS/6iW5FQyFGmuteq3CZY6GGl+kq3+OVsM6ex/tvDrottLag2f81oekZ&#13;
-If5SEzCoM5TIzTy0S6Q=</xenc:CipherValue></xenc:CipherData></xenc:EncryptedKey></ds:KeyInfo><xenc:CipherData><xenc:CipherValue>LH+djO1G1vm9uIMaCmnigSuI+4HlvfgC</xenc:CipherValue></xenc:CipherData></xenc:EncryptedData></ns2:idPoruke><ns2:duznik-nalogodavac>levi</ns2:duznik-nalogodavac><ns2:svrhaPlacanja>Svrha placanja</ns2:svrhaPlacanja><ns2:primalac-poverilac>ftn</ns2:primalac-poverilac><ns2:racunDuznika>200636547896321456</ns2:racunDuznika><ns2:modelZaduzenja>92</ns2:modelZaduzenja><ns2:pozivNaBrojZaduzenja>41247412</ns2:pozivNaBrojZaduzenja><ns2:racunPoverioca>400254547845612156</ns2:racunPoverioca><ns2:modelOdobrenja>97</ns2:modelOdobrenja><ns2:pozivNaBrojOdobrenja>147541214</ns2:pozivNaBrojOdobrenja><ns2:iznos>25000</ns2:iznos><ns2:oznakaValute>RSD</ns2:oznakaValute></ns2:nalogZaPlacanje></ns2:getNalogZaPlacanjeRequest></SOAP-ENV:Body><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+<xenc:EncryptedKey><xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-1_5"/><xenc:CipherData><xenc:CipherValue>llDIQaeXAualN2JdDEUjZM1pPwoqRr49aXxr4F+wTJ7N4wuMQSzVWan6DyZ+S/zVIFonjzJBmD60&#13;
+J18NPnbpv5XXc22mdfy0O2gJZU7rfetuRfEqfUojN9+or10LPdHDsCCxnNSwAzWJkco3HgPdXwKB&#13;
+E0yRMaAm/YwjUIlOlzY=</xenc:CipherValue></xenc:CipherData></xenc:EncryptedKey></ds:KeyInfo><xenc:CipherData><xenc:CipherValue>Rwy2WgieFVS3O3XLksrw56lPWJZ2mxmS</xenc:CipherValue></xenc:CipherData></xenc:EncryptedData></ns2:idPoruke><ns2:duznik-nalogodavac>levi</ns2:duznik-nalogodavac><ns2:svrhaPlacanja>Svrha placanja</ns2:svrhaPlacanja><ns2:primalac-poverilac>ftn</ns2:primalac-poverilac><ns2:racunDuznika>200636547896321456</ns2:racunDuznika><ns2:modelZaduzenja>92</ns2:modelZaduzenja><ns2:pozivNaBrojZaduzenja>41247412</ns2:pozivNaBrojZaduzenja><ns2:racunPoverioca>400254547845612156</ns2:racunPoverioca><ns2:modelOdobrenja>97</ns2:modelOdobrenja><ns2:pozivNaBrojOdobrenja>147541214</ns2:pozivNaBrojOdobrenja><ns2:iznos>25000</ns2:iznos><ns2:oznakaValute>RSD</ns2:oznakaValute></ns2:nalogZaPlacanje></ns2:getNalogZaPlacanjeRequest></SOAP-ENV:Body><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
 <ds:SignedInfo>
 <ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
 <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
@@ -12,13 +12,13 @@ If5SEzCoM5TIzTy0S6Q=</xenc:CipherValue></xenc:CipherData></xenc:EncryptedKey></d
 <ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments"/>
 </ds:Transforms>
 <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
-<ds:DigestValue>GFxaHDXIyBnTBEz/naNXX7u0/XY=</ds:DigestValue>
+<ds:DigestValue>7HLR4c8G60xzr36KYzu4nr20LiI=</ds:DigestValue>
 </ds:Reference>
 </ds:SignedInfo>
 <ds:SignatureValue>
-m7T3QtP/Se8CFQ3Xa9MP05kZT/vPToH44WzCI73SAX48++xVlBu6k0OHovWUS5r1oRmXCoC93w8M&#13;
-YruAvm9/YMc5LgB6HrO/5ZgTY6pm1JVCcjWXPgkXVmqlHBjqAs1EcrFz41ADMTX+FrTUaSfIrg1Z&#13;
-BXdX8Q+1tdnmUJQUZCg=
+S/J7fOL9xQqvbUPgu3NonXfklP/vx+KSFFcL/ju0B7Lod/vmOdUsyQVVgulLzZeKr0MXfJXomVgx&#13;
+2I4/UfUVcJhsfpTQZn6/uCq2TQTAlwVbgEWb66K7smdx3Cx7rITDGOxzlL1yGEfBiK3NpDaAgB5d&#13;
+6Oko13Ugp+udjhIWwQU=
 </ds:SignatureValue>
 <ds:KeyInfo>
 <ds:KeyValue>

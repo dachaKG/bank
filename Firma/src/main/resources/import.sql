@@ -17,10 +17,9 @@ insert into user (username, password, email, firma_id) values ('milance','$2a$10
 insert into user (username, password, email, firma_id) values ('duca','$2a$10$UteruuYLEll8yHbjCM7Q8OhIvB0EIzT9ErS7Wqqltj1gk37qEHkpW','ed@c.com',4);
 insert into user (username, password, email, firma_id) values ('rada', '$2a$10$YQefMKcyoC1LNTPoqXRreOSvJvs.ytC857rlHHn5MjE0DqQluxnqi', 'rada@r.com',2);
 
-insert into certificate (povucen, serial_number) values (0, '1496236139');
-insert into certificate (povucen, serial_number) values (0, '1496256785');
-insert into certificate (povucen, serial_number) values (0, '1496256921');
-insert into certificate (povucen, serial_number) values (0, '1496257047');
+insert into certificate (povucen, serial_number) values (0, '1497621275');
+insert into certificate (povucen, serial_number) values (0, '1497621358');
+
 
 
 
@@ -34,7 +33,6 @@ insert into users_roles(user_id, role_id) values (3,2);
 insert into users_roles(user_id, role_id) values (1,3);
 insert into users_roles(user_id, role_id) values (4,2);
 insert into users_roles(user_id, role_id) values (5,1);
-insert into users_roles(user_id, role_id) values (5,3);
 insert into users_roles(user_id, role_id) values (6,4);
 
 insert into privilege (privilege) values ('addCertificate');
@@ -42,13 +40,21 @@ insert into privilege (privilege) values ('revokeCertificate');
 insert into privilege (privilege) values ('registerUser');
 insert into privilege (privilege) values ('addCaSignedCertificate');
 insert into privilege (privilege) values ('sendInvoice');
+insert into privilege (privilege) values ('createCSR');
+insert into privilege (privilege) values ('signCSR');
+
+
 
 insert into roles_privileges (role_id, privilege_id) values (1,1);
 insert into roles_privileges (role_id, privilege_id) values (1,2);
-insert into roles_privileges (role_id, privilege_id) values (1,3);
 insert into roles_privileges (role_id, privilege_id) values (3,3);
 insert into roles_privileges (role_id, privilege_id) values (1,4);
 insert into roles_privileges (role_id, privilege_id) values (4,5);
+insert into roles_privileges (role_id, privilege_id) values (2,5);
+insert into roles_privileges (role_id, privilege_id) values (2,6);
+insert into roles_privileges (role_id, privilege_id) values (4,6);
+insert into roles_privileges (role_id, privilege_id) values (3,7);
+
 
 insert into faktura(adresa_dobavljaca, adresa_kupca, broj_racuna, datum_racuna, datum_valute, iznos_za_uplatu, naziv_dobavljaca, naziv_kupca, obradjena, oznaka_valute, pib_dobavljaca, pib_kupca, ukupan_porez, ukupan_rabat, ukupno_robaiusluge, uplata_na_racun, vrednost_robe, vrednost_usluga, firma_id) values ('bulevar', 'trifkovicev trg', '123321123147852369', '2017-06-12 02:00:00', '2017-06-12 02:00:00', '7', 'ftn', 'levi', false, '7', 'asdfggfdsea', 'asdfggfdsaa', '7', '7', '77', '789654123369852147', '312312', '3212', '1')
 
