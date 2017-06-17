@@ -37,6 +37,12 @@
 	<logger name="bank.client" level="INFO">
 		<appender-ref ref="FILE" />
 	</logger>
+	<logger name="bank.faktura" level="INFO">
+		<appender-ref ref="FILE" />
+	</logger>
+
+
+
 	<root level="info">
 		<appender-ref ref="STDOUT" />
 	</root>

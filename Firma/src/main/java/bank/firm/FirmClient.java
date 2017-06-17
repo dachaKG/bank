@@ -23,7 +23,7 @@ public class FirmClient {
 	private WSTemplate webServiceTemplate;
 
 
-	public void sendNalog(Faktura f, int s) {
+	public void sendNalog(Faktura f) {
 		ObjectFactory factory = new ObjectFactory();
 		GetNalogZaPlacanjeRequest nalogZaPlacanjeRequest = factory.createGetNalogZaPlacanjeRequest();
 		
