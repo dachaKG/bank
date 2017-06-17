@@ -8,6 +8,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -33,6 +35,8 @@ import bank.userBadPassword.UserBadPasswordService;
 @RestController
 @RequestMapping
 public class UserController {
+	
+	private static Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	private final UserService userService;
 	private final UserDetailsService userDetailsService;
@@ -61,7 +65,6 @@ public class UserController {
 	public void registerUser(@RequestBody User user) {
 
 		Generex regex = new Generex("([0-9]{1,}[a-z]{1,}[A-Z]{1,}){3,}");
-		//String password = nextSessionId(regex.random());
 		String password = regex.random();
 		System.out.println(password);
 		user.setPassword(encoder.encode(password));
@@ -76,7 +79,7 @@ public class UserController {
 			email.setFrom("isarestorani2@gmail.com");
 			email.setSubject("Registration successfull");
 			email.setText("Your password is " + password);
-	
+			
 			javaMailSender.send(email);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -106,6 +109,8 @@ public class UserController {
 			if (checkOldPassword) {
 				user.setPassword(encoder.encode(changePassword.getNewPassword()));
 				userService.save(user);
+				logger.info("password is changed");
+				
 				return "changed";
 			}
 

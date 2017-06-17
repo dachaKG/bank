@@ -5,7 +5,6 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.ws.client.core.WebServiceTemplate;
 
 import com.nalogzaplacanje.GetNalogZaPlacanjeRequest;
 import com.nalogzaplacanje.GetNalogZaPlacanjeResponse;
