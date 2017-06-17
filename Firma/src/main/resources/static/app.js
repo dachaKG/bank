@@ -203,6 +203,8 @@ angular.module('routerApp', ['ui.router',
 		templateUrl : 'home.html',
 		controller : 'userController'
 	})
+
+	
 	
 }).service('appService', ['$http', function($http){
 	
