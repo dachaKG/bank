@@ -28,6 +28,9 @@
 	<logger name="bank.login" level="INFO">
 		<appender-ref ref="FILE" />
 	</logger>
+	<logger name="bank.faktura" level="INFO">
+		<appender-ref ref="FILE" />
+	</logger>
 
 
 

@@ -1,7 +1,5 @@
 package bank.user;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,11 +73,11 @@ public class UserController {
 		userService.save(user);
 		try{
 			SimpleMailMessage email = new SimpleMailMessage();
-			email.setTo(user.getEmail());// umesto ovoga guest.mail..ako neces da testiras
+			email.setTo(user.getEmail());
 			email.setFrom("isarestorani2@gmail.com");
 			email.setSubject("Registration successfull");
 			email.setText("Your password is " + password);
-			
+			logger.info("User " + getUserDetails().getUsername() + " registered new user with username: " + user.getUsername());
 			javaMailSender.send(email);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -87,10 +85,6 @@ public class UserController {
 
 	}
 	
-	public String nextSessionId(SecureRandom random) {
-		return new BigInteger(130, random).toString(16);
-	}
-
 
 	@GetMapping("/logout")
 	public void logoutPage(HttpServletRequest request, HttpServletResponse response) {
@@ -109,7 +103,7 @@ public class UserController {
 			if (checkOldPassword) {
 				user.setPassword(encoder.encode(changePassword.getNewPassword()));
 				userService.save(user);
-				logger.info("password is changed");
+				logger.info("User " + user.getUsername() + " changed password");
 				
 				return "changed";
 			}
@@ -132,9 +126,6 @@ public class UserController {
 
 		Authentication authentication = context.getAuthentication();
 
-		// User user = userService.findByUsername(authentication.getName());
-
-		// return user;
 		org.springframework.security.core.userdetails.UserDetails currentUser = userDetailsService
 				.loadUserByUsername(authentication.getName());
 
