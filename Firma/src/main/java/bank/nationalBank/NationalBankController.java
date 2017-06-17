@@ -31,8 +31,13 @@ import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,19 +49,28 @@ import org.springframework.web.bind.annotation.RestController;
 import bank.certificate.Certificate;
 import bank.certificate.CertificateService;
 import bank.selfCertificate.SelfCertificate;
+import bank.user.User;
+import bank.user.UserService;
 
 @RestController
 @RequestMapping("/nationalBank")
 public class NationalBankController {
 
+	private static Logger logger = LoggerFactory.getLogger(NationalBankController.class);
+
+	
+	
 	private final NationalBankService nationalBankService;
 	//private final SelfCertificateService certificateService;
 	private final CertificateService certificateService;
+	
+	private final UserService userService;
 	@Autowired
-	public NationalBankController(final NationalBankService nationalBankService,final CertificateService certificateService) {
+	public NationalBankController(final NationalBankService nationalBankService,final CertificateService certificateService,final UserService userService) {
 		Security.addProvider(new BouncyCastleProvider());
 		this.nationalBankService = nationalBankService;
 		this.certificateService = certificateService;
+		this.userService = userService;
 	}
 
 	@GetMapping
@@ -183,7 +197,8 @@ public class NationalBankController {
 			os.close();			
 			
 			certificateService.save(new Certificate(selfCertificate.getSerialNumber(),false));
-
+			logger.info("User " + getUserDetails().getUsername() + " created self-signed certificate. Certifiate serial number is: " + unique_id);
+			
 	}
 	
 	
@@ -220,5 +235,12 @@ public class NationalBankController {
 		}
 		return null;
 	}
+	private User getUserDetails() {
 
+		  SecurityContext context = SecurityContextHolder.getContext();
+		  Authentication authentication = context.getAuthentication();  
+		  User user = userService.findByUsername(authentication.getName());
+		  
+		  return user;
+	}
 }

@@ -36,8 +36,13 @@ import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -46,16 +51,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import bank.user.User;
+import bank.user.UserService;
+
 @RestController
 @RequestMapping("/certificates")
 public class CertificateController {
 
-	private final CertificateService certificateService;
+	private static Logger logger = LoggerFactory.getLogger(CertificateController.class);
 
+	private final CertificateService certificateService;
+	private final UserService userService;
+	
 	@Autowired
-	public CertificateController(final CertificateService certificateService) {
+	public CertificateController(final CertificateService certificateService,final UserService userService) {
 		Security.addProvider(new BouncyCastleProvider());
 		this.certificateService = certificateService;
+		this.userService = userService;
 	}
 
 	@RequestMapping(value = "/commonName", method = RequestMethod.GET)
@@ -187,12 +199,18 @@ public class CertificateController {
 			os.write(Base64.encodeBase64(certificate.getEncoded(), true));
 			os.write("-----END CERTIFICATE-----\n".getBytes("US-ASCII"));
 			os.close();
+			logger.info("User " + getUserDetails().getUsername() + " created CA certificate.Certifiate serial number is: " + unique_id);
+			
 		}
 	}
 
 	@PreAuthorize("hasAuthority('revokeCertificate')")
 	@PutMapping("/{serialNumber}")
 	public bank.certificate.Certificate revokeCertificate(@PathVariable("serialNumber") String serialNumber) {
+		bank.certificate.Certificate cer = certificateService.revoke(serialNumber);
+		if(cer != null)
+			logger.info("User " + getUserDetails().getUsername() + " revoked certificate. Certifiate serial number is: " + serialNumber);
+
 		return certificateService.revoke(serialNumber);
 	}
 
@@ -238,4 +256,13 @@ public class CertificateController {
 		builder.addRDN(BCStyle.UID, bc.getSerialNumber());
 		return new SubjectData(keyPairSubject.getPublic(), builder.build(), bc.getSerialNumber(), bc.getStartDate());
 	}
+	
+	private User getUserDetails() {
+
+		  SecurityContext context = SecurityContextHolder.getContext();
+		  Authentication authentication = context.getAuthentication();  
+		  User user = userService.findByUsername(authentication.getName());
+		  
+		  return user;
+	}	
 }

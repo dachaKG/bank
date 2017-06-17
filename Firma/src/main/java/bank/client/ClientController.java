@@ -46,8 +46,13 @@ import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequestBuilder;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 import org.bouncycastle.util.io.pem.PemWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,21 +62,28 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import bank.certificate.BankCertificate;
+import bank.certificate.CertificateController;
 import bank.certificate.CertificateGenerator;
 import bank.certificate.CertificateService;
 import bank.certificate.SubjectData;
+import bank.user.User;
+import bank.user.UserService;
 
 @RestController
 @RequestMapping("/client")
 public class ClientController {
 	
+	private static Logger logger = LoggerFactory.getLogger(CertificateController.class);
 
+	
 	private final CertificateService certificateService;
+	private final UserService userService;
 	
 	@Autowired
-	public ClientController(final CertificateService certificateService) {
+	public ClientController(final CertificateService certificateService,final UserService userService) {
 		Security.addProvider(new BouncyCastleProvider());
 		this.certificateService = certificateService;
+		this.userService = userService;
 	}
 	
 	@PreAuthorize("hasAuthority('createCSR')")
@@ -99,16 +111,8 @@ public class ClientController {
 		//pemWriter.writeObject(pemObject);
 		pemWriter.close();
 
-		KeyStore ks = KeyStore.getInstance("JKS", "SUN");
-		File file = new File("ksClientsPrivateKeys\\"+clientCertificate.getCommonName() + ".jks");
-		// keyStore.load(null, null);
+		logger.info("User " + getUserDetails().getUsername() + " created CSR.");
 
-		if (!file.exists()) {
-			file.createNewFile();
-			ks.load(null, "123".toCharArray());
-		} else {
-			ks.load(new FileInputStream(file), null);
-		}
 		
 	    
 
@@ -223,7 +227,8 @@ public class ClientController {
 			os.close();
     		File removeFile = new File(bc.getSerialNumber()+".pem");
     		removeFile.delete();
-
+			logger.info("User " + getUserDetails().getUsername() + " signed CSR .Certifiate serial number is: " + bc.getSerialNumber());
+    		
 		}
 
 
@@ -255,5 +260,12 @@ public class ClientController {
 		builder.addRDN(BCStyle.UID, bc.getSerialNumber());
 		return new SubjectData(publicKey, builder.build(), bc.getSerialNumber(), bc.getStartDate());
 	}	
+	private User getUserDetails() {
 
+		  SecurityContext context = SecurityContextHolder.getContext();
+		  Authentication authentication = context.getAuthentication();  
+		  User user = userService.findByUsername(authentication.getName());
+		  
+		  return user;
+	}
 }
