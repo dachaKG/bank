@@ -55,7 +55,7 @@ public class WSTemplate extends WebServiceTemplate {
 						requestCallback.doWithMessage(request);
 					}
 				}
-				
+				//////////////
 				DOMSource source = (DOMSource) request.getPayloadSource();
 				Document doc = source.getNode().getOwnerDocument();
 				
@@ -79,6 +79,7 @@ public class WSTemplate extends WebServiceTemplate {
 				PrivateKey privateKey = ksReader.readPrivateKey("primer.jks", "primer", "primer", "primer");
 				doc = sigUtility.signDocument(doc, privateKey, cert);
 				saveDocument(doc,"nalog_encrypted_and_signed.xml");
+				/////////
 					
 		}
 		}, new WebServiceMessageExtractor<Object>() {
