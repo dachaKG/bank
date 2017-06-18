@@ -5,66 +5,86 @@
 <title>Log in</title>
 <link rel="stylesheet"
 	href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
-<!-- 
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-resource.js"></script> -->
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-resource.js"></script>
 
 </head>
-<body>
-	<div class = "container" align = "center">
-		<!-- <div class="alert alert-danger" ng-show="error">There was a
-			problem logging in. Please try again.</div> -->
+<body ng-app = "hello">
+	<div class="container" align="center" ng-controller = "navigation">
 
-	<div class = "col-sm-offset-4 col-sm-4">
-		<form role="form" ng-submit="login()" method = "POST">
-
-			<div class="form-group">
-
-				<label for="username">Username:</label>
-				<input type="text" class="form-control" id="username" name="username" ng-model="credentials.username" />
-
+		<div class="col-sm-offset-4 col-sm-4">
+			<div class="alert alert-danger" ng-if="errorLog">There was a
+				problem logging in. Please try again.</div>
+			<form role="form" ng-submit="login()" >
+				<div class="form-group">
+					<label for="username">Username:</label> <input type="text"
+						class="form-control" id="username" name="username"
+						ng-model="credentials.username" />
+				</div>
+				<div class="form-group">
+					<label for="password">Password:</label> <input type="password"
+						class="form-control" id="password" name="password"
+						ng-model="credentials.password" />
+				</div>
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+			<div>
+				<a href="forgotPassword.html">Forgot password?</a>
 			</div>
-
-			<div class="form-group">
-
-				<label for="password">Password:</label> 
-				<input type="password" class="form-control" id="password" name="password" ng-model="credentials.password" />
-
-			</div>
-
-			<button type="submit" class="btn btn-primary">Log in</button>
-
-		</form>
-		<div>
-			<a href="forgotPassword.html">Forgot password?</a>
-		</div>
 		</div>
 	</div>
 </body>
 
 
-<!-- <script>
-var app = angular.module('application', [])
-.service('loginService',['$http',function($http){
-	
-	this.login = function(credentials){
-		return $http.post("/loginButton", credentials);
-	}
-}])
-.controller('loginController',['$scope','loginService','$location',
-		 function($scope, loginService, $location) {
-	$scope.loginButton = function(){
-		loginService.login($scope.credentials).then(
-			function(response){
-				$scope.error = false;
-				$location.path("/home");
-			}, function(response){
-				$scope.error = true;
-			}
-		)
-	}
-}]);
+<script>
+	angular.module('hello', [ 'ngRoute' ]) // ... omitted code
+	.controller(
+			'navigation',
 
-</script> -->
+			function($rootScope, $scope, $http, $location, $window) {
+
+				var authenticate = function(credentials, callback) {
+
+					var headers = credentials ? {
+						authorization : "Basic "
+								+ btoa(credentials.username + ":"
+										+ credentials.password)
+					} : {};
+
+					$http.get('user', {
+						headers : headers
+					}).success(function(data) {
+						if (data.name) {
+							$rootScope.authenticated = true;
+						} else {
+							$rootScope.authenticated = false;
+						}
+						callback && callback();
+					}).error(function() {
+						$rootScope.authenticated = false;
+						callback && callback();
+					});
+
+				}
+				$scope.errorLog = false;
+				authenticate();
+				$scope.credentials = {};
+				$scope.login = function() {
+					authenticate($scope.credentials, function() {
+						if ($rootScope.authenticated) {
+							$window.location.href = "/#/home"
+							$scope.error = false;
+						} else {
+							//$location.path("/login");
+							$scope.errorLog = true;
+						}
+					});
+				};
+			});
+</script>
 </html>

@@ -1,5 +1,6 @@
 package bank.login;
 
+import java.security.Principal;
 import java.security.SecureRandom;
 
 import org.slf4j.Logger;
@@ -22,7 +23,7 @@ import bank.user.UserService;
 @RestController
 @RequestMapping
 public class LoginController {
-	
+
 	private static Logger logger = LoggerFactory.getLogger(LoginController.class);
 
 	@Autowired
@@ -30,12 +31,16 @@ public class LoginController {
 
 	@Autowired
 	UserService userService;
-	
-    @Autowired
-    private JavaMailSender javaMailSender;
-	
+
+	@Autowired
+	private JavaMailSender javaMailSender;
+
 	BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(5, new SecureRandom());
 
+	@RequestMapping("/user")
+	public Principal user(Principal user) {
+		return user;
+	}
 
 	@GetMapping("/forgotPasswordMail/{credentials}")
 	public void forgotPasswordMail(@PathVariable String credentials) {
@@ -43,15 +48,15 @@ public class LoginController {
 		// userDetailsService.loadUserByUsername(credentials.getUsername());
 		User user = userService.findByUsername(credentials);
 
-
 		Generex regex = new Generex("([0-9]{1,}[a-z]{1,}[A-Z]{1,}){3,}");
 		String newPassword = regex.random();
-		//System.out.println("Nova sifra " + newPassword);
+		// System.out.println("Nova sifra " + newPassword);
 		user.setPassword(encoder.encode(newPassword));
 		userService.save(user);
-		try{
+		try {
 			SimpleMailMessage email = new SimpleMailMessage();
-			email.setTo("choda.94@gmail.com");// umesto ovoga guest.mail..ako neces da testiras
+			email.setTo("choda.94@gmail.com");// umesto ovoga guest.mail..ako
+												// neces da testiras
 			email.setFrom("isarestorani2@gmail.com");
 			email.setSubject("New password");
 			email.setText("Your new password is " + newPassword);
@@ -61,6 +66,5 @@ public class LoginController {
 			e.printStackTrace();
 		}
 	}
-
 
 }
