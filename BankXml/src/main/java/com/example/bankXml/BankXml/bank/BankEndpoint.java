@@ -193,6 +193,8 @@ public class BankEndpoint {
 				nalogZaMt102Service.save(nalog);
 				//mt102.setNalogZaMT102(nalogZaMT102);
 				//mt102Service.save(mt102);
+				 
+				 
 			}
 		}
 

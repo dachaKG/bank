@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
+import com.example.bankXml.BankXml.WSTemplate;
 import com.example.bankXml.BankXml.firm.FirmService;
 import com.example.bankXml.BankXml.firm.Firma;
 import com.example.bankXml.BankXml.mt102.GetMt102Request;
@@ -20,7 +21,7 @@ import com.strukturartgsnaloga.GetStrukturaRtgsNalogaResponse;
 public class BankClient {
 
 	@Autowired
-	private WebServiceTemplate webServiceTemplate;
+	private WSTemplate webServiceTemplate;
 
 	@Autowired
 	private FirmService firmService;

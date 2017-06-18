@@ -80,14 +80,20 @@ public class NationalBankEndpoint {
 		return response;
 	}
 	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "getStrukturaRtgsNalogaRequest")
+	@XmlAnyElement
 	@ResponsePayload
-	public GetStrukturaRtgsNalogaResponse getStrukturaRtgsNaloga(@RequestPayload GetStrukturaRtgsNalogaRequest request) {
-		StrukturaRtgsNaloga rtgsNalog = request.getStrukturaRtgsNaloga();
+	public GetStrukturaRtgsNalogaResponse getStrukturaRtgsNaloga(@RequestPayload Element request) {
+		//getstrukturartgsnalogarequest
+		Document d = request.getOwnerDocument();
+		saveDocument(d, "PRISTIGAO.XML");
+		
+		
+		/*StrukturaRtgsNaloga rtgsNalog = request.getStrukturaRtgsNaloga();
 		Bank bankaDuznika = bankService.findBySwiftCode(rtgsNalog.getSwiftKodBankeDuznika());
 		Bank bankaPoverioca = bankService.findBySwiftCode(rtgsNalog.getSwiftKodBankePoverioca());
 		bankaPoverioca.setStanjeRacunaBanke(bankaPoverioca.getStanjeRacunaBanke() + rtgsNalog.getIznos().intValue());
 		bankaDuznika.setStanjeRacunaBanke(bankaDuznika.getStanjeRacunaBanke()-rtgsNalog.getIznos().intValue());
-		
+		System.out.println("Usao rtgs");
 		ObjectFactory factory = new ObjectFactory();
 		GetMt910Request mt910Request = factory.createGetMt910Request();
 		
@@ -117,17 +123,21 @@ public class NationalBankEndpoint {
 		
 		GetStrukturaRtgsNalogaResponse response = new GetStrukturaRtgsNalogaResponse();
 		response.setMt900(mt900);
-		return response;
+		return response;*/
+		System.out.println("Usao rtgs");
+
+		return null;
 	}	
 	
 	@PayloadRoot(namespace = NAMESPACE_URI2, localPart = "getMt102Request")
 	@ResponsePayload
 	public GetMt102Response getMt102(@RequestPayload GetMt102Request request) {
 		////
-		com.example.bankxml.bankxml.mt102.ObjectFactory factory = new com.example.bankxml.bankxml.mt102.ObjectFactory();
+		/*com.example.bankxml.bankxml.mt102.ObjectFactory factory = new com.example.bankxml.bankxml.mt102.ObjectFactory();
 		com.example.bankxml.bankxml.mt102.Mt910 mt910 = factory.createMt910();
 		GetMt910RequestMt102 mt910Request = factory.createGetMt910RequestMt102();
-		
+		System.out.println("Usao MT102");
+
 		mt910.setDatumValute(null);
 		mt910.setIdPoruke("MT910");
 		mt910.setIdPorukeNaloga("Nalog za prenos");
@@ -152,7 +162,10 @@ public class NationalBankEndpoint {
 		GetMt102Response response = new GetMt102Response();
 		response.setMt900(mt900);
 	
-		return response;
+		return response;*/
+		System.out.println("Usao MT102");
+
+		return null;
 	}
 	
 	

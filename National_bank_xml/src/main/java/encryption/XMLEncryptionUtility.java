@@ -78,6 +78,10 @@ public class XMLEncryptionUtility {
 		return null;
 	}
 	
+	
+	
+	
+	
 	/**
 	 * Kriptuje sadrzaj prvog elementa odsek
 	 */
