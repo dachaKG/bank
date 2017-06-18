@@ -5,22 +5,12 @@
 <title>Log in</title>
 <link rel="stylesheet"
 	href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
-
-<script
-	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
-<script
-	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-resource.js"></script>
-
 </head>
-<body ng-app = "hello">
+<body>
 	<div class="container" align="center" ng-controller = "navigation">
 
 		<div class="col-sm-offset-4 col-sm-4">
-			<div class="alert alert-danger" ng-if="errorLog">There was a
-				problem logging in. Please try again.</div>
-			<form role="form" ng-submit="login()" >
+			<form role="form" autocomplete="off" method = "post">
 				<div class="form-group">
 					<label for="username">Username:</label> <input type="text"
 						class="form-control" id="username" name="username"
@@ -31,7 +21,7 @@
 						class="form-control" id="password" name="password"
 						ng-model="credentials.password" />
 				</div>
-				<button type="submit" class="btn btn-primary">Submit</button>
+				<button type="submit" class="btn btn-primary">Log in</button>
 			</form>
 			<div>
 				<a href="forgotPassword.html">Forgot password?</a>
@@ -40,51 +30,4 @@
 	</div>
 </body>
 
-
-<script>
-	angular.module('hello', [ 'ngRoute' ]) // ... omitted code
-	.controller(
-			'navigation',
-
-			function($rootScope, $scope, $http, $location, $window) {
-
-				var authenticate = function(credentials, callback) {
-
-					var headers = credentials ? {
-						authorization : "Basic "
-								+ btoa(credentials.username + ":"
-										+ credentials.password)
-					} : {};
-
-					$http.get('user', {
-						headers : headers
-					}).success(function(data) {
-						if (data.name) {
-							$rootScope.authenticated = true;
-						} else {
-							$rootScope.authenticated = false;
-						}
-						callback && callback();
-					}).error(function() {
-						$rootScope.authenticated = false;
-						callback && callback();
-					});
-
-				}
-				$scope.errorLog = false;
-				authenticate();
-				$scope.credentials = {};
-				$scope.login = function() {
-					authenticate($scope.credentials, function() {
-						if ($rootScope.authenticated) {
-							$window.location.href = "/#/home"
-							$scope.error = false;
-						} else {
-							//$location.path("/login");
-							$scope.errorLog = true;
-						}
-					});
-				};
-			});
-</script>
 </html>

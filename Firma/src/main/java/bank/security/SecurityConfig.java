@@ -10,9 +10,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.csrf.CsrfFilter;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
-import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -43,8 +40,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			and().
 				sessionManagement().invalidSessionUrl("/").
 			and().
-				addFilterAfter(new CsrfHeaderFilter(), CsrfFilter.class).csrf().csrfTokenRepository(csrfTokenRepository());
-		
+				csrf().disable().exceptionHandling().
+			and().
+				headers().xssProtection();
 	}
 
 	@Override
@@ -53,10 +51,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
 	}
 	
-	private CsrfTokenRepository csrfTokenRepository() {
-		  HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
-		  repository.setHeaderName("X-XSRF-TOKEN");
-		  return repository;
-		}
+
 
 }
