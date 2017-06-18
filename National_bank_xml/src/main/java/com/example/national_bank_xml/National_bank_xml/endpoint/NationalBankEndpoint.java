@@ -79,13 +79,20 @@ public class NationalBankEndpoint {
 		//bankClient.sendToNationalBank(response.getNalogZaPlacanje());
 		return response;
 	}
+	
+	
+	
+	
 	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "getStrukturaRtgsNalogaRequest")
 	@XmlAnyElement
 	@ResponsePayload
 	public GetStrukturaRtgsNalogaResponse getStrukturaRtgsNaloga(@RequestPayload Element request) {
 		//getstrukturartgsnalogarequest
-		Document d = request.getOwnerDocument();
-		saveDocument(d, "PRISTIGAO.XML");
+		Document doc = request.getOwnerDocument();
+		saveDocument(doc, "PRISTIGAO_RTGS.XML");
+		if(checkSignature(request))
+			doc = decryptRtgs(request);
+		StrukturaRtgsNaloga srn = getStrukturaRtgsNalogaFromXMLDoc(doc);
 		
 		
 		/*StrukturaRtgsNaloga rtgsNalog = request.getStrukturaRtgsNaloga();
@@ -204,6 +211,27 @@ public class NationalBankEndpoint {
 		}
 	}
 	
+	public Document decryptRtgs(Element request){
+		try{
+		Document document = request.getOwnerDocument();
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+		Document document1 = db.newDocument();
+		NodeList nodeList = document.getElementsByTagNameNS("*", "strukturaRtgsNaloga");
+		document1.appendChild(document1.adoptNode(nodeList.item(0).cloneNode(true)));
+		saveDocument(document1,"RTGS_encrypted.xml");
+		
+		XMLEncryptionUtility encUtility = new XMLEncryptionUtility();
+        KeyStoreReader ksReader = new KeyStoreReader();
+		PrivateKey privateKey = ksReader.readPrivateKey("primer.jks", "primer", "primer", "primer");
+		document1 = encUtility.decrypt(document1, privateKey);
+		return document1;
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	
 	
 	public static NalogZaPlacanje getObjectFromXMLDoc(Document document){
@@ -216,6 +244,25 @@ public class NationalBankEndpoint {
 		JAXBContext context = JAXBContext.newInstance(NalogZaPlacanje.class);
 		Unmarshaller unmarshaller = context.createUnmarshaller();
 		NalogZaPlacanje nzp = (NalogZaPlacanje) unmarshaller.unmarshal(document1);
+		System.out.println("----UNMARSHALED----\n "+nzp.getIdPoruke());
+		return nzp;
+		}catch(Exception tt)
+		{
+			tt.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static StrukturaRtgsNaloga getStrukturaRtgsNalogaFromXMLDoc(Document document){
+		try{
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+		Document document1 = db.newDocument();
+		NodeList nodeList = document.getElementsByTagNameNS("*", "strukturaRtgsNaloga");
+		document1.appendChild(document1.adoptNode(nodeList.item(0).cloneNode(true)));
+		JAXBContext context = JAXBContext.newInstance(StrukturaRtgsNaloga.class);
+		Unmarshaller unmarshaller = context.createUnmarshaller();
+		StrukturaRtgsNaloga nzp = (StrukturaRtgsNaloga) unmarshaller.unmarshal(document1);
 		System.out.println("----UNMARSHALED----\n "+nzp.getIdPoruke());
 		return nzp;
 		}catch(Exception tt)
