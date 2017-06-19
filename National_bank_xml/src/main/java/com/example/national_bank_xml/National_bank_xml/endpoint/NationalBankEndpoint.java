@@ -63,7 +63,7 @@ public class NationalBankEndpoint {
 	@Autowired
 	private BankService bankService;
 	
-	@PayloadRoot(namespace = NAMESPACE_URI1, localPart = "getNalogZaPlacanjeRequest")
+	/*@PayloadRoot(namespace = NAMESPACE_URI1, localPart = "getNalogZaPlacanjeRequest")
 	@XmlAnyElement
 	@ResponsePayload
 	public GetNalogZaPlacanjeResponse getNalogZaPlacanje(@RequestPayload Element request) {
@@ -78,7 +78,7 @@ public class NationalBankEndpoint {
 		//response.setCountry(countryRepository.findCountry(request.getName()));
 		//bankClient.sendToNationalBank(response.getNalogZaPlacanje());
 		return response;
-	}
+	}*/
 	
 	
 	
@@ -92,10 +92,10 @@ public class NationalBankEndpoint {
 		saveDocument(doc, "PRISTIGAO_RTGS.XML");
 		if(checkSignature(request))
 			doc = decryptRtgs(request);
-		StrukturaRtgsNaloga srn = getStrukturaRtgsNalogaFromXMLDoc(doc);
+		StrukturaRtgsNaloga rtgsNalog = getStrukturaRtgsNalogaFromXMLDoc(doc);
 		
 		
-		/*StrukturaRtgsNaloga rtgsNalog = request.getStrukturaRtgsNaloga();
+		//StrukturaRtgsNaloga rtgsNalog = request.getStrukturaRtgsNaloga();
 		Bank bankaDuznika = bankService.findBySwiftCode(rtgsNalog.getSwiftKodBankeDuznika());
 		Bank bankaPoverioca = bankService.findBySwiftCode(rtgsNalog.getSwiftKodBankePoverioca());
 		bankaPoverioca.setStanjeRacunaBanke(bankaPoverioca.getStanjeRacunaBanke() + rtgsNalog.getIznos().intValue());
@@ -130,10 +130,10 @@ public class NationalBankEndpoint {
 		
 		GetStrukturaRtgsNalogaResponse response = new GetStrukturaRtgsNalogaResponse();
 		response.setMt900(mt900);
-		return response;*/
-		System.out.println("Usao rtgs");
+		return response;
+		/*System.out.println("Usao rtgs");
 
-		return null;
+		return null;*/
 	}	
 	
 	@PayloadRoot(namespace = NAMESPACE_URI2, localPart = "getMt102Request")

@@ -131,7 +131,6 @@ public class BankEndpoint {
 				duznik.setStanjeRacuna(duznik.getStanjeRacuna()-response.getMt900().getIznos().intValue());
 				firmService.save(duznik);
 			}
-			bankClient.sendToNationalBank(responseNalog.getNalogZaPlacanje());
 		}
 		else{
 			//MT102
@@ -211,7 +210,7 @@ public class BankEndpoint {
 		Firma poverilac = firmService.findByAccount(request.getRtgsNalog().getRacunPoverioca());
 		poverilac.setStanjeRacuna(poverilac.getStanjeRacuna()+ request.getRtgsNalog().getIznos().intValue());
 		firmService.save(poverilac);
-		return null;
+		return new GetMt910Response();
 	}
 	
 	@PayloadRoot(namespace = NAMESPACE_URI2, localPart = "getMt910RequestMt102")//za mt102
