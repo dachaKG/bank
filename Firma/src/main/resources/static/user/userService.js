@@ -13,4 +13,12 @@ services.service('userService', ['$http', function($http){
 	this.logout = function(){
 		return $http.get("/logout");
 	}
+	
+	this.findNonActiveUser = function(){
+		return $http.get("/userBadPassword");
+	}
+	
+	this.activate = function(id){
+		return $http.delete("/userBadPassword/" + id);
+	}
 }])

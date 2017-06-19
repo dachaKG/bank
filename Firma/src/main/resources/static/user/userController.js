@@ -41,14 +41,21 @@ app.controller('userController',['$scope','userService','$location',
 			}
 		}
 		
-		/*$scope.logout = function(){
-			userService.logout().then(
+		$scope.userBadPasswordList = function(){
+			userService.findNonActiveUser().then(
 				function(response){
-					$location.path("/logout");
+					$scope.nonActiveUsersTable = response.data;
 				}, function(response){
-					alert("Greska pri logout-u");
+					alert("greska");
+				}
+			)	
+		}
+
+		$scope.activate = function(user){
+			userService.activate(user.id).then(
+				function(response){
+					$location.path("/home");
 				}
 			)
-		}*/
-
+		}
 }])

@@ -25,17 +25,12 @@ import org.w3c.dom.NodeList;
 
 import com.example.bankxml.bankxml.mt102.GetMt102Request;
 import com.example.bankxml.bankxml.mt102.GetMt102Response;
-import com.example.bankxml.bankxml.mt102.GetMt910RequestMt102;
-import com.example.bankxml.bankxml.mt102.Mt102;
 import com.example.national_bank_xml.National_bank_xml.bank.Bank;
 import com.example.national_bank_xml.National_bank_xml.bank.BankService;
 import com.example.national_bank_xml.National_bank_xml.client.NationalBankClient;
-import com.nalogzaplacanje.GetNalogZaPlacanjeRequest;
-import com.nalogzaplacanje.GetNalogZaPlacanjeResponse;
 import com.nalogzaplacanje.NalogZaPlacanje;
 import com.strukturartgsnaloga.GetMt910Request;
 import com.strukturartgsnaloga.GetMt910Response;
-import com.strukturartgsnaloga.GetStrukturaRtgsNalogaRequest;
 import com.strukturartgsnaloga.GetStrukturaRtgsNalogaResponse;
 import com.strukturartgsnaloga.Mt900;
 import com.strukturartgsnaloga.Mt910;

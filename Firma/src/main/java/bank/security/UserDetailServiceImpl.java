@@ -62,6 +62,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 				if(badPassword.getAttempts() >= 3){
 					badPassword.setAccessLocked(true);
 				}
+				badPassword.setUsername(user.getUsername());
 				userBadPasswordService.save(badPassword);
 			}
 			
