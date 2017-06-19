@@ -34,6 +34,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.example.bankXml.BankXml.mt102.GetMt102Request;
 import com.nalogzaplacanje.GetNalogZaPlacanjeRequest;
 import com.nalogzaplacanje.NalogZaPlacanje;
 import com.strukturartgsnaloga.GetStrukturaRtgsNalogaRequest;
@@ -116,6 +117,31 @@ public class WSTemplate extends WebServiceTemplate {
 					PrivateKey privateKey = ksReader.readPrivateKey("primer.jks", "primer", "primer", "primer");
 					doc = sigUtility.signDocument(doc, privateKey, cert);
 					saveDocument(doc,"RTGS_encrypted_and_signed.xml");
+				}
+				else if(requestPayload instanceof GetMt102Request){
+					DOMSource source = (DOMSource) request.getPayloadSource();
+					Document doc = source.getNode().getOwnerDocument();
+					
+					
+					//-----sve za print na izlaz----
+					StringWriter writer = new StringWriter();
+					StreamResult result = new StreamResult(writer);
+					TransformerFactory tf = TransformerFactory.newInstance();
+					Transformer transformer = tf.newTransformer();
+					transformer.transform(source, result);
+					System.out.println("MT102 XML IN String format is: \n" + writer.toString());
+					
+					
+					//---------sifrovanje---------------------
+					KeyStoreReader ksReader = new KeyStoreReader();
+					XMLEncryptionUtility encUtility = new XMLEncryptionUtility();
+					XMLSigningUtility sigUtility = new XMLSigningUtility();
+					SecretKey secretKey = encUtility.generateDataEncryptionKey();
+					Certificate cert = ksReader.readCertificate("primer.jks", "primer", "primer");
+					doc = encUtility.encryptMT102(doc, secretKey, cert);
+					PrivateKey privateKey = ksReader.readPrivateKey("primer.jks", "primer", "primer", "primer");
+					doc = sigUtility.signDocument(doc, privateKey, cert);
+					saveDocument(doc,"MT102_encrypted_and_signed.xml");
 				}
 				
 		}

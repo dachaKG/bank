@@ -25,6 +25,8 @@ import org.w3c.dom.NodeList;
 
 import com.example.bankxml.bankxml.mt102.GetMt102Request;
 import com.example.bankxml.bankxml.mt102.GetMt102Response;
+import com.example.bankxml.bankxml.mt102.GetMt910RequestMt102;
+import com.example.bankxml.bankxml.mt102.Mt102;
 import com.example.national_bank_xml.National_bank_xml.bank.Bank;
 import com.example.national_bank_xml.National_bank_xml.bank.BankService;
 import com.example.national_bank_xml.National_bank_xml.client.NationalBankClient;
@@ -86,7 +88,7 @@ public class NationalBankEndpoint {
 		Document doc = request.getOwnerDocument();
 		saveDocument(doc, "PRISTIGAO_RTGS.XML");
 		if(checkSignature(request))
-			doc = decryptRtgs(request);
+			doc = decrypt(request);
 		StrukturaRtgsNaloga rtgsNalog = getStrukturaRtgsNalogaFromXMLDoc(doc);
 		
 		
@@ -132,10 +134,18 @@ public class NationalBankEndpoint {
 	}	
 	
 	@PayloadRoot(namespace = NAMESPACE_URI2, localPart = "getMt102Request")
+	@XmlAnyElement
 	@ResponsePayload
-	public GetMt102Response getMt102(@RequestPayload GetMt102Request request) {
-		////
-		/*com.example.bankxml.bankxml.mt102.ObjectFactory factory = new com.example.bankxml.bankxml.mt102.ObjectFactory();
+	public GetMt102Response getMt102(@RequestPayload Element request) {
+		////GetMt102Request
+		Document doc = request.getOwnerDocument();
+		saveDocument(doc, "PRISTIGAO_MT102.xml");
+		if(checkSignature(request))
+			doc = decrypt(request);
+		Mt102 mt102 = getMt102FromXMLDoc(doc);
+		
+		
+		com.example.bankxml.bankxml.mt102.ObjectFactory factory = new com.example.bankxml.bankxml.mt102.ObjectFactory();
 		com.example.bankxml.bankxml.mt102.Mt910 mt910 = factory.createMt910();
 		GetMt910RequestMt102 mt910Request = factory.createGetMt910RequestMt102();
 		System.out.println("Usao MT102");
@@ -143,13 +153,13 @@ public class NationalBankEndpoint {
 		mt910.setDatumValute(null);
 		mt910.setIdPoruke("MT910");
 		mt910.setIdPorukeNaloga("Nalog za prenos");
-		mt910.setIznos(request.getMt102().getUkupanIznos());
-		mt910.setObracunskiRacunBankePoverioca(request.getMt102().getObracunskiRacunBankePoverioca());
-		mt910.setSifraValute(request.getMt102().getSifraValute());
-		mt910.setSwiftKodBankePoverioca(request.getMt102().getSWIFTKodBankePoverioca());
+		mt910.setIznos(mt102.getUkupanIznos());
+		mt910.setObracunskiRacunBankePoverioca(mt102.getObracunskiRacunBankePoverioca());
+		mt910.setSifraValute(mt102.getSifraValute());
+		mt910.setSwiftKodBankePoverioca(mt102.getSWIFTKodBankePoverioca());
 		
 		mt910Request.setMt910(mt910);
-		mt910Request.setMt102(request.getMt102());
+		mt910Request.setMt102(mt102);
 		com.example.bankxml.bankxml.mt102.GetMt910Response mt910response = client.sendMt910mt102(mt910Request);
 		
 		/////////////////////
@@ -157,17 +167,14 @@ public class NationalBankEndpoint {
 		mt900.setDatumValute(null);
 		mt900.setIdPoruke("MT900");
 		mt900.setIdPorukeNaloga("Nalog za prenos");
-		mt900.setIznos(request.getMt102().getUkupanIznos());
-		mt900.setObracunskiRacunBankeDuznika(request.getMt102().getObracunskiRacunBankeDuznika());
-		mt900.setSifraValute(request.getMt102().getSifraValute());
-		mt900.setSwiftBankeDuznika(request.getMt102().getSwiftKodBankeDuznika());
+		mt900.setIznos(mt102.getUkupanIznos());
+		mt900.setObracunskiRacunBankeDuznika(mt102.getObracunskiRacunBankeDuznika());
+		mt900.setSifraValute(mt102.getSifraValute());
+		mt900.setSwiftBankeDuznika(mt102.getSwiftKodBankeDuznika());
 		GetMt102Response response = new GetMt102Response();
 		response.setMt900(mt900);
 	
-		return response;*/
-		System.out.println("Usao MT102");
-
-		return null;
+		return response;
 	}
 	
 	
@@ -188,34 +195,6 @@ public class NationalBankEndpoint {
 	public Document decrypt(Element request){
 		try{
 		Document document = request.getOwnerDocument();
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-		Document document1 = db.newDocument();
-		NodeList nodeList = document.getElementsByTagNameNS("*", "nalogZaPlacanje");
-		document1.appendChild(document1.adoptNode(nodeList.item(0).cloneNode(true)));
-		saveDocument(document1,"nalog_encrypted.xml");
-		
-		XMLEncryptionUtility encUtility = new XMLEncryptionUtility();
-        KeyStoreReader ksReader = new KeyStoreReader();
-		PrivateKey privateKey = ksReader.readPrivateKey("primer.jks", "primer", "primer", "primer");
-		document1 = encUtility.decrypt(document1, privateKey);
-		return document1;
-		}catch(Exception e){
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	public Document decryptRtgs(Element request){
-		try{
-		Document document = request.getOwnerDocument();
-		/*DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-		Document document1 = db.newDocument();
-		NodeList nodeList = document.getElementsByTagNameNS("*", "strukturaRtgsNaloga");
-		document1.appendChild(document1.adoptNode(nodeList.item(0).cloneNode(true)));
-		saveDocument(document1,"RTGS_encrypted.xml");*/
-		
 		XMLEncryptionUtility encUtility = new XMLEncryptionUtility();
         KeyStoreReader ksReader = new KeyStoreReader();
 		PrivateKey privateKey = ksReader.readPrivateKey("primer.jks", "primer", "primer", "primer");
@@ -226,7 +205,6 @@ public class NationalBankEndpoint {
 			return null;
 		}
 	}
-	
 	
 	
 	public static NalogZaPlacanje getObjectFromXMLDoc(Document document){
@@ -259,6 +237,26 @@ public class NationalBankEndpoint {
 		Unmarshaller unmarshaller = context.createUnmarshaller();
 		StrukturaRtgsNaloga nzp = (StrukturaRtgsNaloga) unmarshaller.unmarshal(document1);
 		System.out.println("----UNMARSHALED----\n "+nzp.getIdPoruke());
+		return nzp;
+		}catch(Exception tt)
+		{
+			tt.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	public static Mt102 getMt102FromXMLDoc(Document document){
+		try{
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+		Document document1 = db.newDocument();
+		NodeList nodeList = document.getElementsByTagNameNS("*", "mt102");
+		document1.appendChild(document1.adoptNode(nodeList.item(0).cloneNode(true)));
+		JAXBContext context = JAXBContext.newInstance(Mt102.class);
+		Unmarshaller unmarshaller = context.createUnmarshaller();
+		Mt102 nzp = (Mt102) unmarshaller.unmarshal(document1);
+		System.out.println("----UNMARSHALED  MT102----\n "+nzp.getIdPoruke());
 		return nzp;
 		}catch(Exception tt)
 		{
