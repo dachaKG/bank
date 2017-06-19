@@ -43,6 +43,8 @@ insert into privilege (privilege) values ('addCaSignedCertificate');
 insert into privilege (privilege) values ('sendInvoice');
 insert into privilege (privilege) values ('createCSR');
 insert into privilege (privilege) values ('signCSR');
+insert into privilege (privilege) values ('activateUser');
+
 
 
 
@@ -55,6 +57,8 @@ insert into roles_privileges (role_id, privilege_id) values (2,5);
 insert into roles_privileges (role_id, privilege_id) values (2,6);
 insert into roles_privileges (role_id, privilege_id) values (4,6);
 insert into roles_privileges (role_id, privilege_id) values (3,7);
+insert into roles_privileges (role_id, privilege_id) values (1,8);
+
 
 
 insert into faktura(adresa_dobavljaca, adresa_kupca, broj_racuna, datum_racuna, datum_valute, iznos_za_uplatu, naziv_dobavljaca, naziv_kupca, obradjena, oznaka_valute, pib_dobavljaca, pib_kupca, ukupan_porez, ukupan_rabat, ukupno_robaiusluge, uplata_na_racun, vrednost_robe, vrednost_usluga, firma_id) values ('bulevar', 'trifkovicev trg', '123321123147852369', '2017-06-12 02:00:00', '2017-06-12 02:00:00', '7', 'ftn', 'levi', false, '7', 'asdfggfdsea', 'asdfggfdsaa', '7', '7', '77', '789654123369852147', '312312', '3212', '1')

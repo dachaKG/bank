@@ -121,6 +121,19 @@ public class UserResolveController {
 		return false;
 	}		
 	
+	@GetMapping("/userPermissionActivateUser")
+	private boolean userPermissionActivateUser(){
+		UserDetails userDetails = getUserDetails();
+		User user = userService.findByUsername(userDetails.getUsername());
+		for(Role role : user.getRoles()){
+			for(Privilege privilege : role.getPrivileges()){
+				if(privilege.getPrivilege().equals("activateUser"))
+					return true;
+			}
+		}
+		return false;
+	}
+	
 	private CustomUserDetails getUserDetails(){
 
 		

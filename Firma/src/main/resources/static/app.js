@@ -203,6 +203,24 @@ angular.module('routerApp', ['ui.router',
 		templateUrl : 'home.html',
 		controller : 'userController'
 	})
+	.state('home.nonActiveUsers',{
+		url : '/nonActiveUsers',
+		templateUrl : 'user/userBadPasswordList.html',
+		controller : 'userController',
+		resolve : {
+			registerUser : function($http){
+				return $http.get("/userPermissionActivateUser").then(
+					function(response){
+						if(response.data == "true"){
+							return true;
+						} else {
+							history.back();
+						}
+					}
+				)
+			}
+		}
+	})
 
 	
 	
@@ -226,6 +244,8 @@ angular.module('routerApp', ['ui.router',
 		$scope.sendInvoice = false;
 		$scope.createCSR = false;
 		$scope.signCSR = false;
+		$scope.activateUser = false;
+		
 		
 		$scope.error = false;
 		
@@ -268,6 +288,8 @@ angular.module('routerApp', ['ui.router',
 					$scope.createCSR = true;
 				if($scope.authorities[i] == "signCSR")
 					$scope.signCSR = true;
+				if($scope.authorities[i] == "activateUser")
+					$scope.activateUser = true;
 			}
 }
 
