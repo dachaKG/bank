@@ -241,13 +241,13 @@ public class ClientController {
 
 			if (!file.exists()) {
 				file.createNewFile();
-				ks.load(null, "123".toCharArray());
+				ks.load(null, bc.getCommonName().replaceAll(" ", "").toCharArray());
 			} else {
-				ks.load(new FileInputStream(file), null);
+				ks.load(new FileInputStream(file), bc.getCommonName().replaceAll(" ", "").toCharArray());
 			}
 			ks.setKeyEntry(bc.getAlias(), privateKey, pass.toCharArray(),chain);
 			//ks.setCertificateEntry(bc.getAlias(), certificate);
-			ks.store(new FileOutputStream(file), "123".toCharArray());
+			ks.store(new FileOutputStream(file), bc.getCommonName().replaceAll(" ", "").toCharArray());
 			
 			// cuvanje u bazu serial number-revoke
 			certificateService.save(new bank.certificate.Certificate(bc.getSerialNumber(), false));
@@ -307,16 +307,9 @@ public class ClientController {
 	
 	private byte[] encrypt(String plainText, PublicKey key) throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
 		
-			//Kada se definise sifra potrebno je navesti njenu konfiguraciju, sto u ovom slucaju ukljucuje:
-			//	- Algoritam koji se koristi (RSA)
-			//	- Rezim rada tog algoritma (ECB)
-			//	- Strategija za popunjavanje poslednjeg bloka (PKCS1Padding)
-			//	- Provajdera kriptografskih funckionalnosti (BC)
+
 		Cipher rsaCipherEnc = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
-		//inicijalizacija za sifrovanje
 		rsaCipherEnc.init(Cipher.ENCRYPT_MODE, key);
-			
-		//sifrovanje
 		byte[] cipherText = rsaCipherEnc.doFinal(plainText.getBytes());
 		return cipherText;
 
@@ -324,7 +317,6 @@ public class ClientController {
 	private byte[] decrypt(byte[] cipherText, PrivateKey key) {
 		try {			
 			Cipher rsaCipherDec = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
-			//inicijalizacija za desifrovanje
 			rsaCipherDec.init(Cipher.DECRYPT_MODE, key);
 			
 			//desifrovanje

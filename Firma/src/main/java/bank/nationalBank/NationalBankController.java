@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.apache.sshd.common.util.Base64;
@@ -39,7 +40,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,6 +48,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import bank.certificate.Certificate;
 import bank.certificate.CertificateService;
+import bank.certificate.KeyStoreCred;
 import bank.selfCertificate.SelfCertificate;
 import bank.user.User;
 import bank.user.UserService;
@@ -92,20 +93,20 @@ public class NationalBankController {
 
 		for (int i = 0; i < listing.length; i++) {
 
-			KeyStore ks = KeyStore.getInstance("JKS");
+			/*KeyStore ks = KeyStore.getInstance("JKS");
 			InputStream readStream = new FileInputStream(listing[i].getPath());
 			ks.load(readStream, "123".toCharArray());
 			Enumeration<String> aliases = ks.aliases();
-			if (checkCN(ks, aliases)) {
-				String s = listing[i].getPath().replaceAll("ksCentralBank", "");
-				String cName = s.replaceAll(".jks", "");
-				result.add(cName.substring(1));
-			}
+			if (checkCN(ks, aliases)) {*/
+			String s = listing[i].getPath().replaceAll("ksCentralBank", "");
+			String cName = s.replaceAll(".jks", "");
+			result.add(cName.substring(1));
+			//}
 		}
 		return result;
 	}
 
-	private boolean checkCN(KeyStore ks, Enumeration<String> aliases) {
+/*	private boolean checkCN(KeyStore ks, Enumeration<String> aliases) {
 		boolean result = false;
 		while (aliases.hasMoreElements()) {
 			String alias = aliases.nextElement();
@@ -115,16 +116,17 @@ public class NationalBankController {
 			}
 		}
 		return result;
-	}
+	}*/
 
-	@RequestMapping(value = "/commonName/{cn}/aliases", method = RequestMethod.GET)
-	public List<String> getAliases(@PathVariable String cn)
+	@RequestMapping(value = "/aliases", method = RequestMethod.POST)
+	public List<String> getAliases(@RequestBody KeyStoreCred cn,HttpSession httpSession)
 			throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
 		
 		KeyStore ks = KeyStore.getInstance("JKS");
-		
-		InputStream readStream = new FileInputStream("ksCentralBank\\"+cn + ".jks");
-		ks.load(readStream, "123".toCharArray());
+		httpSession.setAttribute("issuerKS", cn);
+
+		InputStream readStream = new FileInputStream("ksCentralBank\\"+cn.getCommonName() + ".jks");
+		ks.load(readStream, cn.getPassword().toCharArray());
 		Enumeration<String> aliases = ks.aliases();
 		ArrayList<String> result = new ArrayList<>();
 		while (aliases.hasMoreElements()) {
@@ -179,15 +181,15 @@ public class NationalBankController {
 			
 			if(!file.exists()){
 				file.createNewFile();
-				keyStore.load(null, "123".toCharArray());
+				keyStore.load(null, selfCertificate.getKsPassword().toCharArray());
 			} else {
-				keyStore.load(new FileInputStream(file), null);
+				keyStore.load(new FileInputStream(file),  selfCertificate.getKsPassword().toCharArray());
 			}
 			
 			
 			//getExistingCertificate("1222");
 			keyStore.setKeyEntry(selfCertificate.getAlias(), keyPair.getPrivate(), selfCertificate.getPassword().toCharArray(), chain);
-			keyStore.store(new FileOutputStream(file), "123".toCharArray());
+			keyStore.store(new FileOutputStream(file), selfCertificate.getKsPassword().toCharArray());
 			
 			File cerFile = new File("certificates\\"+x509cert.getSerialNumber()+".cer");
 			final FileOutputStream os = new FileOutputStream(cerFile);

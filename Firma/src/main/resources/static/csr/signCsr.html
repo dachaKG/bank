@@ -62,7 +62,7 @@
 				<div class = "form-group" >
 					<label class="col-md-4 control-label" for = "issuerCNSelect">Issuer Common Name:</label>
 					<div class = "col-md-4">
-						<select  class="form-control" name = "issuerCNSelect" id = "issuerCNSelect" required data-ng-model = "issuerCommonName" ng-change = "loadAliases()"
+						<select  class="form-control" name = "issuerCNSelect" id = "issuerCNSelect" required data-ng-model = "issuerCommonName" ng-change = "openModal()"
 						data-ng-options = "criteria.name for criteria in issuersCNs track by criteria.id">
 						</select>
 					</div>
@@ -101,7 +101,7 @@
 						<span ng-show = "form.alias.$dirty && form.alias.$error.required" class="help-block">Alias is required</span>							 		
 					</div>
 				</div>
-
+	
 				
 				<div class = "form-group">
 					<label class = "col-md-4 control-label" form = "buttonSubmit"></label>
@@ -111,6 +111,26 @@
 				</div>
 		</form>
 	</div>
+</div>
+<div id="myModal" class="modal">
+	
+	<div class="modal-dialog">	
+	 <div class="modal-content">
+       <div class="modal-header">
+         <button type="button" class="close" ng-click = "dismissModal()">&times;</button>
+         <h3>Key store password</h3>
+       </div>	  
+	    <form class="form-horizontal" name= "form" role = "form"  ng-submit = "loadAliases()" method = "post">
+			<div class = "form-group" >
+				<label class = "col-md-4 control-label" for = "password">Enter password:</label>
+				<div class = "col-md-4">
+					<input type = "password" name = "keyStorePassword" ng-model = "keyStore.password" class="form-control" required>
+				</div>
+			</div>
+			<button type = "submit" class="btn btn-default navbar-btn">OK</button></center>					    		
+		</form>
+	 </div>
+</div>
 </div>
 <div>
 	<div ui-view ></div>

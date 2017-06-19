@@ -49,6 +49,7 @@ public class SelfCertificate implements Serializable{
 
 	private String password;
 	
+	private String ksPassword;
 
 	public Date getStartDate() {
 		return startDate;
@@ -131,6 +132,14 @@ public class SelfCertificate implements Serializable{
 
 	public void setAlias(String alias) {
 		this.alias = alias;
+	}
+
+	public String getKsPassword() {
+		return ksPassword;
+	}
+
+	public void setKsPassword(String ksPassword) {
+		this.ksPassword = ksPassword;
 	}
 
 	

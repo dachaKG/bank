@@ -9,8 +9,8 @@ services.service('csrService',['$http',function($http){
 		return $http.get('client/certificates/requests/'+number);
 	}
 	
-	this.loadAliases = function(commonName){
-		return $http.get("/certificates/commonName/"+commonName+"/aliases");
+	this.loadAliases = function(ksc){
+		return $http.post("/certificates/aliases",ksc);
 	}
 	this.loadCNs = function(){
 		return $http.get("/certificates/commonName");

@@ -1,7 +1,8 @@
 var app = angular.module('csr.controllers',[]);
 app.controller('csrController',['$scope','csrService','$location',
 	function($scope,service,$location){
-	
+	$scope.issuerCommonName = {id:null,name:""};
+	$scope.certificateRequest = {};	
 	$scope.requests = [];
 	$scope.csrData = {};
 	$scope.certificateRequest  ={};
@@ -18,12 +19,14 @@ app.controller('csrController',['$scope','csrService','$location',
 	}
 
 	$scope.loadAliases = function(){
-		service.loadAliases($scope.issuerCommonName.name)
+		$scope.keyStore.commonName = $scope.issuerCommonName.name;
+		service.loadAliases($scope.keyStore)
 		.then(function(response){
 			$scope.issuerAliases = [];
 			for(i = 0; i < response.data.length;i++){
 				$scope.issuerAliases.push({id:i,name : response.data[i]})
 			}
+			$scope.hideModal();			
 		},
 		function(response){
 			alert("GRESKA PRI UCITAVANJU ALIASA");
@@ -76,6 +79,19 @@ app.controller('csrController',['$scope','csrService','$location',
 			
 		})
 	}	
-	
+	$scope.openModal = function(){
+		
+		var modal = document.getElementById('myModal');
+		modal.style.display = "block";		
+	}
+	$scope.hideModal = function(){
+		var modal = document.getElementById('myModal');
+		modal.style.display = "none";		
+	}
+	$scope.dismissModal = function(){
+		$scope.issuerCommonName = {id:null,name:""};
+		var modal = document.getElementById('myModal');
+		modal.style.display = "none";		
+	}	
 	
 }])

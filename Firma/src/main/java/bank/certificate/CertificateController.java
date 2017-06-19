@@ -28,6 +28,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.sshd.common.util.Base64;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -83,20 +84,20 @@ public class CertificateController {
 
 		for (int i = 0; i < listing.length; i++) {
 
-			KeyStore ks = KeyStore.getInstance("JKS");
+			/*KeyStore ks = KeyStore.getInstance("JKS");
 			InputStream readStream = new FileInputStream(listing[i].getPath());
 			ks.load(readStream, "123".toCharArray());
 			Enumeration<String> aliases = ks.aliases();
-			if (checkCN(ks, aliases)) {
+			if (checkCN(ks, aliases)) {*/
 				String s = listing[i].getPath().replaceAll("ksBanks", "");
 				String cName = s.replaceAll(".jks", "");
 				result.add(cName.substring(1));
-			}
+			//}
 		}
 		return result;
 	}
 
-	private boolean checkCN(KeyStore ks, Enumeration<String> aliases) {
+/*	private boolean checkCN(KeyStore ks, Enumeration<String> aliases) {
 		boolean result = false;
 		while (aliases.hasMoreElements()) {
 			String alias = aliases.nextElement();
@@ -106,16 +107,16 @@ public class CertificateController {
 			}
 		}
 		return result;
-	}
+	}*/
 
-	@RequestMapping(value = "/commonName/{cn}/aliases", method = RequestMethod.GET)
-	public List<String> getAliases(@PathVariable String cn)
+	@RequestMapping(value = "/aliases", method = RequestMethod.POST)
+	public List<String> getAliases(@RequestBody KeyStoreCred cn,HttpSession httpSession)
 			throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException {
 		
 		KeyStore ks = KeyStore.getInstance("JKS");
-		
-		InputStream readStream = new FileInputStream("ksBanks\\"+cn + ".jks");
-		ks.load(readStream, "123".toCharArray());
+		httpSession.setAttribute("issuerKS", cn);
+		InputStream readStream = new FileInputStream("ksBanks\\"+cn.getCommonName() + ".jks");
+		ks.load(readStream, cn.getPassword().toCharArray());
 		Enumeration<String> aliases = ks.aliases();
 		ArrayList<String> result = new ArrayList<>();
 		while (aliases.hasMoreElements()) {
@@ -148,16 +149,16 @@ public class CertificateController {
 
 	@PreAuthorize("hasAuthority('addCaSignedCertificate')")
 	@RequestMapping(method = RequestMethod.POST)
-	public void addCaSignedCertificate(@RequestBody BankCertificate bc) throws IOException, KeyStoreException,
+	public void addCaSignedCertificate(@RequestBody BankCertificate bc,HttpSession httpSession) throws IOException, KeyStoreException,
 			NoSuchProviderException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException {
 
 		int unique_id = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
 		bc.setSerialNumber("" + unique_id + "");
-
+		KeyStoreCred ksCred = (KeyStoreCred) httpSession.getAttribute("issuerKS");
 		KeyStore ks = KeyStore.getInstance("JKS", "SUN");
 		KeyPair keyPairSubject = generateKeyPair();
 		BufferedInputStream in = new BufferedInputStream(new FileInputStream("ksCentralBank\\"+bc.getIssuerCommonName() + ".jks"));
-		ks.load(in, "123".toCharArray());
+		ks.load(in, ksCred.getPassword().toCharArray());
 
 		if (ks.isKeyEntry(bc.getIssuerAlias())) {
 
@@ -182,12 +183,12 @@ public class CertificateController {
 
 			if (!file.exists()) {
 				file.createNewFile();
-				ks.load(null, "123".toCharArray());
+				ks.load(null, bc.getKsPassword().toCharArray());
 			} else {
-				ks.load(new FileInputStream(file), null);
+				ks.load(new FileInputStream(file), bc.getKsPassword().toCharArray());
 			}
-			ks.setKeyEntry(bc.getAlias(), keyPairSubject.getPrivate(), bc.getPassword().toCharArray(), chain);
-			ks.store(new FileOutputStream(file), "123".toCharArray());
+			ks.setKeyEntry(bc.getAlias(), keyPairSubject.getPrivate(), bc.getKsPassword().toCharArray(), chain);
+			ks.store(new FileOutputStream(file), bc.getPassword().toCharArray());
 
 			// cuvanje u bazu serial number-revoke
 			certificateService.save(new bank.certificate.Certificate(bc.getSerialNumber(), false));

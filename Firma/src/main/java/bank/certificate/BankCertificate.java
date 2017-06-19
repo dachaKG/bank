@@ -35,6 +35,7 @@ public class BankCertificate {
 	
 	private String password;
 	
+	private String ksPassword;
 	/*@Column
 	private X500Name x500Name;*/
 
@@ -152,8 +153,14 @@ public class BankCertificate {
 		this.issuerPassword = issuerPassword;
 	}
 
+	public String getKsPassword() {
+		return ksPassword;
+	}
 
-	
+	public void setKsPassword(String ksPassword) {
+		this.ksPassword = ksPassword;
+	}
+
 	
 
 	

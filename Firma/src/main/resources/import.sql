@@ -17,9 +17,9 @@ insert into user (username, password, email, firma_id) values ('milance','$2a$10
 insert into user (username, password, email) values ('duca','$2a$10$UteruuYLEll8yHbjCM7Q8OhIvB0EIzT9ErS7Wqqltj1gk37qEHkpW','ed@c.com');
 insert into user (username, password, email, firma_id) values ('rada', '$2a$10$YQefMKcyoC1LNTPoqXRreOSvJvs.ytC857rlHHn5MjE0DqQluxnqi', 'rada@r.com',4);
 
-insert into certificate (povucen, serial_number) values (0, '1497705448');
-insert into certificate (povucen, serial_number) values (0, '1497705517');
-insert into certificate (povucen, serial_number) values (0, '1497706177');
+insert into certificate (povucen, serial_number) values (0, '1497911438');
+insert into certificate (povucen, serial_number) values (0, '1497911492');
+insert into certificate (povucen, serial_number) values (0, '1497911614');
 
 
 insert into role (enum_role) values ('ROLE_ADMIN');
