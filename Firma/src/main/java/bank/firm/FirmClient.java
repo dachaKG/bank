@@ -33,7 +33,7 @@ public class FirmClient {
 		nalogZaPlacanje.setDuznikNalogodavac("levi");
 		nalogZaPlacanje.setHitno(false);
 		nalogZaPlacanje.setIdPoruke("Nalog za prenos");
-		nalogZaPlacanje.setIznos(new BigDecimal("2000"));
+		nalogZaPlacanje.setIznos(new BigDecimal("260000"));
 		nalogZaPlacanje.setModelOdobrenja(97);
 		nalogZaPlacanje.setModelZaduzenja(92);
 		nalogZaPlacanje.setOznakaValute("RSD");

@@ -14,6 +14,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -90,6 +91,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  * 
  */
+@XmlRootElement(name="mt102")
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "mt102", propOrder = {
     "idPoruke",
