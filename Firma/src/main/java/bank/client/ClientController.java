@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.security.InvalidKeyException;
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.KeyStore;
@@ -23,9 +24,15 @@ import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.security.auth.x500.X500Principal;
 
 import org.apache.sshd.common.util.Base64;
@@ -88,13 +95,19 @@ public class ClientController {
 	
 	@PreAuthorize("hasAuthority('createCSR')")
 	@PostMapping("/certificates/csr")
-	public void generateCSR(@RequestBody ClientCertificate clientCertificate) throws OperatorCreationException, IOException, KeyStoreException, NoSuchProviderException, NoSuchAlgorithmException, CertificateException{
+	public void generateCSR(@RequestBody ClientCertificate clientCertificate) throws OperatorCreationException, IOException, KeyStoreException, NoSuchProviderException, NoSuchAlgorithmException, CertificateException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException{
 		KeyPair pair = generateKeyPair();
 
 	
 		PrivateKey privateKey = pair.getPrivate();
 		PublicKey publicKey = pair.getPublic();
+		int unique_id = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
 		
+		byte[] encrypted = encrypt(clientCertificate.getPassword(), publicKey);
+        FileOutputStream outputStream = new FileOutputStream(new File(unique_id +".txt"));
+        outputStream.write(encrypted);
+        outputStream.close();
+
 		//http://www.bouncycastle.org/wiki/display/JA1/BC+Version+2+APIs
 		ContentSigner signGen = new JcaContentSignerBuilder("SHA1withRSA").build(privateKey);
 		X500Principal subject = new X500Principal("C=" +clientCertificate.getCountry()+ ", O="+clientCertificate.getOrganization()+", OU="+clientCertificate.getOrganizationUnit()+", CN="+clientCertificate.getCommonName()+", EMAILADDRESS="+clientCertificate.getEmail());
@@ -105,20 +118,20 @@ public class ClientController {
 		
 		PemObject pemObject = new PemObject("CERTIFICATE REQUEST", certRequest.getEncoded());
 		//StringWriter str = new StringWriter();
-		int unique_id = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
 		PemWriter pemWriter = new PemWriter(new FileWriter(unique_id+".pem"));
 		pemWriter.writeObject(pemObject);
 		//pemWriter.writeObject(pemObject);
 		pemWriter.close();
 
 		logger.info("User " + getUserDetails().getUsername() + " created CSR.");
-
 		
-	    
-
-		//str.close();
-		//System.out.println(str);
-		}
+		// Store Private Key.
+		PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(
+				privateKey.getEncoded());
+		FileOutputStream fos = new FileOutputStream(unique_id+".key");		
+		fos.write(pkcs8EncodedKeySpec.getEncoded());
+		fos.close();		
+	}
 	
 	@GetMapping("/certificates/requests")
 	public java.util.List<String> findAllRequests(){
@@ -165,7 +178,7 @@ public class ClientController {
 	@PreAuthorize("hasAuthority('signCSR')")
 	@RequestMapping(value = "/certificates",method = RequestMethod.POST)
 	public void signCSR(@RequestBody BankCertificate bc) throws IOException, KeyStoreException,
-			NoSuchProviderException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException, InvalidKeyException {
+			NoSuchProviderException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException, InvalidKeyException, InvalidKeySpecException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
 
 		FileReader fileReader = new FileReader(bc.getSerialNumber()+".pem");
 		PemReader pemReader = new PemReader(fileReader);
@@ -180,11 +193,30 @@ public class ClientController {
 		BufferedInputStream in = new BufferedInputStream(new FileInputStream("ksBanks\\"+bc.getIssuerCommonName() + ".jks"));
 		ks.load(in, "123".toCharArray());
 
+		//citam privatni kljuc
+		File filePrivateKey = new File(bc.getSerialNumber()+ ".key");
+		FileInputStream fis = new FileInputStream(bc.getSerialNumber()+ ".key");
+		byte[] encodedPrivateKey = new byte[(int) filePrivateKey.length()];
+		fis.read(encodedPrivateKey);
+		fis.close();	
+		KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+		PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(
+				encodedPrivateKey);
+		PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
+
+        File inputFile = new File(bc.getSerialNumber()+".txt");
+        FileInputStream inputStream = new FileInputStream(inputFile);
+        byte[] inputBytes = new byte[(int) inputFile.length()];
+        inputStream.read(inputBytes);
+        inputStream.close();        
+        byte[] dec =  decrypt(inputBytes, privateKey);
+       	String pass = new String(dec);		
+		
+       	
 		if (ks.isKeyEntry(bc.getIssuerAlias())) {
 
 			PrivateKey issuerPrivateKey = (PrivateKey) ks.getKey(bc.getIssuerAlias(),
-					bc.getIssuerPassword().toCharArray());// privatni kljuc
-															// issuer-a
+					bc.getIssuerPassword().toCharArray());// privatni kljuc issuer-a
 			Certificate issuerCert = ks.getCertificate(bc.getIssuerAlias());
 			X500Name issuerX500Name = new JcaX509CertificateHolder((X509Certificate) issuerCert).getSubject();
 			Certificate[] issuerChain = ks.getCertificateChain(bc.getIssuerAlias());// certificate chain if issuer , kako bi odredio ceo chain za  subject
@@ -213,22 +245,28 @@ public class ClientController {
 			} else {
 				ks.load(new FileInputStream(file), null);
 			}
-			ks.setCertificateEntry(bc.getAlias(), certificate);
+			ks.setKeyEntry(bc.getAlias(), privateKey, pass.toCharArray(),chain);
+			//ks.setCertificateEntry(bc.getAlias(), certificate);
 			ks.store(new FileOutputStream(file), "123".toCharArray());
-
+			
 			// cuvanje u bazu serial number-revoke
 			certificateService.save(new bank.certificate.Certificate(bc.getSerialNumber(), false));
-
+			
 			// export to .cer fajl
 			final FileOutputStream os = new FileOutputStream("certificates\\"+certificate.getSerialNumber() + ".cer");
 			os.write("-----BEGIN CERTIFICATE-----\n".getBytes("US-ASCII"));
 			os.write(Base64.encodeBase64(certificate.getEncoded(), true));
 			os.write("-----END CERTIFICATE-----\n".getBytes("US-ASCII"));
 			os.close();
+			
     		File removeFile = new File(bc.getSerialNumber()+".pem");
+    		File removeKey = new File(bc.getSerialNumber()+".key");
+    		File removePass = new File(bc.getSerialNumber()+".txt");
+
     		removeFile.delete();
+    		removeKey.delete();
+    		removePass.delete();
 			logger.info("User " + getUserDetails().getUsername() + " signed CSR .Certifiate serial number is: " + bc.getSerialNumber());
-    		
 		}
 
 
@@ -261,11 +299,53 @@ public class ClientController {
 		return new SubjectData(publicKey, builder.build(), bc.getSerialNumber(), bc.getStartDate());
 	}	
 	private User getUserDetails() {
-
 		  SecurityContext context = SecurityContextHolder.getContext();
 		  Authentication authentication = context.getAuthentication();  
 		  User user = userService.findByUsername(authentication.getName());
-		  
 		  return user;
 	}
+	
+	private byte[] encrypt(String plainText, PublicKey key) throws NoSuchAlgorithmException, NoSuchProviderException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+		
+			//Kada se definise sifra potrebno je navesti njenu konfiguraciju, sto u ovom slucaju ukljucuje:
+			//	- Algoritam koji se koristi (RSA)
+			//	- Rezim rada tog algoritma (ECB)
+			//	- Strategija za popunjavanje poslednjeg bloka (PKCS1Padding)
+			//	- Provajdera kriptografskih funckionalnosti (BC)
+		Cipher rsaCipherEnc = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
+		//inicijalizacija za sifrovanje
+		rsaCipherEnc.init(Cipher.ENCRYPT_MODE, key);
+			
+		//sifrovanje
+		byte[] cipherText = rsaCipherEnc.doFinal(plainText.getBytes());
+		return cipherText;
+
+	}
+	private byte[] decrypt(byte[] cipherText, PrivateKey key) {
+		try {			
+			Cipher rsaCipherDec = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
+			//inicijalizacija za desifrovanje
+			rsaCipherDec.init(Cipher.DECRYPT_MODE, key);
+			
+			//desifrovanje
+			byte[] plainText = rsaCipherDec.doFinal(cipherText);
+			return plainText;
+		} catch (InvalidKeyException e) {
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (NoSuchProviderException e) {
+			e.printStackTrace();
+		} catch (NoSuchPaddingException e) {
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IllegalBlockSizeException e) {
+			e.printStackTrace();
+		} catch (BadPaddingException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}	
+	
 }
