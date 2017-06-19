@@ -132,9 +132,15 @@ public class NationalBankEndpoint {
 	}	
 	
 	@PayloadRoot(namespace = NAMESPACE_URI2, localPart = "getMt102Request")
+	@XmlAnyElement
 	@ResponsePayload
-	public GetMt102Response getMt102(@RequestPayload GetMt102Request request) {
-		////
+	public GetMt102Response getMt102(@RequestPayload Element request) {
+		////GetMt102Request
+		Document doc = request.getOwnerDocument();
+		saveDocument(doc, "PRISTIGAO_MT102.xml");
+		
+		
+		
 		/*com.example.bankxml.bankxml.mt102.ObjectFactory factory = new com.example.bankxml.bankxml.mt102.ObjectFactory();
 		com.example.bankxml.bankxml.mt102.Mt910 mt910 = factory.createMt910();
 		GetMt910RequestMt102 mt910Request = factory.createGetMt910RequestMt102();
