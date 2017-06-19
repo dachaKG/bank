@@ -242,18 +242,18 @@ public class BankEndpoint {
 	public Document decrypt(Element request){
 		try{
 		Document document = request.getOwnerDocument();
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		/*DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
 		Document document1 = db.newDocument();
 		NodeList nodeList = document.getElementsByTagNameNS("*", "nalogZaPlacanje");
 		document1.appendChild(document1.adoptNode(nodeList.item(0).cloneNode(true)));
-		saveDocument(document1,"nalog_encrypted.xml");
+		saveDocument(document1,"nalog_encrypted.xml");*/
 		
 		XMLEncryptionUtility encUtility = new XMLEncryptionUtility();
         KeyStoreReader ksReader = new KeyStoreReader();
 		PrivateKey privateKey = ksReader.readPrivateKey("primer.jks", "primer", "primer", "primer");
-		document1 = encUtility.decrypt(document1, privateKey);
-		return document1;
+		document = encUtility.decrypt(document, privateKey);
+		return document;
 		}catch(Exception e){
 			e.printStackTrace();
 			return null;

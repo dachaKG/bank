@@ -64,7 +64,7 @@ public class XMLEncryptionUtility {
 	        encryptedData.setKeyInfo(keyInfo);
 			
 			//Trazi se element ciji sadrzaj se sifruje
-			NodeList odseci = doc.getElementsByTagName("nalogZaPlacanje");
+			NodeList odseci = doc.getElementsByTagName("ns2:getNalogZaPlacanjeRequest");
 			Element odsek = (Element) odseci.item(0);
 			
 			xmlCipher.doFinal(doc, odsek, true); //Sifruje sa sadrzaj
@@ -106,7 +106,7 @@ public class XMLEncryptionUtility {
 	        encryptedData.setKeyInfo(keyInfo);
 			
 			//Trazi se element ciji sadrzaj se sifruje
-			NodeList odseci = doc.getElementsByTagName("ns3:id_poruke");
+			NodeList odseci = doc.getElementsByTagName("ns3:getStrukturaRtgsNalogaRequest");
 			Element odsek = (Element) odseci.item(0);
 			
 			xmlCipher.doFinal(doc, odsek, true); //Sifruje sa sadrzaj
