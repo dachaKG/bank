@@ -74,10 +74,11 @@ public class WSTemplate extends WebServiceTemplate {
 				XMLEncryptionUtility encUtility = new XMLEncryptionUtility();
 				XMLSigningUtility sigUtility = new XMLSigningUtility();
 				SecretKey secretKey = encUtility.generateDataEncryptionKey();
-				Certificate cert = ksReader.readCertificate("primer.jks", "primer", "primer");
+				Certificate cert = ksReader.readCertificate("ksBanks\\Banka A.jks", "123", "ba1");
 				doc = encUtility.encrypt(doc, secretKey, cert);
-				PrivateKey privateKey = ksReader.readPrivateKey("primer.jks", "primer", "primer", "primer");
-				doc = sigUtility.signDocument(doc, privateKey, cert);
+				Certificate certFirm = ksReader.readCertificate("ksClients\\Firma A.jks", "FirmaA", "fa1");
+				PrivateKey privateKeyFirm = ksReader.readPrivateKey("ksClients\\Firma A.jks", "FirmaA", "fa1", "123");
+				doc = sigUtility.signDocument(doc, privateKeyFirm, certFirm);
 				saveDocument(doc,"nalog_encrypted_and_signed.xml");
 				/////////
 					

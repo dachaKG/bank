@@ -243,7 +243,7 @@ public class BankEndpoint {
 		
 		XMLEncryptionUtility encUtility = new XMLEncryptionUtility();
         KeyStoreReader ksReader = new KeyStoreReader();
-		PrivateKey privateKey = ksReader.readPrivateKey("primer.jks", "primer", "primer", "primer");
+		PrivateKey privateKey = ksReader.readPrivateKey("ksBanks\\Banka A.jks", "123", "ba1", "123");
 		document = encUtility.decrypt(document, privateKey);
 		return document;
 		}catch(Exception e){

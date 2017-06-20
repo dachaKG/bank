@@ -1,7 +1,5 @@
 package com.example.bankXml.BankXml;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -12,9 +10,6 @@ import java.security.PrivateKey;
 import java.security.cert.Certificate;
 
 import javax.crypto.SecretKey;
-import javax.xml.bind.JAXBContext;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -31,12 +26,8 @@ import org.springframework.ws.client.core.WebServiceMessageExtractor;
 import org.springframework.ws.client.core.WebServiceTemplate;
 import org.springframework.ws.support.MarshallingUtils;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
 import com.example.bankXml.BankXml.mt102.GetMt102Request;
 import com.nalogzaplacanje.GetNalogZaPlacanjeRequest;
-import com.nalogzaplacanje.NalogZaPlacanje;
 import com.strukturartgsnaloga.GetStrukturaRtgsNalogaRequest;
 
 import encryption.KeyStoreReader;
@@ -87,10 +78,12 @@ public class WSTemplate extends WebServiceTemplate {
 					XMLEncryptionUtility encUtility = new XMLEncryptionUtility();
 					XMLSigningUtility sigUtility = new XMLSigningUtility();
 					SecretKey secretKey = encUtility.generateDataEncryptionKey();
-					Certificate cert = ksReader.readCertificate("primer.jks", "primer", "primer");
-					doc = encUtility.encrypt(doc, secretKey, cert);
-					PrivateKey privateKey = ksReader.readPrivateKey("primer.jks", "primer", "primer", "primer");
-					doc = sigUtility.signDocument(doc, privateKey, cert);
+					Certificate certNationalBank = ksReader.readCertificate("ksCentralBank\\Narodna banka.jks", "123", "nbs1");
+					Certificate certBank = ksReader.readCertificate("ksBanks\\Banka A.jks", "123", "ba1");
+					
+					doc = encUtility.encryptRtgs(doc, secretKey, certNationalBank);
+					PrivateKey privateKey = ksReader.readPrivateKey("ksBanks\\Banka A.jks", "123", "ba1", "123");
+					doc = sigUtility.signDocument(doc, privateKey, certBank);
 					saveDocument(doc,"nalog_encrypted_and_signed.xml");
 				}
 				else if(requestPayload instanceof GetStrukturaRtgsNalogaRequest){
@@ -112,10 +105,12 @@ public class WSTemplate extends WebServiceTemplate {
 					XMLEncryptionUtility encUtility = new XMLEncryptionUtility();
 					XMLSigningUtility sigUtility = new XMLSigningUtility();
 					SecretKey secretKey = encUtility.generateDataEncryptionKey();
-					Certificate cert = ksReader.readCertificate("primer.jks", "primer", "primer");
-					doc = encUtility.encryptRtgs(doc, secretKey, cert);
-					PrivateKey privateKey = ksReader.readPrivateKey("primer.jks", "primer", "primer", "primer");
-					doc = sigUtility.signDocument(doc, privateKey, cert);
+					Certificate certNationalBank = ksReader.readCertificate("ksCentralBank\\Narodna banka.jks", "123", "nbs1");
+					Certificate certBank = ksReader.readCertificate("ksBanks\\Banka A.jks", "123", "ba1");
+					
+					doc = encUtility.encryptRtgs(doc, secretKey, certNationalBank);
+					PrivateKey privateKey = ksReader.readPrivateKey("ksBanks\\Banka A.jks", "123", "ba1", "123");
+					doc = sigUtility.signDocument(doc, privateKey, certBank);
 					saveDocument(doc,"RTGS_encrypted_and_signed.xml");
 				}
 				else if(requestPayload instanceof GetMt102Request){
@@ -137,10 +132,12 @@ public class WSTemplate extends WebServiceTemplate {
 					XMLEncryptionUtility encUtility = new XMLEncryptionUtility();
 					XMLSigningUtility sigUtility = new XMLSigningUtility();
 					SecretKey secretKey = encUtility.generateDataEncryptionKey();
-					Certificate cert = ksReader.readCertificate("primer.jks", "primer", "primer");
-					doc = encUtility.encryptMT102(doc, secretKey, cert);
-					PrivateKey privateKey = ksReader.readPrivateKey("primer.jks", "primer", "primer", "primer");
-					doc = sigUtility.signDocument(doc, privateKey, cert);
+					Certificate certNationalBank = ksReader.readCertificate("ksCentralBank\\Narodna banka.jks", "123", "nbs1");
+					Certificate certBank = ksReader.readCertificate("ksBanks\\Banka A.jks", "123", "ba1");
+					
+					doc = encUtility.encryptRtgs(doc, secretKey, certNationalBank);
+					PrivateKey privateKey = ksReader.readPrivateKey("ksBanks\\Banka A.jks", "123", "ba1", "123");
+					doc = sigUtility.signDocument(doc, privateKey, certBank);
 					saveDocument(doc,"MT102_encrypted_and_signed.xml");
 				}
 				
