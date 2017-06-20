@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><getStrukturaRtgsNalogaResponse xmlns="http://strukturaRtgsNaloga.com"><xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Type="http://www.w3.org/2001/04/xmlenc#Content"><xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#tripledes-cbc"/><ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+<ds:KeyName>Sifrovan tajni kljuc</ds:KeyName>
+<xenc:EncryptedKey><xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-1_5"/><xenc:CipherData><xenc:CipherValue>b/xN8U82WED6yiVRPq76z/zkj6CrHNaJb3YU0WSjQbX0OCrymwE/t5MkodMuWmQXAP4NCkJ5Mu55&#13;
+NPp2xxSlkjvVxMoOhTCHON/SGTDww3SnAHMUgZ0V9yLtTXD/+sLWXKeCWep45WcRXwZebaaMc3r8&#13;
+aJe30gKAOTJsqr/SZQI=</xenc:CipherValue></xenc:CipherData></xenc:EncryptedKey></ds:KeyInfo><xenc:CipherData><xenc:CipherValue>mjTP66z8xUt+CW1ozy3pul0R0FTnG/eCI6Nia9SDIUJY/n9zeHfGIdPFdzk0MO/VTfGxvXUxLEtj&#13;
+Woo5oNSbt23em5WIHcrNzEqRqdeB98scKMaG99S/fzTdztmHAiDOB01L14BWTFZdF5+h2X1zEfFu&#13;
+E6ede7HLmnAk0r/An7O8u5gcAuPW6LHgLRZ4kEuy0+yUu8vxoIE6qtcXkXThFY60Sxra/VEwAuuY&#13;
+gW6hBYNR1MdcnDZmnSY3dgHP8kr8w/gUFVGkBNhPd3KXP1TXFn8I3amqTE2dP/WOsjNU1hhfDUE3&#13;
+IC+vc4mjsKUJFJ7CLawTDBzBwoFZNb/0tiqogRVTnF7/slrcNHgfRpJhrrWOp+/DY8hnR24j9fLN&#13;
+wLKiQRUcyPxhzHRf4TuDeS0CLY5dXwA81KMivD3iRILoJSPy/VwhauS7zqh52E26+T3U</xenc:CipherValue></xenc:CipherData></xenc:EncryptedData></getStrukturaRtgsNalogaResponse>
