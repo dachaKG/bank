@@ -102,7 +102,7 @@ public class NationalBankEndpoint {
 	@XmlAnyElement
 	@ResponsePayload
 	public GetStrukturaRtgsNalogaResponse getStrukturaRtgsNaloga(@RequestPayload Element request) throws JAXBException, IOException {
-		//getstrukturartgsnalogarequest
+		
 		Document doc = request.getOwnerDocument();
 		saveDocument(doc, "PRISTIGAO_RTGS.XML");
 		if(checkSignature(request))
@@ -146,17 +146,8 @@ public class NationalBankEndpoint {
 		GetStrukturaRtgsNalogaResponse response = new GetStrukturaRtgsNalogaResponse();
 		response.setMt900(mt900);
 	
-	//	JAXBContext jaxbMarshaller = null;
-		//try {
-		//	jaxbMarshaller = JAXBContext.newInstance(GetStrukturaRtgsNalogaResponse.class);
-		//} catch (JAXBException e) {
-		///	// TODO Auto-generated catch block
-	//	/	e.printStackTrace();
-//		}
-		
-	
-		////////////
-		File file = new File("file.xml");
+
+		File file = new File("RESPONSEfile.xml");
 		JAXBContext jaxbContext;
 		try {
 			jaxbContext = JAXBContext.newInstance(GetStrukturaRtgsNalogaResponse.class);
@@ -174,7 +165,7 @@ public class NationalBankEndpoint {
 			e.printStackTrace();
 		}
 		
-		Document document = loadDocument("file.xml");
+		Document document = loadDocument("RESPONSEfile.xml");
 
 		
 		KeyStoreReader ksReader = new KeyStoreReader();
@@ -188,6 +179,7 @@ public class NationalBankEndpoint {
 		//Ucitava sertifikat za sifrovanje tajnog kljuca
 		Certificate cert = ksReader.readCertificate("primer.jks", "primer", "primer");
 		//Sifruje se dokument
+		//Provera sifrov...
 		System.out.println("\n===== Sifrovanje XML dokumenta =====");
 		document = encUtility.encrypt(document, secretKey, cert);
 		//Snima se XML dokument, koji sadrzi tajni kljuc
@@ -196,7 +188,7 @@ public class NationalBankEndpoint {
 		System.out.println("\n===== Potpisivanje XML dokumenta =====");
 		PrivateKey privateKey = ksReader.readPrivateKey("primer.jks", "primer", "primer", "primer");
 		document = sigUtility.signDocument(document, privateKey, cert);
-		saveDocument(document, "signedFile.xml");
+		saveDocument(document, "RESPONSEsignedFile.xml");
 		
 		return response;
 		
@@ -265,6 +257,50 @@ public class NationalBankEndpoint {
 		mt900.setSwiftBankeDuznika(mt102.getSwiftKodBankeDuznika());
 		GetMt102Response response = new GetMt102Response();
 		response.setMt900(mt900);
+		
+/*
+		File file = new File("RESPONSEfile.xml");
+		JAXBContext jaxbContext;
+		try {
+			jaxbContext = JAXBContext.newInstance(GetStrukturaRtgsNalogaResponse.class);
+			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+
+			// output pretty printed
+			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+			jaxbMarshaller.marshal(response, file);
+			jaxbMarshaller.marshal(response, System.out);
+			
+			
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Document document = loadDocument("RESPONSEfile.xml");
+
+		
+		KeyStoreReader ksReader = new KeyStoreReader();
+		XMLEncryptionUtility encUtility = new XMLEncryptionUtility();
+		XMLSigningUtility sigUtility = new XMLSigningUtility();
+		
+		SecretKey secretKey = encUtility.generateDataEncryptionKey();
+		System.out.println("\n===== Generisan kljuc =====");
+		System.out.println(Base64.encode(secretKey.getEncoded()));
+		
+		//Ucitava sertifikat za sifrovanje tajnog kljuca
+		Certificate cert = ksReader.readCertificate("primer.jks", "primer", "primer");
+		//Sifruje se dokument
+		System.out.println("\n===== Sifrovanje XML dokumenta =====");
+		document = encUtility.encrypt(document, secretKey, cert);
+		//Snima se XML dokument, koji sadrzi tajni kljuc
+		saveDocument(document, file.getPath());
+		
+		System.out.println("\n===== Potpisivanje XML dokumenta =====");
+		PrivateKey privateKey = ksReader.readPrivateKey("primer.jks", "primer", "primer", "primer");
+		document = sigUtility.signDocument(document, privateKey, cert);
+		saveDocument(document, "RESPONSEsignedFile.xml");
+		*/
 	
 		return response;
 	}
