@@ -100,7 +100,7 @@ public class WSTemplate extends WebServiceTemplate {
 					TransformerFactory tf = TransformerFactory.newInstance();
 					Transformer transformer = tf.newTransformer();
 					transformer.transform(source, result);
-					System.out.println("RTGS XML IN String format is: \n" + writer.toString());
+					System.out.println("MT910MT102 XML IN String format is: \n" + writer.toString());
 					
 					
 					//---------sifrovanje---------------------
@@ -111,7 +111,7 @@ public class WSTemplate extends WebServiceTemplate {
 					Certificate certNationalBank = ksReader.readCertificate("ksCentralBank\\Narodna banka.jks", "123", "nbs1");
 					Certificate certBank = ksReader.readCertificate("ksBanks\\Banka A.jks", "123", "ba1");
 				
-					doc = encUtility.encryptMt910(doc, secretKey, certBank);
+					doc = encUtility.encryptMt910Mt102(doc, secretKey, certBank);
 					PrivateKey privateKey = ksReader.readPrivateKey("ksCentralBank\\Narodna banka.jks", "123", "nbs1", "123");
 					doc = sigUtility.signDocument(doc, privateKey, certNationalBank);
 					saveDocument(doc,"MT910encrypted_signed.xml");

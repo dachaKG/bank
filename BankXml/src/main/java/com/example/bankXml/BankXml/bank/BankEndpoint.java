@@ -216,12 +216,19 @@ public class BankEndpoint {
 	
 	@PayloadRoot(namespace = NAMESPACE_URI2, localPart = "getMt910RequestMt102")//za mt102
 	@ResponsePayload
-	public com.example.bankXml.BankXml.mt102.GetMt910Response getMt910(@RequestPayload GetMt910RequestMt102 request){
+	public com.example.bankXml.BankXml.mt102.GetMt910Response getMt910mt102(@RequestPayload Element request){
+		//GetMt910RequestMt102
+		Document doc = null;
+		if(checkSignature(request))
+			doc = decrypt(request);
+		//----------------------------------gotov deo za desifrovanje-------------
+		GetMt910RequestMt102 getMt910Request = getMt910RequestMt102FromXMLDoc(doc);
+		
 		String racunPoverioca = null;
-		for(int i =0; i < request.getMt102().getNalogZaMT102().size();i++){
-			racunPoverioca = request.getMt102().getNalogZaMT102().get(i).getRacunPoverioca();
+		for(int i =0; i < getMt910Request.getMt102().getNalogZaMT102().size();i++){
+			racunPoverioca = getMt910Request.getMt102().getNalogZaMT102().get(i).getRacunPoverioca();
 			Firma poverilac = firmService.findByAccount(racunPoverioca);
-			poverilac.setStanjeRacuna(poverilac.getStanjeRacuna()+ request.getMt102().getNalogZaMT102().get(i).getIznos().intValue());
+			poverilac.setStanjeRacuna(poverilac.getStanjeRacuna()+ getMt910Request.getMt102().getNalogZaMT102().get(i).getIznos().intValue());
 			firmService.save(poverilac);
 		}
 		return null;
@@ -298,6 +305,25 @@ public class BankEndpoint {
 			tt.printStackTrace();
 			return null;
 		}
+	}
+	
+	public static GetMt910RequestMt102 getMt910RequestMt102FromXMLDoc(Document document){
+		try{
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+	        DocumentBuilder db = dbf.newDocumentBuilder();
+			Document document1 = db.newDocument();
+			NodeList nodeList = document.getElementsByTagNameNS("*", "getMt910RequestMt102");
+			document1.appendChild(document1.adoptNode(nodeList.item(0).cloneNode(true)));
+			JAXBContext context = JAXBContext.newInstance(GetMt910RequestMt102.class);
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			GetMt910RequestMt102 nzp = (GetMt910RequestMt102) unmarshaller.unmarshal(document1);
+			System.out.println("----! UNMARSHALED MT910mt102 !----\n ");
+			return nzp;
+			}catch(Exception tt)
+			{
+				tt.printStackTrace();
+				return null;
+			}
 	}
 	
 	
