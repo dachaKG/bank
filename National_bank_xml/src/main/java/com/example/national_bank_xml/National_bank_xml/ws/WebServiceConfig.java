@@ -66,4 +66,15 @@ public class WebServiceConfig {
 
 		return webServiceTemplate;
 	}
+	
+	@Bean
+	public WSTemplate wsTemplate() {
+
+		WSTemplate webServiceTemplate = new WSTemplate();
+		webServiceTemplate.setMarshaller(jaxb2Marshaller());
+		webServiceTemplate.setUnmarshaller(jaxb2Marshaller());
+		webServiceTemplate.setDefaultUri("http://localhost:8082/ws");
+
+		return webServiceTemplate;
+	}
 }

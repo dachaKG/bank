@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><SOAP-ENV:Header/><SOAP-ENV:Body><ns2:getMt910Request xmlns:ns2="http://strukturaRtgsNaloga.com" xmlns:ns3="http://mt102.BankXml.bankXml.example.com"><xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Type="http://www.w3.org/2001/04/xmlenc#Content"><xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#tripledes-cbc"/><ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+<ds:KeyName>Sifrovan tajni kljuc</ds:KeyName>
+<xenc:EncryptedKey><xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-1_5"/><xenc:CipherData><xenc:CipherValue>GHbz7ZrCQl28ylYgvIHZDPNNI/2iB5SC8bcI7Sh3AUxs3eXj8iIUXHZ4A2GDdHJybzANN8oCkkZk&#13;
+k3LfY8jhnvxeA6Dr2vZulB9DZx7LXA4l//5UOTSSyEYk2IyK3xLG0zDQcnEkMQjexnvcbSIwiJUL&#13;
+7srB/y4QDSSq671ougg8FZMCj57Oh7W5YJIUy1vnAOjuMpB4RIojRCRRs8j7w+ZwNJhrv8ne6fiy&#13;
+WqCuHtkuG9JSwihZXfTuOc55SuCmVwBlvdTFD2sYbnmAaC8KTHaqBFAd5vWNV1nfnkSKOewWVN5H&#13;
+4RssntnL9wl52xQnVpy/LIoziLaPs3OgSQhidQ==</xenc:CipherValue></xenc:CipherData></xenc:EncryptedKey></ds:KeyInfo><xenc:CipherData><xenc:CipherValue>Jikc9IIAVqSjQxOrSDlx35Q3jv/LK3+p2JA/PLz9SNXMauCPwo4FguQt1abHTLw1vdfx+LpFS2wn&#13;
+zgW5w478Ng0wJLR1mJmHsy2aZGDXIu9lfw/QcKamNZ8aZf4LAWu4pNzwftQUiJEYZ6idjRWZL8qj&#13;
+IXla6Y134UJ1wUgs+79idGq0eem5wrrcyFjileR3XdGaEpOmFP00li1LtEQjGHpwYyLD7nq3kirv&#13;
+qfNbkrkwlHWUsdFEFvtlKMjEUmYKRqM84oUj/Pt9kPnALQTRc9qOI3aqsmz2d6N7sKWLb+ye4GNG&#13;
+mMhU+dLIqbFueWz6o6fqCj+KY1ZLQ5JhACDlSNRHrK4BmrWb4bBRa2IIpwDXbxRzzik87dScnl7t&#13;
+4flKA/qWEx35s6E0tyvqWxP4gcbs22bQw+NPOX0ZQR4Ap7pmtJKq92Ki+1aCQapS6izM0A9Wc0Mg&#13;
+PgNj38V5z4P6J11VFA/3BQ4BCOMaLKDd8W9zqxEdI/EDB3YkM3VlvsxRITYPa6C3wteJCw4qtznA&#13;
+One6bPo5UMAKT9J8MXALkwotUFNaxiifPf1+P6DDaZnvfheEak1PyhceJmwHDmfh6C/Oh+PB++nD&#13;
+zJZiQAhRq/PYTWy7cQ/eX8RbiQdEhk9F2/9zShfwuH3EkcV4ZRrS3689HowUHqa9N3exAbituRBg&#13;
+kP9G/v6MdL3KLDUzTo6i0yv46NdXGLN6ODmjZCCInxqEpY6De7m047H8Md+V84AyJBrvLgEPhmGt&#13;
+9AKa5NKyyoCgkgpR4I/h5U0ofxOGWzt60JMDW8kYgSp4/ykyV8l0BdJA+yAUhjG3JKA92YJSldUp&#13;
++BPXToZ5U5rk7GhwW6ikkr7uZH9skECiq9+xjg3xPo/+MbweYQtXvIBQNhz2i4kf0EiOSLmDHF48&#13;
+o1mIZxKzkxRhN35MB8qNGr2PKLv8zvpyuadpXvY+qm0oj5yAkifyEpp/XsTpfArec4HL0XYZhFxt&#13;
+gcpZyw5npNfQBD/kTvckFdWbZug7u279aMs4eNJ+fY5k/4dyeKsl53f9S3qWOXjCioh7j48q3PJr&#13;
+obENgTC6YXloKtze1TZJaxPUb8kRi9YO9aQu0OKvp7OkHqrhPdw/30BOWZfAnTS7vsKLtjdg+dZH&#13;
+9l+WkhcaAfBiaqwDBAn82W3i4bE8cPJ9014pDGbazfZErk4Xe/1q55fE63KL6giOIdRj13WAA6OW&#13;
+cbXwfiIJkftWejxRwk7j2SZOm8vPNICueQo3f2z7HcIzfa+SrQQ4teAmgpynSgEFzF8fwOGI0JUf&#13;
+haJiknMuSprKEfEpBYCLTVfThYW0gBMXEguyKtwHXIoeslYMhWGI74kaSnDZHkMT4F3tcEZCE8eO&#13;
+fbwGaoxPD7fgJehiSx/rwQpQs4u4AeBGHPr5TRPMBHnxbXKyNEFSft4xrD1kEWaLN+AITT2vTQX8&#13;
+JRXx2ohrD/Z8V0Y8uBa9+GEO7IXbbAY1fufewlVUrx2fPYaEeRvzgFf+QP1+3d8pOdZKGWhAKxM7&#13;
+06zdvj8fXBjyyVj7zy+pYbNqZ0/3yXWqt0ZDbEHfSABvbE8BgNXmPWATgcXYVgyrKsh4dluuoEZ3&#13;
+oOLvXDWpqYEtfrApKCqnzEMnHWn5ts1+MhIPwgC+81KXnCLVh5GAymDbclGUBX2pbBIOF1iUMfaf&#13;
+qVN5q4nQn7J04yGWZqZkRsuRgH0oor3qW0Z/UGP+2ILF2rbbU/noO2mlkTeAvFZzjB3r03TjkaVC&#13;
+iv3IWm974IfW0ZsrZEOBP16defCEhucT5g==</xenc:CipherValue></xenc:CipherData></xenc:EncryptedData></ns2:getMt910Request></SOAP-ENV:Body><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+<ds:SignedInfo>
+<ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+<ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+<ds:Reference URI="">
+<ds:Transforms>
+<ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+<ds:Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments"/>
+</ds:Transforms>
+<ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+<ds:DigestValue>yNttcyJj/jpAnCJc45R4+w/MSRk=</ds:DigestValue>
+</ds:Reference>
+</ds:SignedInfo>
+<ds:SignatureValue>
+aSMGYWw7BPwBqv3poQwJtidsrQB+6ZCkdyoh+ctbfadQGNLZ8MbaGXOahXbcqe9sTtXeD5lwfplI&#13;
+lQZpIBNQRlfbHAbD1Sr9N/7Ku7k6kZ/ROTsoXG5YEooWtWSZw4ZRxcUGJUJQUL5wItNvuSGpPrsa&#13;
+ryJ651NxKY0DhMBaoP6VnpdA6wZfKgli9c9QUB4HKH1geKO9XnqcxzOVg27cC5u/dmSH+7dYklkN&#13;
+r885W3ov1I4/UuZy7Vk22mMZcwheY+A+Di1pPFShHai41gu002X2xsAwUa5g93oQANJ8nATRFf0z&#13;
+iUdj+A/ze5Ue+7pFz9eOAwumB9+7+Ob60j7Jwg==
+</ds:SignatureValue>
+<ds:KeyInfo>
+<ds:KeyValue>
+<ds:RSAKeyValue>
+<ds:Modulus>
+iB4brM9IcSzO94vsP2oklqN2bnPRIj4WnkokiLR4pwUiZPDwNOmz8VXfq73I6HA1++WGYMTxBwwi&#13;
+YTWlCvBBGoN/iKQNY31bk/8ybvHCH+jfLuMe6LGkOzqiXKOARR+13D4/55JmhGIry6ZaUHNnBEQw&#13;
+oO9I30t90tLf+t2+AJUes1cRv8bbXtkoiykA4ZGdT+xaB8t41LIdNIRFNYaupGQPs3td7xZn7kJd&#13;
+nEv2KIma8gOlDDkr8M2TARRmbcLSsr4MPXosIalThZE8Nt5l/zRQiRM9pSW2zAVAqQ/frLf8ZZuS&#13;
+TQwy1wt+OJ4DX+DVcya9ONNRNXvfCMGyxdheyw==
+</ds:Modulus>
+<ds:Exponent>AQAB</ds:Exponent>
+</ds:RSAKeyValue>
+</ds:KeyValue>
+<ds:X509Data>
+<ds:X509Certificate>
+MIIDyDCCArCgAwIBAgIEWUhQjjANBgkqhkiG9w0BAQsFADCBlDEWMBQGA1UEAwwNTmFyb2RuYSBi&#13;
+YW5rYTEWMBQGA1UECgwNTmFyb2RuYSBiYW5rYTEWMBQGA1UECwwNTmFyb2RuYSBiYW5rYTEMMAoG&#13;
+A1UEBhMDc3JiMSAwHgYJKoZIhvcNAQkBFhFuYXJvZG5hQGJhbmthLmNvbTEaMBgGCgmSJomT8ixk&#13;
+AQEMCjE0OTc5MTE0MzgwHhcNMTcwNjE5MDAwMDAwWhcNMTgwNjE5MDAwMDAwWjCBlDEWMBQGA1UE&#13;
+AwwNTmFyb2RuYSBiYW5rYTEWMBQGA1UECgwNTmFyb2RuYSBiYW5rYTEWMBQGA1UECwwNTmFyb2Ru&#13;
+YSBiYW5rYTEMMAoGA1UEBhMDc3JiMSAwHgYJKoZIhvcNAQkBFhFuYXJvZG5hQGJhbmthLmNvbTEa&#13;
+MBgGCgmSJomT8ixkAQEMCjE0OTc5MTE0MzgwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIB&#13;
+AQCIHhusz0hxLM73i+w/aiSWo3Zuc9EiPhaeSiSItHinBSJk8PA06bPxVd+rvcjocDX75YZgxPEH&#13;
+DCJhNaUK8EEag3+IpA1jfVuT/zJu8cIf6N8u4x7osaQ7OqJco4BFH7XcPj/nkmaEYivLplpQc2cE&#13;
+RDCg70jfS33S0t/63b4AlR6zVxG/xtte2SiLKQDhkZ1P7FoHy3jUsh00hEU1hq6kZA+ze13vFmfu&#13;
+Ql2cS/YoiZryA6UMOSvwzZMBFGZtwtKyvgw9eiwhqVOFkTw23mX/NFCJEz2lJbbMBUCpD9+st/xl&#13;
+m5JNDDLXC344ngNf4NVzJr0401E1e98IwbLF2F7LAgMBAAGjIDAeMA8GA1UdEwEB/wQFMAMBAf8w&#13;
+CwYDVR0PBAQDAgH2MA0GCSqGSIb3DQEBCwUAA4IBAQBKgkCxBNwHmG/wEYU8Od6HkxihXWPj1h12&#13;
+fG+q61jmb4fYSRfJ0izYvn5nrXht+WQh/TSDoR5b/FyKbjwyTqT14F+SduxLVKQ2SEdeO/nvHE3r&#13;
+nQBV4fRejhZU5tfX6L5axwh33CP+S1BJ/hVzF5q2gctUkL4lCcfvcjk+ybKoi0+d4xuavtHrdfc8&#13;
+B3R5xQoJHpWijNLg0JQn76/9gt1GMvBduxBUB1RE32w0+mWlCI1aQEOcM69rXRgRW6BWWP1GyMGr&#13;
+YeOsFn5vAOQWf2es2a7JbPdCz78z61ULiljUXSYC60ihwwBCoC0ehlp1itw6xPMtT2xlzvAZ2a+l&#13;
+miTA
+</ds:X509Certificate>
+</ds:X509Data>
+</ds:KeyInfo>
+</ds:Signature></SOAP-ENV:Envelope>

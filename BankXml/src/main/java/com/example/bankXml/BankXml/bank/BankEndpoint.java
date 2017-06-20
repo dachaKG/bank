@@ -199,9 +199,17 @@ public class BankEndpoint {
 	
 	@PayloadRoot(namespace = NAMESPACE_URI, localPart = "getMt910Request")//za rtgs tj mt103
 	@ResponsePayload
-	public GetMt910Response getMt910(@RequestPayload GetMt910Request request){
-		Firma poverilac = firmService.findByAccount(request.getRtgsNalog().getRacunPoverioca());
-		poverilac.setStanjeRacuna(poverilac.getStanjeRacuna()+ request.getRtgsNalog().getIznos().intValue());
+	public GetMt910Response getMt910(@RequestPayload Element request){
+		//GetMt910Request
+		Document doc = null;
+		if(checkSignature(request))
+			doc = decrypt(request);
+		//----------------------------------gotov deo za desifrovanje-------------
+		GetMt910Request getMt910Request = getMt910FromXMLDoc(doc);
+		
+		
+		Firma poverilac = firmService.findByAccount(getMt910Request.getRtgsNalog().getRacunPoverioca());
+		poverilac.setStanjeRacuna(poverilac.getStanjeRacuna()+ getMt910Request.getRtgsNalog().getIznos().intValue());
 		firmService.save(poverilac);
 		return new GetMt910Response();
 	}
@@ -265,6 +273,25 @@ public class BankEndpoint {
 		Unmarshaller unmarshaller = context.createUnmarshaller();
 		NalogZaPlacanje nzp = (NalogZaPlacanje) unmarshaller.unmarshal(document1);
 		System.out.println("----UNMARSHALED----\n "+nzp.getIdPoruke());
+		return nzp;
+		}catch(Exception tt)
+		{
+			tt.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static GetMt910Request getMt910FromXMLDoc(Document document){
+		try{
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+		Document document1 = db.newDocument();
+		NodeList nodeList = document.getElementsByTagNameNS("*", "getMt910Request");
+		document1.appendChild(document1.adoptNode(nodeList.item(0).cloneNode(true)));
+		JAXBContext context = JAXBContext.newInstance(GetMt910Request.class);
+		Unmarshaller unmarshaller = context.createUnmarshaller();
+		GetMt910Request nzp = (GetMt910Request) unmarshaller.unmarshal(document1);
+		System.out.println("----UNMARSHALED MT910----\n ");
 		return nzp;
 		}catch(Exception tt)
 		{

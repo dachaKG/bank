@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.ws.client.core.WebServiceTemplate;
 
 import com.example.bankxml.bankxml.mt102.GetMt910RequestMt102;
+import com.example.national_bank_xml.National_bank_xml.ws.WSTemplate;
 import com.strukturartgsnaloga.GetMt910Request;
 import com.strukturartgsnaloga.GetMt910Response;
 
@@ -12,7 +13,7 @@ import com.strukturartgsnaloga.GetMt910Response;
 public class NationalBankClient {
 
 	@Autowired
-	private WebServiceTemplate webServiceTemplate;
+	private WSTemplate webServiceTemplate;
 	
 	public GetMt910Response sendMt910(GetMt910Request request){
 		//webServiceTemplate.setDefaultUri("");

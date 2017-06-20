@@ -80,6 +80,84 @@ public class XMLEncryptionUtility {
 	
 	
 	
+	public Document encryptMt910(Document doc, SecretKey key, Certificate certificate) {
+		try {
+		    //Sifra koja ce se koristiti za sifrovanje XML-a u ovom slucaju je 3DES
+		    XMLCipher xmlCipher = XMLCipher.getInstance(XMLCipher.TRIPLEDES);
+		    //Inicijalizacija za kriptovanje
+		    xmlCipher.init(XMLCipher.ENCRYPT_MODE, key);
+		    
+		    //Sadrzaj XMLa se sifruje tajnim kljucem, putem simetricne sifre (3DES)
+		    //Tajni kljuc se potom sifruje javnim kljucem koji se preuzima sa sertifikata putem asimetricne sifre (RSA)
+			XMLCipher keyCipher = XMLCipher.getInstance(XMLCipher.RSA_v1dot5);
+		    //Inicijalizacija za kriptovanje tajnog kljuca javnim RSA kljucem
+		    keyCipher.init(XMLCipher.WRAP_MODE, certificate.getPublicKey());
+		    EncryptedKey encryptedKey = keyCipher.encryptKey(doc, key);
+		    
+		    //U EncryptedData elementa koji se sifruje kao KeyInfo stavljamo sifrovan tajni kljuc
+		    EncryptedData encryptedData = xmlCipher.getEncryptedData();
+	        //kreira se KeyInfo
+		    KeyInfo keyInfo = new KeyInfo(doc);
+		    keyInfo.addKeyName("Sifrovan tajni kljuc");
+		    keyInfo.add(encryptedKey);
+		    //postavljamo KeyInfo za element koji se sifruje
+	        encryptedData.setKeyInfo(keyInfo);
+			
+			//Trazi se element ciji sadrzaj se sifruje
+			NodeList odseci = doc.getElementsByTagName("ns2:getMt910Request");
+			Element odsek = (Element) odseci.item(0);
+			
+			xmlCipher.doFinal(doc, odsek, true); //Sifruje sa sadrzaj
+			
+			return doc;
+		} catch (XMLEncryptionException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public Document encryptMt910Mt102(Document doc, SecretKey key, Certificate certificate) {
+		try {
+		    //Sifra koja ce se koristiti za sifrovanje XML-a u ovom slucaju je 3DES
+		    XMLCipher xmlCipher = XMLCipher.getInstance(XMLCipher.TRIPLEDES);
+		    //Inicijalizacija za kriptovanje
+		    xmlCipher.init(XMLCipher.ENCRYPT_MODE, key);
+		    
+		    //Sadrzaj XMLa se sifruje tajnim kljucem, putem simetricne sifre (3DES)
+		    //Tajni kljuc se potom sifruje javnim kljucem koji se preuzima sa sertifikata putem asimetricne sifre (RSA)
+			XMLCipher keyCipher = XMLCipher.getInstance(XMLCipher.RSA_v1dot5);
+		    //Inicijalizacija za kriptovanje tajnog kljuca javnim RSA kljucem
+		    keyCipher.init(XMLCipher.WRAP_MODE, certificate.getPublicKey());
+		    EncryptedKey encryptedKey = keyCipher.encryptKey(doc, key);
+		    
+		    //U EncryptedData elementa koji se sifruje kao KeyInfo stavljamo sifrovan tajni kljuc
+		    EncryptedData encryptedData = xmlCipher.getEncryptedData();
+	        //kreira se KeyInfo
+		    KeyInfo keyInfo = new KeyInfo(doc);
+		    keyInfo.addKeyName("Sifrovan tajni kljuc");
+		    keyInfo.add(encryptedKey);
+		    //postavljamo KeyInfo za element koji se sifruje
+	        encryptedData.setKeyInfo(keyInfo);
+			
+			//Trazi se element ciji sadrzaj se sifruje
+			NodeList odseci = doc.getElementsByTagName("ns2:getMt910RequestMt102");
+			Element odsek = (Element) odseci.item(0);
+			
+			xmlCipher.doFinal(doc, odsek, true); //Sifruje sa sadrzaj
+			
+			return doc;
+		} catch (XMLEncryptionException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
+	
 	
 	
 	/**
