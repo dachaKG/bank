@@ -2,27 +2,46 @@ package com.example.national_bank_xml.National_bank_xml.endpoint;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.security.PrivateKey;
+import java.security.cert.Certificate;
 
+import javax.xml.bind.Marshaller;
+import javax.crypto.SecretKey;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.FactoryConfigurationError;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.xml.security.encryption.EncryptedData;
+import org.apache.xml.security.encryption.EncryptedKey;
+import org.apache.xml.security.encryption.XMLCipher;
+import org.apache.xml.security.encryption.XMLEncryptionException;
+import org.apache.xml.security.keys.KeyInfo;
+import org.apache.xml.security.utils.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ws.WebServiceMessage;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
+import org.springframework.ws.support.MarshallingUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import com.example.bankxml.bankxml.mt102.GetMt102Request;
 import com.example.bankxml.bankxml.mt102.GetMt102Response;
 import com.example.bankxml.bankxml.mt102.GetMt910RequestMt102;
 import com.example.bankxml.bankxml.mt102.Mt102;
@@ -126,10 +145,10 @@ public class NationalBankEndpoint {
 		
 		GetStrukturaRtgsNalogaResponse response = new GetStrukturaRtgsNalogaResponse();
 		response.setMt900(mt900);
+		
+		
 		return response;
-		/*System.out.println("Usao rtgs");
-
-		return null;*/
+		
 	}	
 	
 	@PayloadRoot(namespace = NAMESPACE_URI2, localPart = "getMt102Request")
@@ -172,6 +191,7 @@ public class NationalBankEndpoint {
 		GetMt102Response response = new GetMt102Response();
 		response.setMt900(mt900);
 	
+		
 		return response;
 	}
 	
@@ -278,4 +298,65 @@ public class NationalBankEndpoint {
 			f.close();
 		} catch (Exception r){r.printStackTrace();}
 	}
+	
+	public Document encryptit(Document doc, SecretKey key, Certificate certificate) {
+		try {
+		    //Sifra koja ce se koristiti za sifrovanje XML-a u ovom slucaju je 3DES
+		    XMLCipher xmlCipher = XMLCipher.getInstance(XMLCipher.TRIPLEDES);
+		    //Inicijalizacija za kriptovanje
+		    xmlCipher.init(XMLCipher.ENCRYPT_MODE, key);
+		    
+		    //Sadrzaj XMLa se sifruje tajnim kljucem, putem simetricne sifre (3DES)
+		    //Tajni kljuc se potom sifruje javnim kljucem koji se preuzima sa sertifikata putem asimetricne sifre (RSA)
+			XMLCipher keyCipher = XMLCipher.getInstance(XMLCipher.RSA_v1dot5);
+		    //Inicijalizacija za kriptovanje tajnog kljuca javnim RSA kljucem
+		    keyCipher.init(XMLCipher.WRAP_MODE, certificate.getPublicKey());
+		    EncryptedKey encryptedKey = keyCipher.encryptKey(doc, key);
+		    
+		    //U EncryptedData elementa koji se sifruje kao KeyInfo stavljamo sifrovan tajni kljuc
+		    EncryptedData encryptedData = xmlCipher.getEncryptedData();
+	        //kreira se KeyInfo
+		    KeyInfo keyInfo = new KeyInfo(doc);
+		    keyInfo.addKeyName("Sifrovan tajni kljuc");
+		    keyInfo.add(encryptedKey);
+		    //postavljamo KeyInfo za element koji se sifruje
+	        encryptedData.setKeyInfo(keyInfo);
+			
+			//Trazi se element ciji sadrzaj se sifruje
+			NodeList odseci = doc.getElementsByTagName("getStrukturaRtgsNalogaResponse");
+			Element odsek = (Element) odseci.item(0);
+			
+			xmlCipher.doFinal(doc, odsek, true); //Sifruje sa sadrzaj
+			
+			return doc;
+		} catch (XMLEncryptionException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+private Document loadDocument(String file) {
+		
+		try {
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			dbf.setNamespaceAware(true);
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			Document document = db.parse(new File(file));
+
+			return document;
+		} catch (FactoryConfigurationError e) {
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+		
+		
+	}
+	
 }
