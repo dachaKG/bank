@@ -23,7 +23,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import com.example.bankxml.bankxml.mt102.GetMt102Request;
 import com.example.bankxml.bankxml.mt102.GetMt102Response;
 import com.example.bankxml.bankxml.mt102.GetMt910RequestMt102;
 import com.example.bankxml.bankxml.mt102.Mt102;
@@ -161,7 +160,6 @@ public class NationalBankEndpoint {
 		mt910Request.setMt910(mt910);
 		mt910Request.setMt102(mt102);
 		com.example.bankxml.bankxml.mt102.GetMt910Response mt910response = client.sendMt910mt102(mt910Request);
-		
 		/////////////////////
 		com.example.bankxml.bankxml.mt102.Mt900 mt900 = new com.example.bankxml.bankxml.mt102.Mt900();
 		mt900.setDatumValute(null);

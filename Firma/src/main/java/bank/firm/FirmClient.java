@@ -49,7 +49,7 @@ public class FirmClient {
 		webServiceTemplate.setDefaultUri(sub+"5/ws");*/
 		
 		GetNalogZaPlacanjeResponse getNalogZaPlacanjeResponse = (GetNalogZaPlacanjeResponse) webServiceTemplate.marshalSendAndReceive(nalogZaPlacanjeRequest);
-
+		System.out.println(getNalogZaPlacanjeResponse.getNalogZaPlacanje().getDuznikNalogodavac());
 		}
 
 }

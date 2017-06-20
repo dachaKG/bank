@@ -1,5 +1,6 @@
 package com.example.bankXml.BankXml.firm;
 
+
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -15,7 +16,6 @@ import javax.validation.constraints.NotNull;
 import com.example.bankXml.BankXml.bank.Bank;
 import com.example.bankXml.BankXml.faktura.Faktura;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 
 
 @Entity
@@ -51,7 +51,7 @@ public class Firma {
 	@Column(name = "web")
 	private String web;
 	
-	@Column(columnDefinition = "CHAR(11)",unique = true)
+	@Column(unique = true, columnDefinition = "CHAR(11)")
 	private String pibFirm;
 
 	private Integer stanjeRacuna;
@@ -62,6 +62,7 @@ public class Firma {
 	@ManyToOne
 	private Bank bank;
 	
+
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "firma", cascade = CascadeType.ALL)
@@ -142,7 +143,6 @@ public class Firma {
 		this.bank = bank;
 	}
 
-
 	public List<Faktura> getFakture() {
 		return fakture;
 	}
@@ -159,6 +159,7 @@ public class Firma {
 		this.pibFirm = pibFirm;
 	}
 
+
 	public Integer getStanjeRacuna() {
 		return stanjeRacuna;
 	}
@@ -174,6 +175,7 @@ public class Firma {
 	public void setBrojRacuna(String brojRacuna) {
 		this.brojRacuna = brojRacuna;
 	}
+
 	
 	
 

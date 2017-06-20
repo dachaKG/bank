@@ -1,10 +1,7 @@
 package com.example.bankXml.BankXml.bank;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.security.PrivateKey;
 import java.util.Date;
 
@@ -14,10 +11,7 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
@@ -38,7 +32,6 @@ import com.example.bankXml.BankXml.mt102.Mt102;
 import com.example.bankXml.BankXml.mt102.Mt102Service;
 import com.example.bankXml.BankXml.mt102.NalogZaMT102;
 import com.example.bankXml.BankXml.mt102.NalogZaMT102Service;
-import com.nalogzaplacanje.GetNalogZaPlacanjeRequest;
 import com.nalogzaplacanje.GetNalogZaPlacanjeResponse;
 import com.nalogzaplacanje.NalogZaPlacanje;
 import com.strukturartgsnaloga.GetMt910Request;

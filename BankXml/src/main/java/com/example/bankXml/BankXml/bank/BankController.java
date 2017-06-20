@@ -51,8 +51,6 @@ public class BankController {
 				mt102Service.save(mt102);
 			}
 		}
-		
-		
 	}
 
 }
